@@ -11,7 +11,7 @@ create table units(
 	un_type	varchar(5),
 	constraint  units_pk primary key (un_id)
 );
-create index  units_idx0 on dept_units(un_kode);
+create index  units_idx0 on units(un_kode);
 /* master program
  * 
  */
