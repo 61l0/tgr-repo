@@ -1,0 +1,101 @@
+/*!
+ * Ext JS Library 3.3.1
+ * Copyright(c) 2006-2010 Sencha Inc.
+ * licensing@sencha.com
+ * http://www.sencha.com/license
+ */
+#container {
+    width:100%;
+    height:50px;
+  
+}
+
+.calendar {
+    background-image:url(../../img/ext/icons/fam/calendar.png) !important;
+}
+
+.blist {
+    background-image: url(list-items.gif) !important;
+}
+
+.bmenu {
+    background-image: url(menu-show.gif) !important;
+}
+.menuMaintain {
+    background-image: url(../../img/ext/icons/maintenance.png) !important;
+}
+.menuTransaction{
+	 background-image: url(../../img/ext/icons/transaction.png) !important;
+}
+.menuIndex{
+	 background-image: url(../../img/ext/icons/fam/house.png) !important;
+}
+.menuTodo{
+	 background-image: url(../../img/ext/icons/fam/folder_go.png) !important;
+}
+.menuCalendar{
+	 background-image: url(../../img/ext/icons/fam/calendar.png) !important;
+}
+.menuActivity{
+	 background-image: url(../../img/ext/icons/fam/book_open.png) !important;
+}
+.menuReport{
+	 background-image: url(../../img/ext/icons/report.png) !important;
+}
+.menuUser{
+	 background-image: url(../../img/ext/icons/fam/user.png) !important;
+}
+.menuCashiers{
+	 background-image: url(../../img/ext/icons/fam/user_edit.png) !important;
+}
+.menuBranches{
+	 background-image: url(../../img/ext/icons/fam/building.png) !important;
+}
+.menuConfig{
+	background-image: url(../../img/ext/icons/fam/server_edit.png) !important;
+}
+.menuCompany{
+	 background-image: url(../../img/ext/icons/company.png) !important;
+}
+.menuOption{
+	 background-image: url(../../img/ext/icons/fam/bullet_wrench.png) !important;
+}
+.menuChart{
+	 background-image: url(../../img/ext/icons/fam/chart_bar.png) !important;
+}
+.menuReportText{
+	 background-image: url(../../img/ext/icons/fam/report.png) !important;
+}
+.menu-title{
+    background: #D6E3F2;
+    border-style: solid;
+    border-color:#DAE6F4 #99bbe8 #99bbe8 #DAE6F4;
+    border-width: 1px;
+    margin:-2px -2px 0;
+    color:#15428b;
+    font:bold 10px tahoma,arial,verdana,sans-serif;
+    display:block;
+   
+}
+ 
+.user {
+    background-image:url(../../img/ext/icons/fam/user.png) !important
+}
+.edit {
+    background-image:url(../desktop/images/im32x32.gif) !important;
+}
+.add {
+    background-image:url(../../img/ext/icons/fam/add.png) !important;
+}
+.search{
+	 background-image: url(../../img/ext/icons/fam/zoom.png) !important;
+}
+.save {
+	 background-image: url(../../img/ext/icons/fam/table_save.png) !important;
+}
+.new {
+	 background-image: url(../../img/ext/icons/fam/new.png) !important;
+}
+.userPriv{
+	 background-image: url(../../img/ext/icons/fam/application_key.png) !important;
+}

@@ -1,0 +1,176 @@
+html,body{
+	font-size:11px;
+	font-family: Tahoma,Ubuntu,Verdana,Arial,Helvetica,Sans-serif;
+	margin:0px;
+	padding:0px;
+	height: 100%;
+}
+
+#loadingbox{
+	width:32px;
+	height:32px;
+	background:url(loading.gif) no-repeat;
+	margin: 0 auto; 
+
+}
+#flash{
+	color:green;font-size:12px;font-weight:bold;
+}
+#ht{
+		height:35px;
+	}
+#ht1{
+	background:url(aht1.png) left top;
+	height:3px;
+	font-size:1px;
+	display:block;
+	width:100%;
+	position:relative;
+}
+#ht2{
+	background:url(aht2.png) repeat-x;
+	height:32px;
+	line-height:32px;
+	width:100%;
+	min-width:1000px;
+	display:block;
+}
+#ht2logo{
+	background:url(logo.png) no-repeat;
+	width:160px;
+	height:32px;
+	float:left;
+}
+#ht2menu{
+	color:#fff;
+	padding-top:10px;
+	float:left;
+	height:22px;
+	line-height:22px;
+	font-weight:bold;
+	
+}
+#ht2menu a.selected{
+	color :#000;
+	text-decoration:none;
+	
+	background:url(tab1.png) no-repeat right top; 
+	padding-right:10px; 
+	display:block;
+	display:inline-block;
+
+}
+#ht2menu a.selected span{
+	background:url(tab1.png) no-repeat left top; 
+	padding-left:10px; 
+	display:block;
+	display:inline-block;
+}
+#ht2menu a.selected:hover{
+	color :#B3B5BA;
+	
+}
+
+#ht2menu a.unselected{
+	color :#fff;
+	text-decoration:none;
+	padding-right:10px; 
+	display:block;
+	display:inline-block;
+	
+}
+#ht2menu a.unselected span{
+	padding-left:10px;
+}
+#ht2menu a.unselected:hover{
+	color :#3C3E45;
+	background:url(tab0a.png) no-repeat right top; 
+	padding-right:10px; 
+	display:block;
+	display:inline-block;
+}
+#ht2menu a.unselected:hover span{
+	background:url(tab0a.png) no-repeat left top; 
+	padding-left:10px; 
+	display:block;
+	display:inline-block;
+}
+#hm{
+	background:url(ahm.png) repeat-x;
+	height:27px;
+	padding-top:1px;
+	 
+	position:relative;
+} 
+ 
+#toolbar{
+	 
+}
+#hf{
+	background:url(ahf.png) repeat-x;
+	height:31px;
+	width:100%;
+	display:block;
+	line-height:31px;
+	bottom:0px;
+	position: fixed;
+	clear:both;
+	
+}
+#homedesktop{
+	width: 100%;
+	height: 100%;
+	border: 0 none;
+	position: relative;
+    overflow:hidden;
+    zoom:1;
+}
+.numberfield{
+	font-family: Tahoma,Ubuntu,Verdana,Arial,Helvetica,Sans-serif;
+	 font-size:11px;
+	 text-align:right;
+}
+.msg .x-box-mc {
+    font-size:14px;
+}
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:250px;
+    z-index:20000;
+}
+.x-portal .x-panel-dd-spacer {
+    margin-bottom:10px;
+}
+
+.x-portlet {
+    margin-bottom:10px;
+}
+
+/* Clean up the look of the portlets */
+.x-portlet .x-panel-ml {
+    padding-left:2px;
+}
+.x-portlet .x-panel-mr {
+    padding-right:2px;
+}
+.x-portlet .x-panel-bl {
+    padding-left:2px;
+}
+
+.x-portlet .x-panel-br {
+    padding-right:2px;
+}
+.x-portlet .x-panel-body {
+    background:white;
+}
+.x-portlet .x-panel-mc {
+    padding-top:2px;
+}
+.x-portlet .x-panel-bc .x-panel-footer {
+    padding-bottom:2px;
+}
+.x-portlet .x-panel-nofooter .x-panel-bc {
+    height:2px;
+}

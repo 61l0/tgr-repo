@@ -1,0 +1,115 @@
+html,body{
+	font-size:10px;
+	font-family: Tahoma,Verdana,Arial,Helvetica,Sans-serif;
+	margin:0px;
+	padding:0px;
+	height: 100%;
+}
+#topper{
+	height:100px;
+	display:block;
+}
+#container{
+	width:420px;
+	border:0px solid black;
+	margin:0 auto;
+	
+
+}
+#lghead{
+	width:420px;
+	height:62px;
+	background:url(lgheadmc.gif) no-repeat;
+}
+#lgbottom{
+	width:420px;
+	height:15px;
+	background:url(lgbottom.gif) no-repeat;
+	
+	line-height:15px;
+}
+#lgbd1{
+	width:6px;
+	background:url(algbd1.gif) repeat-y;
+	float:left;
+	display:block;
+	height:100%;
+}
+#lgbd2{
+	width:12px;
+	background:url(algbd2.gif) repeat-y;
+	float:left;
+
+	height:100%;
+}
+#lgcnt{
+	width:420px;
+	height:275px;
+	
+	display:block;
+}
+#lgcnt1{
+	width:102px;
+	display:block;
+	text-align:center;
+	padding-top:20px;
+	float:left;
+}
+#lgcnt2{
+	width:300px;
+	
+	float:left;
+	display:block;
+	padding-top:20px;
+}
+#lgbox{
+	border:1px solid #F9BA4C;
+	background-color:#F3DBB2;
+	width:250px;
+	height:200px;
+	margin:auto;
+	padding:10px;
+	display:block;
+}
+/* rounded buttons */
+.buttround {
+	cursor:pointer; 
+	cursor:hand; 
+	line-height:27px;
+	background:url(button.gif) no-repeat right top; 
+	padding-right:10px; 
+	vertical-align:middle;
+	display:block; /*opera*/
+	display:inline-block; /*ie*/
+	display:-moz-inline-box;  /*ff*/
+	height:27px;
+	border:0px;
+}
+
+.buttround input { 
+	background:url(button.gif) no-repeat left top; 
+	height:27px;
+	display:block;
+	display:inline-block;
+	padding-left:10px; line-height:27px;
+	border:0px;
+	font-size:10px;
+}
+
+.buttround:hover {background-position:right -155px;cursor:pointer;}
+.buttround:hover input {background-position:left -155px;cursor:pointer}
+
+.inputcls{
+	border:1px solid #F7A618;
+	padding:2px;
+	font-size:12px;
+	
+}
+
+.inputclsFocus{
+	background:#FAD89D;
+	border:1px solid #F7A618;
+	padding:2px;
+	font-size:12px;
+	
+}
