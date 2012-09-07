@@ -1,6 +1,8 @@
 insert into units(un_id,un_kode,un_nama,un_lvl,un_akronim,un_alamat,un_telp,un_type)
 select trim(unitkey),trim(kdunit),trim(nmunit),to_number(trim(kdlevel),'99'),trim(akrounit),trim(alamat),trim(telepon),trim("type") from dafunits;
-
+ 
+insert into pns(pn_nip,pn_nama,pn_kdgol,un_id,pn_jabatan,pn_pddk)
+select trim(nip),trim(nama),trim(kdgol),trim(unitkey),trim(jabatan),trim(pddk) from pegawais;
  
 insert into programs(prog_kode,prog_nourut,prog_nama,un_id)
 select trim(idprgrm),trim(nuprgrm),trim(nmprgrm),trim(unitkey) from mpgrms;

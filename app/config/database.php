@@ -89,7 +89,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'postgres',
 		'password' => 'admin',
-		'database' => 'simkeda',
+		'database' => 'spektra',
 		'prefix' => '',
 	);
 	 

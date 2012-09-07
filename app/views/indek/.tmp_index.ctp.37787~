@@ -1,0 +1,16 @@
+<?php if (isset($indexscript)) { ?>
+<script type="text/javascript"> 
+<?php
+ echo $indexscript;
+?> 
+</script>
+<?php }?>
+<?php  
+if (isset($scriptarr)){ 
+	foreach ($scriptarr as $ascript){
+		echo $javascript->link('app/'.$ascript);
+	}
+	
+}
+  
+?>	

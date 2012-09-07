@@ -20,6 +20,17 @@ create table units(
 );
 create index units_idx0 on units(un_kode);
  
+drop table if exists pns;
+create table pns (
+	pn_nip		varchar(30),
+	pn_nama		varchar(125),
+	pn_kdgol	varchar(10),
+	un_id		varchar(20),
+	pn_jabatan	varchar(200),
+	pn_pddk		varchar(20),
+	constraint pns_pk primary key(pn_nip)
+);
+create index pns_idx0 on pns(un_id);
 /* master program
  * 
  */
@@ -147,24 +158,71 @@ create index dpa_details_idx2 on dpa_details(angg_kode);
 /*  permohonan spd
  * spdper => SPD Permohonan
  * _benda=bendahara pengeluaran
+ * total per skpd
+ * angg per skpd
+ * akum per skpd
+ * sisa per skpd
  
  */
+drop table if exists spdper_masters cascade;
 create table spdper_masters(
 	spdm_id			varchar(20),
 	spdm_no			varchar(50),
 	spdm_tgl		date,
+	spdm_state		integer default 0,
 	un_id			varchar(20),
 	spdm_benda		varchar(30),
 	spdm_ppkd		varchar(30),
 	spdm_uraian		varchar(500),
+	spdm_ketentuan	varchar(500),
    	spdm_total		numeric(24,2) default 0,
+   	spdm_akum		numeric(24,2) default 0,
     spdm_angg		numeric(24,2) default 0,
-	constraint spd_master_pk primary key(spdm_id)
+    spdm_sisa		numeric(24,2) default 0,
+    spdm_bln1		integer default 1,
+	spdm_bln2		integer default 2,
+	constraint spdper_master_pk primary key(spdm_id)
 	
 
 );
 create index spdper_masters_idx0 on spdper_masters(spdm_id);
-create index spdper_masters_idx1 on spdper_masters(un_kode);
+create index spdper_masters_idx1 on spdper_masters(un_id);
+
+/*untuk menyimpan DPA Belanja Tidak Langsung */
+drop table if exists spdper_detail0s cascade;
+create table spdper_detail0s(
+	spdd_id			varchar(20),
+	spdm_id			varchar(20),
+	dpam_no			varchar(50),
+	 
+	spdd_angg		numeric(24,2) default 0,
+	spdd_akum		numeric(24,2) default 0,
+	spdd_nilai		numeric(24,2) default 0,
+	spmd_sisa		numeric(24,2) default 0,
+	
+
+	constraint spdper_detail0s_pk primary key(spdd_id),
+	constraint spdper_detail0s_fk1 foreign key (spdm_id) references spdper_masters(spdm_id) on delete cascade 
+);
+
+
+-- untuk menyimpan dpa belanja tidak langsung (gaji)
+drop table if exists spd_detail0s cascade;
+create table spd_detail0s(
+	spdd_id			varchar(20),
+	spdm_id			varchar(20),
+	dpam_no			varchar(50),
+	 
+	spdd_angg		numeric(24,2) default 0,
+	spdd_akum		numeric(24,2) default 0,
+	
+	spdd_nilai		numeric(24,2) default 0,
+	spmd_sisa		numeric(24,2) default 0,
+	
+
+	constraint spd_detail0s_pk primary key(spdd_id),
+	constraint spd_detail0s_fk1 foreign key (spdm_id) references spd_masters(spdm_id) on delete cascade 
+);
 
 -- detail 1 daftar dpa-kegiatan
 /*
@@ -175,30 +233,34 @@ create index spdper_masters_idx1 on spdper_masters(un_kode);
  * _total=total nilai yg di SPD kan melalui transaksi ini
  * _sisa=sisa nilai anggaran yg sekarang 
 */
+
+
+drop table if exists spdper_detail1s cascade;
 create table spdper_detail1s(
 	spdd_id			varchar(20),
 	spdm_id			varchar(20),
-	dpa_no			varchar(50),
+	dpam_no			varchar(50),
 	 
 	spdd_angg		numeric(24,2) default 0,
 	spdd_akum		numeric(24,2) default 0,
-	spdd_total		numeric(24,2) default 0,
-	spmd_sisa	numeric(24,2) default 0,
-	spdm_bln1		integer default 1,
-	spdm_bln2		integer default 2,
+	spdd_nilai		numeric(24,2) default 0,
+	spmd_sisa		numeric(24,2) default 0,
+	
 
 	constraint spdper_detail1s_pk primary key(spdd_id),
 	constraint spdper_detail1s_fk1 foreign key (spdm_id) references spdper_masters(spdm_id) on delete cascade 
 );
  
 --detail2 daftar rekening  
+drop table if exists spdper_detail2s cascade;
 create table spdper_detail2s(
-	spdd_id			serial,
-	spdm_id			integer,
-	dpa_no			varchar(50),
+	spdd_id			varchar(20),
+	spdm_id			varchar(20),
+	dpam_no			varchar(50),
 	akun_kode		varchar(50),
 	spdd_angg		numeric(24,2) default 0,
 	spdd_akum		numeric(24,2) default 0,
+	 
 	spdd_nilai		numeric(24,2) default 0,
  	spdd_sisa		numeric(24,2) default 0,
 	constraint spdper_detail2s_pk primary key(spdd_id),
@@ -212,28 +274,70 @@ create table spdper_detail2s(
  * _noper=transaksi selalu berdasarkan nomor permohonan
    
  * spd_app-> di approve atau tidak
-**/
+**/ 
 
-create table spds(
-	spd_id			varchar(20),
-	spd_no			varchar(50),
-	spd_noper		varchar(50),
-	spd_tgl			date,
-	un_id			varchar(30),
-	spd_benda		varchar(30),
-	spd_ppkd		varchar(30),
-	spd_uraian		varchar(500),
-	spd_angg		numeric(24,2) default 0,
-	spd_akum		numeric(24,2) default 0,
-   	spd_total		numeric(24,2) default 0,
-    spd_sisa		numeric(24,2) default 0,
-    spd_app			integer default 0,
-    spd_catatan		varchar(500),
+
+drop table if exists spd_masters cascade;
+create table spd_masters(
+	spdm_id			varchar(20),
+	spdm_no			varchar(50),
+	spdper_no		varchar(50),
+	spdm_tgl		date,
+	spdm_ketentuan	varchar(500),
+	spdm_state		integer default 0,
+	un_id			varchar(20),
+	spdm_benda		varchar(30),
+	spdm_ppkd		varchar(30),
+	spdm_uraian		varchar(500),
+   	spdm_total		numeric(24,2) default 0,
+   	spdm_akum		numeric(24,2) default 0,
+    spdm_angg		numeric(24,2) default 0,
+    spdm_sisa		numeric(24,2) default 0,
+    spdm_bln1		integer default 1,
+	spdm_bln2		integer default 2,
 	constraint spd_master_pk primary key(spdm_id)
 	
 
 );
-create index spds_idx0 on spds(un_id);
-create index spds_idx1 on spds(spd_no);
-create index spds_idx2 on spds(spd_noper);
+create index spd_masters_idx0 on spd_masters(spdm_id);
+create index spd_masters_idx1 on spd_masters(un_id);
+
+-- detail 1 daftar dpa-kegiatan
+/*
+ * _bln1 = untuk kebutuhan dari bulan 1 s/d bulan 2
+ * _bln2= sda
+ * _akum= akumulasi SPD sebelumnya
+ * _sisa=sisa akumulasi SPD
+ * _total=total nilai yg di SPD kan melalui transaksi ini
+ * _sisa=sisa nilai anggaran yg sekarang 
+*/
+drop table if exists spd_detail1s cascade;
+create table spd_detail1s(
+	spdd_id			varchar(20),
+	spdm_id			varchar(20),
+	dpam_no			varchar(50),
+	 
+	spdd_angg		numeric(24,2) default 0,
+	spdd_akum		numeric(24,2) default 0,
+	spdd_nilai		numeric(24,2) default 0,
+	spmd_sisa		numeric(24,2) default 0,
+	
+
+	constraint spd_detail1s_pk primary key(spdd_id),
+	constraint spd_detail1s_fk1 foreign key (spdm_id) references spd_masters(spdm_id) on delete cascade 
+);
  
+--detail2 daftar rekening  
+drop table if exists spd_detail2s cascade;
+create table spd_detail2s(
+	spdd_id			varchar(20),
+	spdm_id			varchar(20),
+	dpam_no			varchar(50),
+	akun_kode		varchar(50),
+	spdd_angg		numeric(24,2) default 0,
+	spdd_akum		numeric(24,2) default 0,
+	spdd_nilai		numeric(24,2) default 0,
+ 	spdd_sisa		numeric(24,2) default 0,
+	constraint spd_detail2s_pk primary key(spdd_id),
+	constraint spd_detail2s_fk1 foreign key (spdm_id) references spd_masters(spdm_id) on delete cascade 
+);

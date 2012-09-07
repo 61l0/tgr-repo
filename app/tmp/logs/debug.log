@@ -1,0 +1,8 @@
+2012-08-29 12:17:16 Notice: Notice (1024): Please change the value of 'Security.salt' in app/config/core.php to a salt value specific to your application in [/var/www/simkeda/cake/libs/debugger.php, line 697]
+2012-08-29 12:17:16 Notice: Notice (1024): Please change the value of 'Security.cipherSeed' in app/config/core.php to a numeric (digits only) seed value specific to your application in [/var/www/simkeda/cake/libs/debugger.php, line 701]
+2012-08-29 12:23:14 Notice: Notice (1024): Please change the value of 'Security.cipherSeed' in app/config/core.php to a numeric (digits only) seed value specific to your application in [/var/www/simkeda/cake/libs/debugger.php, line 701]
+2012-09-07 00:22:03 Notice: Notice (8): Undefined variable: vendor in [/var/www/tgr/app/controllers/skpd_controller.php, line 36]
+2012-09-07 02:38:44 Notice: Notice (8): Undefined variable: skpd in [/var/www/tgr/app/controllers/pns_controller.php, line 42]
+2012-09-07 02:43:36 Notice: Notice (8): Undefined variable: skpd in [/var/www/tgr/app/controllers/pns_controller.php, line 42]
+2012-09-07 02:44:34 Notice: Notice (8): Undefined variable: skpd in [/var/www/tgr/app/controllers/pns_controller.php, line 42]
+2012-09-07 02:46:08 Notice: Notice (8): Undefined variable: skpd in [/var/www/tgr/app/controllers/pns_controller.php, line 42]

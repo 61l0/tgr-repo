@@ -155,7 +155,7 @@ Ext.onReady(function(){
 		//MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 	}
 	function onMohonSPDClick(){
-		//MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+	 MyDesktop.getSingleModule('spdpergrid-win').createWindow();
 	}
 	function onSPDClick(){
 		//MyDesktop.getSingleModule('addspdmaster-win').createWindow();
