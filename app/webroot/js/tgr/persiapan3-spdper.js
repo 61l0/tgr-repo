@@ -380,7 +380,7 @@ MyDesktop.SPDPerGridWindow = Ext.extend(Ext.app.Module, {
     id:'spdpergrid-win',
    init : function(){
       this.launcher = {
-            text: 'Surat Permohonan SPD',
+            text: 'Permohonan SPD',
             iconCls:'icon-grid',
             handler : this.createWindow,
             scope: this
@@ -393,7 +393,7 @@ MyDesktop.SPDPerGridWindow = Ext.extend(Ext.app.Module, {
         if(!win2){
             win2 = desktop.createWindow({
                 id: this.id,
-                title:'Surat Permohonan SPD',
+                title:'Permohonan SPD',
                 width:700,
                 height:400,
                 iconCls: 'icon-grid',
@@ -524,7 +524,7 @@ MyDesktop.SPDPerGridWindow = Ext.extend(Ext.app.Module, {
 								plugins: new Ext.ux.SlidingPager(),
 								listeners :{
 										'change' : function(){
-										 SpdPerMasterStore.baseParams={start:'start',limit:'limit',search:Ext.getCmp("searchPurchaseTxt").getValue()};
+										 SpdPerMasterStore.baseParams={start:'start',limit:'limit',search:Ext.getCmp("searchSPDPerTxt").getValue()};
 			    
 										}
 									}
@@ -614,7 +614,7 @@ MyDesktop.SPDPerGridWindow = Ext.extend(Ext.app.Module, {
 							}, '-',
 							 'Search Key',
 							 new Ext.form.TextField({
-									id:'searchPurchaseTxt',
+									id:'searchSPDPerTxt',
 								    text:'*',
 							        emptyText:'*',
 							        selectOnFocus:true,
@@ -624,7 +624,7 @@ MyDesktop.SPDPerGridWindow = Ext.extend(Ext.app.Module, {
 								                SpdPerMasterStore.load({params: {
 													start: 0,
 													limit: 20,
-													 search:Ext.getCmp("searchPurchaseTxt").getValue()
+													 search:Ext.getCmp("searchSPDPerTxt").getValue()
 											 }})
 						       
 						                }
@@ -640,7 +640,7 @@ MyDesktop.SPDPerGridWindow = Ext.extend(Ext.app.Module, {
 								  SpdPerMasterStore.load({params: {
 									start: 0,
 									limit: 20,
-									 search:Ext.getCmp("searchPurchaseTxt").getValue()
+									 search:Ext.getCmp("searchSPDPerTxt").getValue()
 									 }})
 						       
 					        }

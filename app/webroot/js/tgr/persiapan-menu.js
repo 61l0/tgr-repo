@@ -158,10 +158,10 @@ Ext.onReady(function(){
 	 MyDesktop.getSingleModule('spdpergrid-win').createWindow();
 	}
 	function onSPDClick(){
-		//MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('spdgrid-win').createWindow();
 	}
 	function onRegSPDClick(){
-		//MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('regspdgrid-win').createWindow();
 	}
 	 
 	function onTextReportClick(item){

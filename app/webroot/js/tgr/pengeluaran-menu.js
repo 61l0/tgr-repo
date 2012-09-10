@@ -170,10 +170,11 @@ Ext.onReady(function(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 	}
 	function onSPMClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+	 MyDesktop.getSingleModule('spmgrid-win').createWindow();
 	}
 	function onSP2DClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('sp2dgrid-win').createWindow();
 	}
 	function onGeserKasClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();

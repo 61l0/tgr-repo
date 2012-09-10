@@ -3,6 +3,9 @@ var  urlppkdsearch=HOST_PATH+'/pns/searchppkd';
 var urlskpdsearch=HOST_PATH+'/skpd/searchskpd';
 var urldpasearch=HOST_PATH+'/dpa/searchdpa';
 var urldpadetailsearch=HOST_PATH+'/dpa/detailsearch';
+var urlspdsearch=HOST_PATH+'/spd/searchspd';
+var urlspdpersearch=HOST_PATH+'/spdper/searchspd';
+
 var MyDesktop = new Ext.app.App({
 	init :function(){
 		  
@@ -11,7 +14,11 @@ var MyDesktop = new Ext.app.App({
 	getModules : function(){
 		return [
 		        new MyDesktop.SPDPerGridWindow(),
-		        new MyDesktop.EntrySPDPerForm()
+		        new MyDesktop.EntrySPDPerForm(),
+		        new MyDesktop.SPDGridWindow (),
+		        new MyDesktop.EntrySPDForm(),
+		        new MyDesktop.RegSPDGridWindow(),
+		        new MyDesktop.EntryRegSPDForm()
 		];
 		
 	},
@@ -28,6 +35,12 @@ var dpadetailComboTpl= new Ext.XTemplate(
 var skpdComboTpl = new Ext.XTemplate(
 	    '<tpl for="."><div class="search-skpd"><p style="padding:3px">',
 	        '{un_nama} (<b>{un_kode}</b>) </p>',
+	        '',
+	    '</div></tpl>'
+	);
+var spdComboTpl = new Ext.XTemplate(
+	    '<tpl for="."><div class="search-spd"><p style="padding:3px">',
+	        '{spdm_no} (<b>{un_nama}</b>) </p>',
 	        '',
 	    '</div></tpl>'
 	);
@@ -56,6 +69,40 @@ function StateChange(val){
 	    return '<span style="color:red;"><img src="'+HOST_PATH+'/img/ext/lock.png"/></span>';
 	}
 };  
+
+var spdperSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlspdpersearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'spdpermasters',
+        totalProperty: 'total',
+        id: 'id'
+    }, [
+        {name: 'id'},
+        {name: 'spdm_no'},
+        {name: 'un_nama'}
+        
+        
+    ])
+});
+
+var spdSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlspdsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'spdmasters',
+        totalProperty: 'total',
+        id: 'id'
+    }, [
+        {name: 'id'},
+        {name: 'spdm_no'},
+        {name: 'un_nama'}
+        
+        
+    ])
+});
 var skpdSearchStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: urlskpdsearch
