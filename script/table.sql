@@ -3,7 +3,43 @@
  * angg_kode=mtgkey
  * 
  */
+drop table if exists banks cascade;
+create table banks (
+	bank_norek	varchar(30),
+	bank_nama	varchar(100),
+	bank_alamat	varchar(150),	
+	bank_kota	varchar(30),
+	bank_cabang	varchar(30),
+	akun_kode	varchar(30),
+	constraint banks_pk primary key (bank_norek)
+);
 
+-- 
+drop table if exists kas cascade;
+create table kas (
+	kas_kode	varchar(20),
+	un_id		varchar(20),
+	kas_nama	varchar(50),
+	kas_benda	varchar(20),
+	akun_kode	varchar(20),
+	constraint kas_pk primary key(kas_kode)
+);
+
+drop table if exists potongans cascade;
+create table potongans (
+	ptg_kode 	varchar(50),
+	ptg_nama	varchar(80),
+	ptg_catatan	varchar(150),
+	constraint potongan_pk primary key(ptg_kode);
+);
+
+drop table if exists pajaks cascade;
+create table pajaks (
+	pjk_kode	varchar(20),
+	pjk_persen	numeric(10,2) default 0,
+	pjk_catatan	varchar(250),
+	constraint pajaks_pk primary key(pjk_kode)
+);
 -- daftar skpd/unit
 drop table  IF EXISTS units cascade;
 create table units(
@@ -341,3 +377,181 @@ create table spd_detail2s(
 	constraint spd_detail2s_pk primary key(spdd_id),
 	constraint spd_detail2s_fk1 foreign key (spdm_id) references spd_masters(spdm_id) on delete cascade 
 );
+
+-- register SPD
+drop table if exists reg_spds cascade;
+create table reg_spds( 
+	rs_id		varchar(20),
+	rs_no		varchar(50),
+	rs_tgl		date,
+	spdm_no		varchar(50),
+	rs_catatan	varchar(500),
+	rs_ttd1		varchar(30),
+	rs_ttd2		varchar(30),
+	constraint reg_spd_pk primary key(rs_id)
+);
+create index reg_spds_idx0 on reg_spds(rs_no);
+
+-- SPP
+-- spdm_no = NO SPD
+-- UP/TU cukup spp_masters
+
+-- spdm_tipe=UP/GU/TU/LS
+drop table if exists spp_masters(
+	sppm_id		varchar(20),
+	sppm_no		varchar(50),
+	sppm_tgl	date,
+	un_id		varchar(20),
+	spdm_tipe	varchar(3),
+	spdm_no		varchar(50),
+	sppm_sisaspd	numeric
+	sppm_total	numeric(24,2) default 0,
+	bank_kode	varchar(20),
+	constraint spp_masters_pk primary key (sppm_id)
+);
+create index spp_masters_idx0 on spp_masters(sppm_no);
+
+--spdm_detail1s -- untuk daftar dpa
+create table spp_detail1s(
+	sppd_id	varchar(20),
+	sppm_id	varchar(20),
+	dpam_no		varchar(50),
+	sppd_nilai	numeric(24,2) default 0,
+	constraint spp_detail1s_pk primary key(sppd_id),
+	constraint spp_detail1s_fk1 foreign key (sppm_id) references spp_masters(sppm_id) on delete cascade 
+);
+
+create index spp_detail1s_idx0 spp_detail2s(dpam_no);
+
+--spdm_detail2s -- untuk daftar kode rekening
+create table spp_detail2s(
+	sppd_id	varchar(20),
+	sppm_id	varchar(20),
+	akun_kode	varchar(30),
+	sppd_nilai	numeric(24,2) default 0,
+	constraint spp_detail2s_pk primary key(sppd_id),
+	constraint spp_detail2s_fk1 foreign key (sppm_id) references spp_masters(sppm_id) on delete cascade 
+);
+
+create index spp_details2s_idx0 spp_detail2s(akun_kode);
+--
+---SPM
+/*
+ * spm_tipe -> 0 -> LS, 1:UP,2:GU,3:TU
+ */
+drop table if exists spm_masters cascade;
+create table spm_masters(
+	spmm_id		varchar(20),
+	spmm_no		varchar(50),
+	spmm_tgl	date,
+	spmm_state	integer default 0,
+	sppm_no		varchar(50),
+	spmm_benda	varchar(30),
+	bank_norek	varchar(30),
+	npwp_no		varchar(30),
+	spmm_ket	varchar(500),
+ 	spm_tipe	integer default 0,
+	constraint spm_masters_pk primary key(spmm_id)
+);
+
+create index spm_master_idx0 on spm_masters(spmm_no);
+
+-- daftar potongan spm
+drop table if exists spm_detail1s cascade;
+create table spm_detail1s (
+	spmd_id		varchar(20),
+	spmm_id		varchar(20),
+	 
+	ptg_kode	varchar(20),
+	spmd_nilai	numeric(24,2) default 0,
+	spmd_ket	varchar(150),
+	constraint spm_detail1s_pk primary key(spmd_id),
+	constraint spm_detail1s_fk1 foreign key (spmm_id) references spm_masters(spmm_id) on delete cascade 
+);
+-- spm pajak
+drop table if exists spm_detail2s cascade;
+create table spm_detail2s (
+	spmd_id		varchar(20),
+	spmm_id		varchar(20),
+	pjk_kode	varchar(20),
+	spmd_nilai	numeric(24,2) default 0,
+	spmd_ket	varchar(150),
+	constraint spm_detail2s_pk primary key (spmd_id),
+	constraint spm_detail2s_fk1 foreign key (spmm_id) references spm_masters(spmm_id) on delete cascade 
+);
+---beban rekening
+drop table if exists spm_detail3s cascade;
+create table spm_detail3s (
+	spmd_id		varchar(20),
+	spmm_id		varchar(20),
+	akun_kode		varchar(30),
+	spmd_nilai		numeric(22,4) default 0,
+	spmd_ket		varchar(150),
+	constraint spm_detail3s_pk primary key (spmd_id),
+	constraint spm_detail3s_fk1 foreign key (spmm_id) references spm_masters(spmm_id) on delete cascade 
+);
+
+
+ 
+---SP2D, mengaju pake SPM
+drop table if exists sp2d_masters cascade;
+create table sp2d_masters(
+	sp2dm_id		varchar(20),
+	sp2dm_no		varchar(50),
+	sp2dm_tgl	date,
+	sp2dm_tipe		integer default 0,
+	sp2dm_state	integer default 0,
+	spm_no		varchar(50),
+	
+	sp2dm_benda	varchar(30),
+	bank_norek	varchar(30),
+	npwp_no		varchar(30),
+	sp2dm_ket	varchar(500),
+ 	
+	sp2dm_norek2	varchar(30),
+	sp2dm_bank2		varchar(50),
+	sp2dm_npwp2	varchar(30),
+	sp2dm_nama2	varchar(100),
+	sp2dm_ket2	varchar(500),
+	
+	constraint sp2dm_masters_pk primary key(sp2dm_id)
+);
+
+create index sp2dm_master_idx0 on sp2d_masters(sp2dm_no);
+
+-- daftar potongan spm
+drop table if exists sp2d_detail1s cascade;
+create table sp2d_detail1s (
+	sp2dd_id		varchar(20),
+	sp2dm_id		varchar(20),
+	ptg_kode	varchar(20),
+	sp2dd_nilai	numeric(24,2) default 0,
+	sp2dd_ket	varchar(150),
+	constraint sp2d_detail1s_pk primary key(sp2dd_id),
+	constraint sp2d_detail1s_fk1 foreign key (sp2dm_id) references sp2d_masters(sp2dm_id) on delete cascade 
+);
+-- spm pajak
+drop table if exists sp2d_detail2s cascade;
+create table sp2d_detail2s (
+	sp2dd_id		varchar(20),
+	sp2dm_id		varchar(20),
+	pjk_kode	varchar(20),
+	sp2dd_nilai	numeric(24,2) default 0,
+	sp2dd_ket	varchar(150),
+	constraint sp2d_detail2s_pk primary key (sp2dd_id),
+	constraint sp2d_detail2s_fk1 foreign key (sp2dm_id) references sp2d_masters(sp2dm_id) on delete cascade 
+);
+---beban rekening
+drop table if exists sp2d_detail3s cascade;
+create table sp2d_detail3s (
+	sp2dd_id		varchar(20),
+	sp2dm_id		varchar(20),
+	
+	akun_kode		varchar(30),
+	spmd_nilai		numeric(22,4) default 0,
+	spmd_ket		varchar(150),
+	constraint sp2d_detail3s_pk primary key (sp2dd_id),
+	constraint sp2d_detail3s_fk1 foreign key (sp2dm_id) references sp2d_masters(sp2dm_id) on delete cascade 
+);
+
+

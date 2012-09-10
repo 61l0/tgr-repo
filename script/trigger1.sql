@@ -84,7 +84,7 @@ CREATE TRIGGER spdper_detail2s_bef_ins0  BEFORE INSERT ON spdper_detail2s FOR EA
 
 
 
-
+/* -------------- SPD ---------------------*/
 CREATE OR REPLACE FUNCTION spd_masters_bef_ins0() RETURNS TRIGGER AS $$
 	 
 	BEGIN
@@ -139,3 +139,148 @@ CREATE OR REPLACE FUNCTION spd_detail2s_bef_ins0() RETURNS TRIGGER AS $$
 $$ LANGUAGE 'plpgsql';
 DROP TRIGGER IF EXISTS spd_detail2s_bef_ins0 on spd_detail2s;
 CREATE TRIGGER spd_detail2s_bef_ins0  BEFORE INSERT ON spd_detail2s FOR EACH ROW  EXECUTE PROCEDURE spd_detail2s_bef_ins0();
+
+
+CREATE OR REPLACE FUNCTION reg_spds_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.rs_id is null or new.rs_id='0') then
+			new.rs_id :=   trim(to_char(nextval('reg_spds_rs_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS reg_spds_bef_ins0 on reg_spds;
+CREATE TRIGGER reg_spds_bef_ins0  BEFORE INSERT ON reg_spds FOR EACH ROW  EXECUTE PROCEDURE reg_spds_bef_ins0();
+
+
+CREATE OR REPLACE FUNCTION spm_masters_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.spmm_id is null or new.spmm_id='0') then
+			new.spmm_id :=   trim(to_char(nextval('spm_masters_spmm_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS spm_masters_bef_ins0 on spm_masters;
+CREATE TRIGGER spm_masters_bef_ins0  BEFORE INSERT ON spm_masters FOR EACH ROW  EXECUTE PROCEDURE spm_masters_bef_ins0();
+
+
+
+CREATE OR REPLACE FUNCTION spm_detail1s_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.spmd_id is null or new.spmd_id='0') then
+			new.spmd_id :=   trim(to_char(nextval('spm_detail1s_spmd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS spm_detail1s_bef_ins0 on spm_detail1s;
+CREATE TRIGGER spm_detail1s_bef_ins0  BEFORE INSERT ON spm_detail1s FOR EACH ROW  EXECUTE PROCEDURE spm_detail1s_bef_ins0();
+
+
+CREATE OR REPLACE FUNCTION spm_detail1s_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.spmd_id is null or new.spmd_id='0') then
+			new.spmd_id :=   trim(to_char(nextval('spm_detail1s_spmd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS spm_detail1s_bef_ins0 on spm_detail1s;
+CREATE TRIGGER spm_detail1s_bef_ins0  BEFORE INSERT ON spm_detail1s FOR EACH ROW  EXECUTE PROCEDURE spm_detail1s_bef_ins0();
+
+
+ 
+CREATE OR REPLACE FUNCTION spm_detail2s_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.spmd_id is null or new.spmd_id='0') then
+			new.spmd_id :=   trim(to_char(nextval('spm_detail2s_spmd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS spm_detail2s_bef_ins0 on spm_detail2s;
+CREATE TRIGGER spm_detail2s_bef_ins0  BEFORE INSERT ON spm_detail2s FOR EACH ROW  EXECUTE PROCEDURE spm_detail2s_bef_ins0();
+
+
+CREATE OR REPLACE FUNCTION spm_detail3s_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.spmd_id is null or new.spmd_id='0') then
+			new.spmd_id :=   trim(to_char(nextval('spm_detail3s_spmd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS spm_detail3s_bef_ins0 on spm_detail3s;
+CREATE TRIGGER spm_detail3s_bef_ins0  BEFORE INSERT ON spm_detail3s FOR EACH ROW  EXECUTE PROCEDURE spm_detail3s_bef_ins0();
+
+/* ---------------------- SP2D */
+
+
+CREATE OR REPLACE FUNCTION sp2d_masters_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.sp2dm_id is null or new.spdm_id='0') then
+			new.sp2dm_id :=   trim(to_char(nextval('sp2d_masters_sp2dm_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_masters_bef_ins0 on sp2d_masters;
+CREATE TRIGGER sp2d_masters_bef_ins0  BEFORE INSERT ON sp2d_masters FOR EACH ROW  EXECUTE PROCEDURE sp2d_masters_bef_ins0();
+ 
+CREATE OR REPLACE FUNCTION sp2d_detail1s_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.sp2dd_id is null or new.sp2dd_id='0') then
+			new.sp2dd_id :=   trim(to_char(nextval('sp2d_detail1s_sp2dd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_detail1s_bef_ins1 on sp2d_detail1s;
+CREATE TRIGGER sp2d_detail1s_bef_ins1  BEFORE INSERT ON sp2d_detail1s FOR EACH ROW  EXECUTE PROCEDURE sp2d_detail1s_bef_ins1();
+
+ 
+CREATE OR REPLACE FUNCTION sp2d_detail2s_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.sp2dd_id is null or new.sp2dd_id='0') then
+			new.sp2dd_id :=   trim(to_char(nextval('sp2d_detail2s_sp2dd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_detail2s_bef_ins1 on sp2d_detail2s;
+CREATE TRIGGER sp2d_detail2s_bef_ins1  BEFORE INSERT ON sp2d_detail2s FOR EACH ROW  EXECUTE PROCEDURE sp2d_detail2s_bef_ins1();
+
+ 
+CREATE OR REPLACE FUNCTION sp2d_detail3s_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.sp2dd_id is null or new.sp2dd_id='0') then
+			new.sp2dd_id :=   trim(to_char(nextval('sp2d_detail3s_sp2dd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_detail3s_bef_ins1 on sp2d_detail3s;
+CREATE TRIGGER sp2d_detail3s_bef_ins1  BEFORE INSERT ON sp2d_detail3s FOR EACH ROW  EXECUTE PROCEDURE sp2d_detail3s_bef_ins1();
+
+ 

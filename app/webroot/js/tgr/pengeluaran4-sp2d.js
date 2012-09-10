@@ -454,7 +454,7 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 											}, //end of composite
 											{	 xtype:'datefield',
 												fieldLabel: 'Tanggal SPM',
-												id:'sppm_tgl2',
+												id:'sppm_tgl3',
 												name: 'data[Sp2dMaster][sppm_tglspp]',
 												maxLength:50, 
 												format:'Y-m-d',
