@@ -33,3 +33,7 @@ select  trim(idxdask),trim(kdkegunit),trim(mtgkey),trim(unitkey),nilai from dask
 
 insert into dpa_details(dpam_id,angg_kode,un_id,dpad_nilai)
 select  trim(idxdask), trim(mtgkey),trim(unitkey),nilai from daskrtls;
+
+--select angg_kodeper,trim(substring(angg_kodeper,0,length(angg_kodeper))) from anggarans
+--menghilangkan titik di belakang
+update anggarans set angg_kodeper=trim(substring(angg_kodeper,0,length(angg_kodeper)));

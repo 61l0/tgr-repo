@@ -149,10 +149,10 @@ Ext.onReady(function(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 	}
 	function onStrukturClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+	 //	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 	}
 	function onGajiClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		MyDesktop.getSingleModule('gajigrid-win').createWindow();
 	}
 	function onSerahTerimaClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();

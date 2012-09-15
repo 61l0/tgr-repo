@@ -2,10 +2,14 @@ var  urlbendasearch=HOST_PATH+'/pns/searchbenda';
 var  urlppkdsearch=HOST_PATH+'/pns/searchppkd';
 var urlskpdsearch=HOST_PATH+'/skpd/searchskpd';
 var urldpasearch=HOST_PATH+'/dpa/searchdpa';
+var urldpablsearch=HOST_PATH+'/dpa/searchdpabl';
+var urldpabtlsearch=HOST_PATH+'/dpa/searchdpabtl';
+var urldpabtllist=HOST_PATH+'/dpa/dpabtllist';
+var urldpabllist=HOST_PATH+'/dpa/dpabllist';
 var urldpadetailsearch=HOST_PATH+'/dpa/detailsearch';
-var urlspdsearch=HOST_PATH+'/spd/searchspd';
+var urlspdsearch=HOST_PATH+'/spd/getforcombo';
 var urlspdpersearch=HOST_PATH+'/spdper/searchspd';
-
+var urldpamasterbtlsearch=HOST_PATH+'/dpa/searchmasterbtl';
 var MyDesktop = new Ext.app.App({
 	init :function(){
 		  
@@ -26,9 +30,39 @@ var MyDesktop = new Ext.app.App({
 		return this.getModule(name);
 	}
 });
-var dpadetailComboTpl= new Ext.XTemplate(
-	    '<tpl for="."><div class="search-dpadetail"><p style="padding:3px">',
-        '{akun_kode} (<b>{akun_nama}</b>) </p>',
+
+Ext.namespace('Ext.monthlist');
+//itm_type -> 0 =service, 1=stock,2=non_stock
+Ext.monthlist.data = [
+    ['1', 'Januari'],
+  	['2', 'Pebruari'],
+	['3', 'Maret'],
+	['4', 'April'],
+	['5', 'Mei'],
+	['6', 'Juni'],
+  	['7', 'Juli'],
+	['8', 'Agustus'],
+	['9', 'September'],
+	['10', 'Okter'],
+	['11', 'November'],
+	['12', 'November']
+	
+  ];
+
+var monthlistStore = new Ext.data.ArrayStore({
+  fields: ['id', 'name'],
+  data : Ext.monthlist.data
+});
+
+var dpaBTLComboTpl= new Ext.XTemplate(
+	    '<tpl for="."><div class="search-dpabtl"><p style="padding:3px">',
+        '{akun_kode} (<b>{akun_nama}</b>)',
+        '',
+    '</div></tpl>'
+);
+var dpaBLComboTpl= new Ext.XTemplate(
+	    '<tpl for="."><div class="search-dpabl"><p style="padding:3px">',
+        '{dpam_no} (<b>{un_nama}</b>)<hr/><p>{keg_nama} ({keg_kode}) </p>',
         '',
     '</div></tpl>'
 );
@@ -113,6 +147,7 @@ var skpdSearchStore = new Ext.data.Store({
         id: 'id'
     }, [
         {name: 'id'},
+        {name:'un_id'},
         {name: 'un_kode'},
         {name: 'un_nama'},
         {name: 'dpa_angg',type:'float'},
@@ -124,27 +159,6 @@ var skpdSearchStore = new Ext.data.Store({
     ])
 });
 
-var dpaDetailSearchStore = new Ext.data.Store({
-    proxy: new Ext.data.HttpProxy({
-        url: urldpadetailsearch
-    }),
-    reader: new Ext.data.JsonReader({
-        root: 'dpadetails',
-        totalProperty: 'total',
-        id: 'dpad_id'
-    }, [
-        {name: 'angg_kode'},
-        {name:'akun_kode'},
-        {name: 'akun_nama'},
-        {name: 'dpad_nilai'},
-      
-        {name: 'dpad_nilai',type:'float'} 
-        
-        
-        
-        
-    ])
-});
 var bendaSearchStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: urlbendasearch
@@ -177,9 +191,78 @@ var ppkdSearchStore = new Ext.data.Store({
 });
 
 
-var dpaSearchStore = new Ext.data.Store({
+var dpaBLSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urldpablsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'dpadetails',
+        totalProperty: 'total',
+        id: 'dpam_no'
+    }, [
+        {name:'dpam_id'},
+        {name: 'dpam_no'},
+        {name: 'un_id'},
+       
+        {name: 'un_kode'},
+        {name: 'un_nama'},
+        {name:'keg_kode'},
+        {name:'keg_nama'},
+        {name:'nilaiangg',type:'float'},
+        {name:'nilaiakum',type:'float'},
+        {name:'nilaitersedia',type:'float'}
+        
+        
+        
+    ])
+});
+//view dpa_btl berdasarkan akun
+var dpaBTLSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urldpabtlsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'dpadetails',
+        totalProperty: 'total',
+        id: 'akun_kode'
+    }, [
+        {name: 'angg_kode'},
+        {name:'akun_kode'},
+        {name: 'akun_nama'},
+        {name: 'nilaiangg',type:'float'},
+      
+        {name: 'nilaiakum',type:'float'},
+        {name: 'nilaitersedia',type:'float'} 
+       
+        
+    ])
+});
+var dpaMasterSearchStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: urldpasearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'dpamasters',
+        totalProperty: 'total',
+        id: 'dpam_id'
+    }, [
+        {name:'dpam_id'},
+        {name: 'dpam_no'},
+        {name: 'un_id'},
+        {name: 'un_kode'},
+        {name: 'un_nama'},
+        {name:'dpam_angg',type:'float'},
+        {name:'dpam_akum',type:'float'},
+        {name:'dpam_tersedia',type:'float'}
+        
+        
+        
+    ])
+});
+
+var dpaMasterBtlSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urldpamasterbtlsearch
     }),
     reader: new Ext.data.JsonReader({
         root: 'dpamasters',

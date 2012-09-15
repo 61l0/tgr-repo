@@ -1,8 +1,8 @@
 
 
-drop view if exists spdper_master_lists;
+drop view if exists spdper_master_lists cascade;
 create or replace view spdper_master_lists as
-select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama
+select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama,(m.spdm_angg-m.spdm_akum) as spdm_tersedia
 from spdper_masters m
 left join units u on (m.un_id=u.un_id)
 left join pns p on (m.spdm_benda=p.pn_nip)
@@ -10,7 +10,7 @@ left join pns p2 on (m.spdm_ppkd=p2.pn_nip);
 
 drop view if exists spd_master_lists cascade;
 create or replace view spd_master_lists as
-select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama
+select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama,(m.spdm_angg-m.spdm_akum) as spdm_tersedia
 from spd_masters m
 left join units u on (m.un_id=u.un_id)
 left join pns p on (m.spdm_benda=p.pn_nip)
@@ -77,7 +77,7 @@ group by dpam_no;
 
 drop view if exists dpa_bl cascade;
 create or replace view dpa_bl as
-select m.*,coalesce(d.spdd_akum,0) as nilaiakum
+select m.*,coalesce(d.spdd_akum,0) as nilaiakum,(m.nilaiangg-coalesce(d.spdd_akum,0)) as nilaitersedia
 from dpa_bl0 m
 left join dpa_bl1 d on (m.dpam_no=d.dpam_no);
 
@@ -99,9 +99,50 @@ group by dpam_no,akun_kode;
 
 drop view if exists dpa_btl cascade;
 create or replace view dpa_btl as
-select m.*,coalesce(d.spdd_akum,0) as nilaiakum
+select m.*,coalesce(d.spdd_akum,0) as nilaiakum,(m.nilaiangg-coalesce(d.spdd_akum,0)) as nilaitersedia
 from dpa_btl0 m
 left join dpa_bl1 d on (m.dpam_no=d.dpam_no);
 
+
+drop view if exists dpa_master_btls cascade;
+create or replace view dpa_master_btls as
+select * from dpa_master_lists where dpam_id in (select dpam_id from dpa_btl);
+
+
+drop view if exists dpa_master_bls cascade;
+create or replace view dpa_master_bls as
+select * from dpa_master_lists where dpam_id in (select dpam_id from dpa_bl);
+
+drop view if exists spdper_detail2_lists cascade;
+create or replace view spdper_detail2_lists as
+select d.*,a.angg_namaper as akun_nama,m.spdm_no,m.spdm_tgl,m.un_id,m.un_kode,m.un_nama from spdper_detail2s d
+left join spdper_master_lists m on (d.spdm_id=m.spdm_id)
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists spdper_detail1_lists cascade;
+create or replace view spdper_detail1_lists as
+select d.*,a.keg_kode,a.keg_nama as keg_nama,m.spdm_no,m.spdm_tgl,m.un_id,m.un_kode,m.un_nama from spdper_detail1s d
+left join spdper_master_lists m on (d.spdm_id=m.spdm_id)
+left join dpa_bl a on (d.dpam_no=a.dpam_no);
+
+
+
+drop view if exists spd_detail2_lists cascade;
+create or replace view spd_detail2_lists as
+select d.*,a.angg_namaper as akun_nama,m.spdm_no,m.spdm_tgl,m.un_id,m.un_kode,m.un_nama from spd_detail2s d
+left join spd_master_lists m on (d.spdm_id=m.spdm_id)
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists spd_detail1_lists cascade;
+create or replace view spd_detail1_lists as
+select d.*,a.keg_kode,a.keg_nama as keg_nama,m.spdm_no,m.spdm_tgl,m.un_id,m.un_kode,m.un_nama from spd_detail1s d
+left join spd_master_lists m on (d.spdm_id=m.spdm_id)
+left join dpa_bl a on (d.dpam_no=a.dpam_no);
+
+drop view if exists reg_spd_lists cascade;
+create or replace view reg_spd_lists 
+as
+select r.*, u.un_kode,u.un_nama from reg_spds r
+left join units u on (r.un_id=u.un_id)
 
 

@@ -284,3 +284,17 @@ DROP TRIGGER IF EXISTS sp2d_detail3s_bef_ins1 on sp2d_detail3s;
 CREATE TRIGGER sp2d_detail3s_bef_ins1  BEFORE INSERT ON sp2d_detail3s FOR EACH ROW  EXECUTE PROCEDURE sp2d_detail3s_bef_ins1();
 
  
+CREATE OR REPLACE FUNCTION reg_spds_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.rs_id is null or new.rs_id='0') then
+			new.rs_id :=   trim(to_char(nextval('reg_spds_rs_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS reg_spds_bef_ins1 on reg_spds;
+CREATE TRIGGER reg_spds_bef_ins1  BEFORE INSERT ON reg_spds FOR EACH ROW  EXECUTE PROCEDURE reg_spds_bef_ins1();
+
+ 

@@ -1,6 +1,7 @@
 var urladdregspd=HOST_PATH+'/regspd/add'; 
 var  urlregspd=HOST_PATH+'/regspd/getall'; 
-
+var urlgetspdcombo=HOST_PATH+'/spd/getforcombo'
+ 
 var RegSpdJsonReader =  new Ext.data.JsonReader({
  
 	remoteSort: false,
@@ -12,11 +13,12 @@ var RegSpdJsonReader =  new Ext.data.JsonReader({
 	 
 		{name:'data[RegSpd][rs_id]',mapping:'RegSpdList.rs_id'},
 		{name:'data[RegSpd][rs_no]',mapping:'RegSpdList.rs_no'},
+		{name:'data[RegSpd][spdm_no]',mapping:'RegSpdList.spdm_no'},
 		{name:'data[RegSpd][rs_tgl]',mapping:'RegSpdList.rs_tgl', type: 'date', dateFormat: 'Y-m-d'},
 		{name:'data[RegSpd][un_id]',mapping:'RegSpdList.un_id'},
 		{name:'data[RegSpd][un_kode]',mapping:'RegSpdList.un_kode'},
 		{name:'data[RegSpd][un_nama]',mapping:'RegSpdList.un_nama'},
-		{name:'data[RegSpd][rs_catatan]',mapping:'RegSpdList.rs_catatan'},
+		{name:'data[RegSpd][rs_catatan]',mapping:'RegSpdList.rs_catatan'} 
 	 
 	]
 	 
@@ -60,7 +62,7 @@ MyDesktop.EntryRegSPDForm = Ext.extend(Ext.app.Module, {
                 id: this.id,
                 title:this.title,
                 width:400,
-                height:250,
+                height:300,
                 iconCls: 'icon-form',
                 animCollapse:false,
                 constrainHeader:true,
@@ -82,7 +84,13 @@ MyDesktop.EntryRegSPDForm = Ext.extend(Ext.app.Module, {
 								xtype:'hidden',
 								name:'data[RegSpd][rs_id]'
 							},
-							
+							{
+								//for add or edit
+								xtype:'hidden',
+								name:'data[RegSpd][rs_type]',
+								id:'rs_type',
+								value:'0'
+							},
 							{
 				    			fieldLabel: 'No Register',
 				                name: 'data[RegSpd][rs_no]',
@@ -99,6 +107,58 @@ MyDesktop.EntryRegSPDForm = Ext.extend(Ext.app.Module, {
 								value:new Date(),
 						 		allowBlank:false
 							},
+							{
+		                        xtype : 'compositefield',
+		                       anchor:'95%',
+		                        msgTarget: 'side',
+		                        fieldLabel: 'SKPD',
+		                        items : [ 
+									new Ext.form.ComboBox({
+					 						 id:'un_id3',
+											 store: skpdSearchStore,
+											 hiddenName:'data[RegSpd][un_id]',
+											 fieldLabel:'SKPD',
+											 displayField:'un_kode',
+											 typeAhead: false,
+											 enableKeyEvents :true, 
+											 valueField:'un_id',
+											  triggerAction: 'all',
+											 loadingText: 'Searching...',
+											 minChars:0,
+											 pageSize:20,
+											 boxMinWidth: 80,
+											 boxMinHeight: 100,
+											 width:120,
+											 hideTrigger:false,
+											 forceSelection: true,
+											 tpl:skpdComboTpl,
+											 allowBlank:false,
+											 itemSelector: 'div.search-skpd',
+											 listeners: {
+			  										select: function(thiscombo,record, index){
+														  
+														 Ext.getCmp('un_nama3').setValue(record.get('un_nama'));
+													 
+														 combo=Ext.getCmp('rs_spdm_no1');
+														 
+													     combo.store.baseParams={un_id:record.get('un_id')};
+					    	  							 combo.store.removeAll();
+							 							 combo.lastQuery=null;
+							 							 
+													}	
+												}
+											 
+						
+											 }),
+									{	xtype:'textfield',
+										id:'un_nama3',
+										fieldLabel: '',
+										name: 'data[RegSpd][un_nama]',
+										flex : 1,
+										readOnly:true 
+									}
+									]
+							}, //end of composite
 							new Ext.form.ComboBox({
 								 id:'rs_spdm_no1',
 								 store: spdSearchStore,
@@ -141,10 +201,10 @@ MyDesktop.EntryRegSPDForm = Ext.extend(Ext.app.Module, {
 						 buttons: [{
 				            text: 'Save',
 							id:'regpsd1-save',
-							disabled:true,
+							 
 							handler:function(){
 								 if (entryregspdform.getForm().isValid()) {
-								 	addwhform.getForm().submit({
+								 	entryregspdform.getForm().submit({
 								 		url: urladdregspd,
 								 		waitMsg: 'Menyimpan data...',
 								 		success: function(form, action){
@@ -175,7 +235,7 @@ MyDesktop.EntryRegSPDForm = Ext.extend(Ext.app.Module, {
 				        },{
 				            text: 'Cancel',
 							id:'regpsd1-cancel',
-							disabled:true,
+							 
 							handler:function(){
 							
 								 MyDesktop.getSingleModule('entryregspd-win').closeWindow();
@@ -245,6 +305,12 @@ MyDesktop.RegSPDGridWindow = Ext.extend(Ext.app.Module, {
 								 renderer: function(date) { return date.format("d/m/Y"); }
 						
 							},
+							  {
+								header: "SKPD",
+								dataIndex: 'data[RegSpd][un_nama]',
+								width: 100,
+								sortable: true
+							},
 							 {
 								header: "No SPD",
 								dataIndex: 'data[RegSpd][spdm_no]',
@@ -310,7 +376,7 @@ MyDesktop.RegSPDGridWindow = Ext.extend(Ext.app.Module, {
 										handler: function(){
 											 
 											 MyDesktop.getSingleModule('entryregspd-win').createWindow();
-											 
+											 Ext.getCmp('rs_type').setValue('0');
 															 
 										}
 									} , {
@@ -319,6 +385,8 @@ MyDesktop.RegSPDGridWindow = Ext.extend(Ext.app.Module, {
 										iconCls: 'edit',
 										disabled: true,
 										handler: function(){
+											 MyDesktop.getSingleModule('entryregspd-win').createWindow();
+											 Ext.getCmp('rs_type').setValue('1');
 										 
 										}
 									},{
@@ -327,7 +395,7 @@ MyDesktop.RegSPDGridWindow = Ext.extend(Ext.app.Module, {
 											iconCls: 'delete',
 											disabled: true,
 											handler: function(){
-												/*
+												 
 												  aid=gridregspd.getSelectionModel().getSelected().get('RegSpdList.regspdm_id');
 												
 												Ext.MessageBox.show({
@@ -370,7 +438,7 @@ MyDesktop.RegSPDGridWindow = Ext.extend(Ext.app.Module, {
 						
 													    });
 												   }
-											    };*/
+											    }; 
 											}
 										}   ]
 								
