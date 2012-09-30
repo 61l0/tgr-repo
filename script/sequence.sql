@@ -21,10 +21,22 @@ create sequence sp2d_detail2s_sp2dd_id_seq increment 1;
 create sequence sp2d_detail3s_sp2dd_id_seq increment 1;
 
 create sequence spm_masters_spmm_id_seq increment 1;
-create sequence spm_detail0s_spmd_id_seq increment 1;
+create sequence spm_detail3s_spmd_id_seq increment 1;
 create sequence spm_detail1s_spmd_id_seq increment 1;
 create sequence spm_detail2s_spmd_id_seq increment 1;
 
 create sequence gaji_masters_gm_id_seq increment 1;
 create sequence gaji_detail1s_gd_id_seq increment 1;
 create sequence gaji_detail2s_gd_id_seq increment 1;
+
+
+create sequence spp_masters_sppm_id_seq increment 1;
+create sequence spp_detail1s_sppd_id_seq increment 1;
+create sequence spp_detail2s_sppd_id_seq increment 1;
+
+create sequence acara_masters_am_id_seq increment 1;
+create sequence acara_details_ad_id_seq increment 1;
+ 
+
+create sequence bansos_masters_bm_id_seq increment 1;
+create sequence bansos_details_bd_id_seq increment 1;

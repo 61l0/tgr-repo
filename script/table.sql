@@ -37,7 +37,7 @@ create table akun_balances(
 	ab_refname	varchar(50),
 	ab_refmode		smallint default 0,
 	ab_desc		varchar(250),
-	 
+	afix		integer default 0,
 	constraint akun_balance_pk primary key(ab_id),
 	constraint akun_balance_fk1 foreign key (akun_kode) references akun(akun_kode) on delete cascade
 );
@@ -77,7 +77,7 @@ create table potongans (
 	ptg_kode 	varchar(50),
 	ptg_nama	varchar(80),
 	ptg_catatan	varchar(150),
-	constraint potongan_pk primary key(ptg_kode);
+	constraint potongan_pk primary key(ptg_kode)
 );
 
 drop table if exists pajaks cascade;
@@ -446,16 +446,31 @@ create index reg_spds_idx0 on reg_spds(rs_no);
 -- UP/TU cukup spp_masters
 
 -- spdm_tipe=UP/GU/TU/LS
-drop table if exists spp_masters(
+drop table if exists spp_masters;
+create table spp_masters(
 	sppm_id		varchar(20),
 	sppm_no		varchar(50),
 	sppm_tgl	date,
 	un_id		varchar(20),
-	spdm_tipe	varchar(3),
+	sppm_tipe	varchar(3),
 	spdm_no		varchar(50),
-	sppm_sisaspd	numeric
+	sppm_sisaspd	numeric(24,2) default 0,
 	sppm_total	numeric(24,2) default 0,
-	bank_kode	varchar(20),
+	bank_norek	varchar(20),
+	sppm_benda	varchar(30),
+	spdm_bln1		integer default 1,
+	spdm_bln2		integer default 2,
+	
+	sppm_namaper		varchar(100),
+	sppm_bentukper		varchar(100),
+	sppm_pimpper		varchar(100),
+	sppm_alamatper		varchar(250),
+	sppm_bankper		varchar(125),
+	sppm_norekper		varchar(50),
+	sppm_nokontrakper	varchar(100),
+	sppm_keglanjut		integer default 0,
+	sppm_waktulaksana	varchar(150),
+	sppm_deskripsikerja	varchar(250),
 	constraint spp_masters_pk primary key (sppm_id)
 );
 create index spp_masters_idx0 on spp_masters(sppm_no);
@@ -465,24 +480,34 @@ create table spp_detail1s(
 	sppd_id	varchar(20),
 	sppm_id	varchar(20),
 	dpam_no		varchar(50),
+	sppd_angg	numeric(24,2) default 0,
+	sppd_akum	numeric(24,2) default 0,
 	sppd_nilai	numeric(24,2) default 0,
+	sppd_sisa	numeric(24,2) default 0,
+	
 	constraint spp_detail1s_pk primary key(sppd_id),
 	constraint spp_detail1s_fk1 foreign key (sppm_id) references spp_masters(sppm_id) on delete cascade 
 );
 
-create index spp_detail1s_idx0 spp_detail2s(dpam_no);
+create index spp_detail1s_idx0 on spp_detail1s(dpam_no);
 
 --spdm_detail2s -- untuk daftar kode rekening
 create table spp_detail2s(
 	sppd_id	varchar(20),
 	sppm_id	varchar(20),
+	dpam_no		varchar(50),
 	akun_kode	varchar(30),
+	sppd_angg	numeric(24,2) default 0,
+	sppd_akum	numeric(24,2) default 0,
 	sppd_nilai	numeric(24,2) default 0,
+	sppd_sisa	numeric(24,2) default 0,
+	sppd_nobelanja	varchar(50),
 	constraint spp_detail2s_pk primary key(sppd_id),
 	constraint spp_detail2s_fk1 foreign key (sppm_id) references spp_masters(sppm_id) on delete cascade 
 );
 
-create index spp_details2s_idx0 spp_detail2s(akun_kode);
+create index spp_details2s_idx0 on spp_detail2s(akun_kode);
+create index spp_details2s_idx1 on spp_detail2s(dpam_no);
 --
 ---SPM
 /*
@@ -645,6 +670,7 @@ create index je_detail_idx1 on  je_details(akun_kode);
 create table gaji_masters(
 	gm_id	varchar(20),
 	gm_tgl	date,
+	gm_no		varchar(50),
 	un_id	varchar(20),
 	gm_bulan	integer,
 	gm_tahun 	integer,
@@ -658,6 +684,7 @@ create table gaji_masters(
 );
 -- rekening gaji
 create table gaji_detail1s(
+	gm_id	varchar(20),
 	gd_id	varchar(20),
 	akun_kode		varchar(30),
 	gd_nilai	numeric(24,2) default 0,
@@ -665,9 +692,10 @@ create table gaji_detail1s(
 	constraint gaji_detail1s_fk1 foreign key (gm_id) references gaji_masters(gm_id) on delete cascade 
 
 );
-create index gaji_detail1s_idx0 on gaji_detail2s(akun_kode);
+create index gaji_detail1s_idx0 on gaji_detail1s(akun_kode);
 --- ini untuk potongan2
 create table gaji_detail2s(
+	gm_id	varchar(20),
 	gd_id	varchar(20),
 	gd_nama		varchar(100),
 	gd_nilai	numeric(24,2) default 0,
@@ -679,35 +707,41 @@ create table gaji_detail2s(
 -- berita acara
 -- ada program/kegiatan, makan selalu gunakan DPA saja
 create table  acara_masters(
-	am_id	varchar(20),
+	am_id	varchar(30),
 	am_no	varchar(50),
 	am_tgl	date,
 	un_id	varchar(20),
-	dpam_no	varchar(30),
+	prog_kode	varchar(30),
+	keg_kode	varchar(30),
 	am_pihak1 varchar(100),
 	am_pihak2 varchar(100),
 	constraint acara_masters_pk primary key(am_id)
 );
+create index acara_masters_idx0 on acara_masters(un_id);
 
 create table  acara_details( 
-	ad_id	varchar(20),
+	am_id	varchar(30),
+	ad_id	varchar(30),
 	akun_kode		varchar(30),
 	ad_nilai	numeric(24,2) default 0,
 	constraint acara_details_pk primary key(ad_id),
-	constraint acara_details_fk foreign key (gm_id) references gaji_masters(gm_id) on delete cascade 
+	constraint acara_details_fk foreign key (am_id) references acara_masters(am_id) on delete cascade 
 );
-
 create index acara_details_idx0 on acara_details(akun_kode);
 
 create table bansos_masters(
-	bm_id	varchar(20),
+	bm_id	varchar(30),
 	bm_no	varchar(50),
 	bm_tgl	date,
-	dpam_no	varchar(30),
+	bm_tentang varchar(250),
+	un_id	varchar(20),
+	prog_kode	varchar(30),
+	keg_kode	varchar(30),
 	constraint bansos_masters_pk primary key(bm_id)
 );
 
 create table bansos_details(
+	bm_id	varchar(30),
 	bd_id	varchar(20),
 	akun_kode		varchar(30),
 	bd_nilai	numeric(24,2) default 0,
@@ -813,7 +847,7 @@ create table skr_masters(
 	sm_masa		integer default 0.
 	sm_tahun	integer default 0,
 	sm_nama	varchar(125),
-	sm_alamat		varchar(250),
+	sm_alamat		varchar(250), 
 	sm_npwr		varchar(100),
 	sm_tgltempo	date,
 	constraint skr_masters_pk primary key(sm_id)

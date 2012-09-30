@@ -66,6 +66,11 @@ Ext.onReady(function(){
         		handler: onSPPGUClick
         	},
         	{
+        		text:'SPP TU',
+        		id:'mnSPPTU',
+        		handler: onSPPTUClick
+        	},
+        	{
         		text:'SPP LS',
         		id:'mnSPPLS',
         		handler: onSPPLSClick
@@ -153,24 +158,35 @@ Ext.onReady(function(){
 	}
 	function onGajiClick(){
 		MyDesktop.getSingleModule('gajigrid-win').createWindow();
+		MyDesktop.getSingleModule('entrygaji-win').createWindow();
 	}
 	function onSerahTerimaClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		MyDesktop.getSingleModule('acaragrid-win').createWindow();
+		MyDesktop.getSingleModule('entryacara-win').createWindow();
 	}
 	function onBansosClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		MyDesktop.getSingleModule('bansosgrid-win').createWindow();
+		MyDesktop.getSingleModule('entrybansos-win').createWindow();
 	}
 	function onSPPUPClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		MyDesktop.getSingleModule('sppgrid-win').createWindow();
+		MyDesktop.getSingleModule('entrySPPUP-win').createWindow();
 	}
 	function onSPPGUClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		MyDesktop.getSingleModule('sppgrid-win').createWindow();
+		MyDesktop.getSingleModule('entrySPPGU-win').createWindow();
 	}
+	function onSPPTUClick(){
+		MyDesktop.getSingleModule('sppgrid-win').createWindow();
+		MyDesktop.getSingleModule('entrySPPTU-win').createWindow();
+		}
 	function onSPPLSClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		MyDesktop.getSingleModule('sppgrid-win').createWindow();
+		MyDesktop.getSingleModule('entrySPPLS-win').createWindow();
 	}
 	function onSPMClick(){
 	 MyDesktop.getSingleModule('spmgrid-win').createWindow();
+	 MyDesktop.getSingleModule('entryspm-win').createWindow();
 	}
 	function onSP2DClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();

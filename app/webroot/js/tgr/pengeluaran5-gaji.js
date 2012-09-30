@@ -1,8 +1,52 @@
 /* GAJI */
 var  urlgajimaster=HOST_PATH+'/gaji/getall'; 
 var urladdgajimaster=HOST_PATH+'/gaji/add';
- 
+var urlgetdpadetailbyun=HOST_PATH+'/dpa/readdetailbyun';
 
+var detailDPABTL1Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetdpadetailbyun
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'dpad_id',
+    fields : [
+        	{name: 'dpad_id'},
+	{name: 'dpam_no'},
+	{name: 'akun_kode'},
+	{name: 'akun_nama'},
+	{name: 'nilaiangg'} ,
+	{name: 'nilaitersedia'},
+	{name: 'nilaiakum'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new GajiDetail1Store.recordType({
+					gd_id: 0,
+					gm_id: '',
+					 
+					akun_kode:recordlist[i].get('akun_kode'),
+					akun_nama:recordlist[i].get('akun_nama'),
+					 
+					gd_nilai:0 
+			
+			});
+		 
+			GajiDetail1Store.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    	 
+    	}
+    }
+    
+});
 var GajiMasterJsonReader =  new Ext.data.JsonReader({
  
 	remoteSort: false,
@@ -23,20 +67,52 @@ var GajiMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[GajiMaster][gm_bulan]',mapping:'GajiMasterList.gm_bulan'},
 		{name:'data[GajiMaster][gm_tahun]',mapping:'GajiMasterList.gm_tahun'},
 		{name:'data[GajiMaster][gm_kotor]',mapping:'GajiMasterList.gm_kotor'},
-		{name:'data[GajiMaster][gm_bulan]',mapping:'GajiMasterList.gm_bulan'} 
+		{name:'data[GajiMaster][gm_potongan]',mapping:'GajiMasterList.gm_potongan'},
+		{name:'data[GajiMaster][gm_bersih]',mapping:'GajiMasterList.gm_bersih'},
+		{name:'data[GajiMaster][gm_bulat]',mapping:'GajiMasterList.gm_bulat'} 
 		 
 	]
 	 
 	 
 });
 function hitungTotalGaji(){
-	 
+	totkotor=0;totpotongan=0;totbersih=0;totbulat=0;
+	for (i=0;i<GajiDetail1Store.getCount();i++){
+	 if (GajiDetail1Store.getAt(i).get('gd_nilai')>0)
+	 totkotor=totkotor+parseFloat(GajiDetail1Store.getAt(i).get('gd_nilai'));
+	}
+	 for (i=0;i<GajiDetail2Store.getCount();i++){
+	 if (GajiDetail1Store.getAt(i).get('gd_nilai')>0)
+	 totpotongan=totpotongan+parseFloat(GajiDetail2Store.getAt(i).get('gd_nilai'));
+	}
+	  
+	 totbersih=totkotor-totpotongan;
+	 totbulat=totbersih;
+	 Ext.getCmp('gm_kotor1').setValue(totkotor);
+	 Ext.getCmp('gm_potongan1').setValue(totpotongan);
+	 Ext.getCmp('gm_bersih1').setValue(totbersih);
+	 Ext.getCmp('gm_bulat1').setValue(totbulat);
 	
 }
 function proc_gaji2(o){ 
 	hitungTotalGaji();
 }
 function proc_gaji1(o){ 
+	if (o.field=="akun_kode"){
+		idxRec=dpaBTLByUNSearchStore.findBy(function(record, id){
+			  	 
+		        if(record.get('akun_kode') === o.value  ) {
+				   		 
+		              return true;  // a record with this data exists
+		        }
+		        return false;  // there is no record in the store with this data
+		    	},dpaBTLByUNSearchStore,0);
+			//alert("idxRec"+idxRec);
+			//alert(accountActiveComboStore.getAt(idxRec).get("acc_name"));
+			o.record.set("akun_nama",dpaBTLByUNSearchStore.getAt(idxRec).get("akun_nama"));
+			 
+
+	}
 	hitungTotalGaji();
 }
 var GajiMasterStore = new Ext.data.GroupingStore({
@@ -81,18 +157,15 @@ var gajiDetail1_proxy = new Ext.data.HttpProxy({
 var gajiDetail1_reader = new Ext.data.JsonReader({
 	totalProperty: 'total',
     successProperty: 'success',
-    idProperty: 'spdd_id',
+    idProperty: 'gd_id',
     root: 'data',
     messageProperty: 'message'  // <-- New "messageProperty" meta-data
 }, [ 
-	{name:'spdd_id'},
+	{name:'gd_id'},
 	{name: 'akun_kode'},
 	{name: 'akun_nama'},
 	{name: 'gm_id'},
-	{name: 'spdd_akum',type:'float'}, 
-	{name: 'spdd_angg',type:'float'},
-	{name: 'spdd_nilai',type:'float'},
-	{name: 'spdd_sisa',type:'float'} 
+	{name: 'gd_nilai',type:'float'} 
 	 
 ]); 
 
@@ -172,16 +245,14 @@ var GajiDetail1Grid = Ext.extend( Ext.grid.EditorGridPanel, {
 		if (acontinue) {
 			//alert('continue');
 			var u = new this.store.recordType({
-				spdd_id: 0,
+				gd_id: 0,
 				gm_id: '',
-				dpam_no:'',
+				 
 				 
 				akun_kode:'',
 				akun_nama:'',
-				spdd_angg:0,
-				spdd_akum:0,
-				spdd_nilai:0,
-				spdd_sisa:0  
+				gd_nilai:0 
+				 
 			});
 			
 			this.store.insert(0, u);
@@ -247,20 +318,14 @@ var gajiDetail2_proxy = new Ext.data.HttpProxy({
 var gajiDetail2_reader = new Ext.data.JsonReader({
 	totalProperty: 'total',
     successProperty: 'success',
-    idProperty: 'spdd_id',
+    idProperty: 'gd_id',
     root: 'data',
     messageProperty: 'message'  // <-- New "messageProperty" meta-data
 }, [ 
-	{name: 'spdd_id'},
-	{name: 'dpam_no'},
-	{name: 'keg_kode'},
-	{name: 'keg_nama'},
+	{name: 'gd_id'},
+	{name: 'gd_nama'},
 	 
-	 
-	{name: 'spdd_angg',type:'float'},
-	{name: 'spdd_akum',type:'float'},
-	{name: 'spdd_nilai',type:'float'},
-	{name: 'spdd_sisa',type:'float'} 
+	{name: 'gd_nilai',type:'float'} 
 	 
 ]); 
 
@@ -340,14 +405,11 @@ var GajiDetail2Grid = Ext.extend( Ext.grid.EditorGridPanel, {
 		if (acontinue) {
 			//alert('continue');
 			var u = new this.store.recordType({
-				spdd_id: 0,
+				gd_id: 0,
 				gm_id: '',
-				dpam_no:'',
+				gd_nama:'',
 			 
-				spdd_angg:0,
-				spdd_akum:0,
-				spdd_nilai:0,
-				spdd_sisa:0  
+				gd_nilai:0
 			});
 			
 			this.store.insert(0, u);
@@ -558,7 +620,7 @@ MyDesktop.GajiGridWindow = Ext.extend(Ext.app.Module, {
 												Ext.getCmp('gm_tgl1').setReadOnly(false);
 												Ext.getCmp('gm_id1').setValue(0);
 											 
-												Ext.getCmp('un_id1').enable();
+												Ext.getCmp('gaji_un_id1').enable();
 															 
 										}
 									   } , {
@@ -680,7 +742,7 @@ MyDesktop.GajiGridWindow = Ext.extend(Ext.app.Module, {
 		gridgaji.on('rowdblclick',function(sm, rowindex, eventobject){
 			 
 			 mid=gridgaji.getSelectionModel().getSelected().get("GajiMasterList.gm_id");
-		 	 GajiDetail0Store.load({params:{gm_id:mid}});				 
+		   
 			 GajiDetail2Store.load({params:{gm_id:mid}});
 			 GajiDetail1Store.load({params:{gm_id:mid}});
 			 MyDesktop.getSingleModule('entrygaji-win').createWindow();
@@ -786,6 +848,15 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 												 
 												allowBlank:false
 											}  
+											,{	 xtype:'numberfield',
+												fieldLabel: 'Gaji Bulan #',
+												name: 'data[GajiMaster][gm_bulan]',
+												maxLength:20,
+												id:'gm_bulan1',
+												 
+												allowBlank:false 
+												 
+											} 
 										]
 									},
 									{
@@ -801,7 +872,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 						                        fieldLabel: 'SKPD',
 						                        items : [ 
 													new Ext.form.ComboBox({
-									 						 id:'un_id1',
+									 						 id:'gaji_un_id1',
 															 store: skpdSearchStore,
 															 hiddenName:'data[GajiMaster][un_id]',
 															 fieldLabel:'SKPD',
@@ -823,14 +894,23 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 															 itemSelector: 'div.search-skpd',
 															 listeners: {
 							  										select: function(thiscombo,record, index){
-																		  
+																		   Ext.getCmp('gaji_un_nama1').setValue(record.get('un_nama'));
+																	 
+																		 detailDPABTL1Store.load({
+																	 				params: {
+																	 					un_id: record.get('un_id')
+																	 				}
+																	 			});
+																	     dpaBTLByUNSearchStore.baseParams={un_id:record.get('un_id')};
+									    	  							 dpaBTLByUNSearchStore.removeAll();
+											 							 dpaBTLByUNSearchStore.lastQuery=null;
 																	}	
 																}
 															 
 										
 															 }),
 													{	xtype:'textfield',
-														id:'un_nama1',
+														id:'gaji_un_nama1',
 														fieldLabel: '',
 														name: 'data[GajiMaster][un_nama]',
 														flex : 1,
@@ -879,7 +959,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																					sortable: true,
 																					editor: {
 																						xtype:'combo',
-																						store: dpaBTLSearchStore,
+																						store: dpaBTLByUNSearchStore,
 																						displayField: 'akun_kode',
 																						typeAhead: false,
 																						enableKeyEvents: true,
@@ -897,7 +977,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																						itemSelector: 'div.search-dpabtl',
 																						listeners : {
 																							focus : function(){
-																								 
+																								 dpaBTLByUNSearchStore.baseParams={un_id:Ext.getCmp('gaji_gaji_un_id1').getValue()};
 																							}
 																						}
 																					
@@ -915,6 +995,9 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																					summaryType: 'sum',
 																					align:'right',
 																					dataIndex: 'gd_nilai',
+																					isCellEditable: true,
+																					allowBlank: false,
+																	 				editor:new Ext.form.TextField({enableKeyEvents :true }),
 																					 renderer: Ext.util.Format.numberRenderer('0,000.00')
 																					 
 																				} ,
@@ -990,9 +1073,9 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 									layout:'column',
 									bodyStyle:'padding:5px 5px 0',
 									border: false,
-									columns:4,
+									columns:2,
 									defaults: {
-										columnWidth: '.25',
+										columnWidth: '.5',
 										border: false,
 										align:'right'
 									},       
@@ -1008,8 +1091,8 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 										  	 {
 											 	xtype:'numberfield',
 												fieldLabel:'Total Kotor',
-												name:'data[SalesMaster][sm_shipweight]',
-												id:'sm_shipweight',
+												name:'data[GajiMaster][gm_kotor]',
+												id:'gm_kotor1',
 												
 												value:'0',
 												fieldClass:'numberfield',
@@ -1032,8 +1115,8 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 											  {
 											 	xtype:'numberfield',
 												fieldLabel:'Total Potongan',
-												name:'data[SalesMaster][sm_subtotal]',
-												id:'sm_subtotal',
+												name:'data[GajiMaster][gm_potongan]',
+												id:'gm_potongan1',
 												value:'0',
 												readOnly:true,
 												fieldClass:'numberfield',
@@ -1049,8 +1132,8 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 											{
 											 	xtype:'numberfield',
 												fieldLabel:'Total Bersih',
-												name:'data[SalesMaster][sm_disc1]',
-												id:'sm_disc1',
+												name:'data[GajiMaster][gm_bersih]',
+												id:'gm_bersih1',
 												value:'0',
 												 
 												fieldClass:'numberfield',
@@ -1073,8 +1156,8 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 											 {
 											 	xtype:'numberfield',
 												fieldLabel:'Total Pembulatan',
-												name:'data[SalesMaster][sm_tottax]',
-												id:'sm_tottax',
+												name:'data[GajiMaster][gm_bulat]',
+												id:'gm_bulat1',
 												value:'0',
 												readOnly:true,
 												fieldClass:'numberfield',
@@ -1097,7 +1180,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 						 		iconCls: 'new',
 						 		handler: function(){
 						 			entrygajiform.getForm().reset();
-						 			entrybtl_gaji.getForm().reset();
+						 		 
 						 			GajiDetail2Store.load({
 						 				params: {
 						 					gm_id: 0
@@ -1112,7 +1195,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 									Ext.getCmp('gm_tgl1').setReadOnly(false);
 									Ext.getCmp('gm_id1').setValue(0);
 								 
-									Ext.getCmp('un_id1').enable();
+									Ext.getCmp('gaji_un_id1').enable();
 									 
 						 		}
 						 	},{
@@ -1155,7 +1238,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 														
 														GajiDetail2Store.save();
 														GajiDetail1Store.save();
-														Ext.getCmp('spdd_spdmid1').setValue(newid);
+														Ext.getCmp('gm_id1').setValue(newid);
 														entrybtl_gaji.getForm().submit({
 						 											url: urladdgajidetail0
 						 											});

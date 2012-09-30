@@ -1,6 +1,135 @@
-var urladdspm=HOST_PATH+'/spm/add'; 
+var urladdspmmaster=HOST_PATH+'/spm/add'; 
 var urlspm=HOST_PATH+'/spm/getall'; 
+var urlgetsppdetailbyno=HOST_PATH+'/spp/getdetail2byno'; 
+var urlgetpotongan=HOST_PATH+'/lain/getpotongan'; 
+var urlgetpajak=HOST_PATH+'/lain/getpajak'; 
+var detailPotonganStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpotongan
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'ptg_kode',
+    fields : [
+        	{name: 'ptg_kode'},
+	 
+	{name: 'ptg_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new spmdPotStore.recordType({
+					spmd_id: 0,
+					sppm_id: '',
+				  
+					ptg_kode:recordlist[i].get('ptg_kode'),
+					 
+					spmd_nilai:0
+				 
+			
+			});
+		 
+			spmdPotStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
 
+var detailPajakStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpajak
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'pjk_kode',
+    fields : [
+        	{name: 'pjk_kode'},
+	 
+	{name: 'pjk_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new spmdPajakStore.recordType({
+					spmd_id: 0,
+					sppm_id: '',
+				 	 
+					pjk_kode:recordlist[i].get('pjk_kode'),
+					 
+					spmd_nilai:0
+				 
+			
+			});
+		 
+			spmdPajakStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
+var detailSPP1Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetsppdetailbyno
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'sppd_id',
+    fields : [
+        	{name: 'sppd_id'},
+	 
+	{name: 'akun_kode'},
+	{name: 'akun_nama'},
+	{name: 'sppd_nilai'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new spmdBebanStore.recordType({
+					spmd_id: 0,
+					sppm_id: '',
+				 	spmd_ket:'',
+					akun_kode:recordlist[i].get('akun_kode'),
+					akun_nama:recordlist[i].get('akun_nama'),
+					 
+					spmd_nilai:recordlist[i].get('sppd_nilai') 
+				 
+			
+			});
+		 
+			spmdBebanStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
 function proc_spmpot(){
 	
 }
@@ -12,10 +141,10 @@ function proc_spmbeban(){
 }
 var spmdPot_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/spm/readdetail_pot',
-        create : HOST_PATH+'/spm/createdetail_pot',
-        update:  HOST_PATH+'/spm/updatedetail_pot',
-        destroy:  HOST_PATH+'/spm/destroydetail_pot'
+        read : HOST_PATH+'/spm/readdetail_1',
+        create : HOST_PATH+'/spm/createdetail_1',
+        update:  HOST_PATH+'/spm/updatedetail_1',
+        destroy:  HOST_PATH+'/spm/destroydetail_1'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -98,10 +227,10 @@ var spmPotGrid = Ext.extend( Ext.grid.EditorGridPanel, {
 
 var spmdPajak_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/spm/readdetail_pajak',
-        create : HOST_PATH+'/spm/createdetail_pajak',
-        update:  HOST_PATH+'/spm/updatedetail_pajak',
-        destroy:  HOST_PATH+'/spm/destroydetail_pajak'
+        read : HOST_PATH+'/spm/readdetail_2',
+        create : HOST_PATH+'/spm/createdetail_2',
+        update:  HOST_PATH+'/spm/updatedetail_2',
+        destroy:  HOST_PATH+'/spm/destroydetail_2'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -131,7 +260,7 @@ var spmdPajak_reader = new Ext.data.JsonReader({
 }, [  
 	{name: 'spmd_id'},
 	{name: 'spmm_id'},
-	{name: 'ptg_kode'},
+	{name: 'pjk_kode'},
 	 
 	{name: 'spmd_nilai',type:'float'},
 	{name: 'spmd_ket',type:'float'} 
@@ -186,10 +315,10 @@ var spmPajakGrid = Ext.extend( Ext.grid.EditorGridPanel, {
 
 var spmdBeban_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/spm/readdetail_beban',
-        create : HOST_PATH+'/spm/createdetail_beban',
-        update:  HOST_PATH+'/spm/updatedetail_beban',
-        destroy:  HOST_PATH+'/spm/destroydetail_beban'
+        read : HOST_PATH+'/spm/readdetail_3',
+        create : HOST_PATH+'/spm/createdetail_3',
+        update:  HOST_PATH+'/spm/updatedetail_3',
+        destroy:  HOST_PATH+'/spm/destroydetail_3'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -220,9 +349,9 @@ var spmdBeban_reader = new Ext.data.JsonReader({
 	{name: 'spmd_id'},
 	{name: 'spmm_id'},
 	{name: 'akun_kode'},
-	 
+    {name: 'akun_nama'},
 	{name: 'spmd_nilai',type:'float'},
-	{name: 'spmd_ket',type:'float'} 
+	{name: 'spmd_ket',type:'string'} 
  
 	 
 ]); 
@@ -269,7 +398,7 @@ var spmBebanGrid = Ext.extend( Ext.grid.EditorGridPanel, {
 var SpmMasterJsonReader =  new Ext.data.JsonReader({
  
 	remoteSort: false,
-	root: 'spms',
+	root: 'spmmasters',
 	totalProperty: 'total',
     idProperty: 'SpmMasterList.spmm_id',
 	fields: [
@@ -277,10 +406,18 @@ var SpmMasterJsonReader =  new Ext.data.JsonReader({
 	 
 		{name:'data[SpmMaster][spmm_id]',mapping:'SpmMasterList.spmm_id'},
 		{name:'data[SpmMaster][spmm_no]',mapping:'SpmMasterList.spmm_no'},
+		{name:'data[SpmMaster][sppm_no]',mapping:'SpmMasterList.sppm_no'},
+		{name:'data[SpmMaster][sppm_tgl]',mapping:'SpmMasterList.sppm_tgl', type: 'date', dateFormat: 'Y-m-d'},
+		{name:'data[SpmMaster][spdm_no]',mapping:'SpmMasterList.sppm_no'},
+		{name:'data[SpmMaster][spdm_tgl]',mapping:'SpmMasterList.spdm_tgl', type: 'date', dateFormat: 'Y-m-d'},
 		{name:'data[SpmMaster][spmm_tgl]',mapping:'SpmMasterList.spmm_tgl', type: 'date', dateFormat: 'Y-m-d'},
 		{name:'data[SpmMaster][un_id]',mapping:'SpmMasterList.un_id'},
 		{name:'data[SpmMaster][un_kode]',mapping:'SpmMasterList.un_kode'},
 		{name:'data[SpmMaster][un_nama]',mapping:'SpmMasterList.un_nama'},
+		{name:'data[SpmMaster][bank_norek]',mapping:'SpmMasterList.bank_norek'},
+		{name:'data[SpmMaster][bank_nama]',mapping:'SpmMasterList.bank_nama'},
+		{name:'data[SpmMaster][spmm_benda]',mapping:'SpmMasterList.spmm_benda'},
+		{name:'data[SpmMaster][spmm_bendanama]',mapping:'SpmMasterList.spmm_bendanama'},
 		{name:'data[SpmMaster][spmm_catatan]',mapping:'SpmMasterList.spmm_catatan'} 
 	 
 	]
@@ -371,6 +508,12 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 												id:'spmm_id1' 
 												 
 											},
+											{	 xtype:'hidden',
+												 name: 'data[SpmMaster][un_id]',
+												 
+												id:'spmm_un_id2' 
+												 
+											},
 											 
 											{	 xtype:'textfield',
 												fieldLabel: 'No Surat',
@@ -410,11 +553,11 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 						                        fieldLabel: 'No SPP',
 						                        items : [ 
 													new Ext.form.ComboBox({
-									 						 id:'spm_sppm_no1',
+									 						 id:'spm_spmm_no1',
 															 store: sppSearchStore,
 															 hiddenName:'data[SpmMaster][sppm_no]',
-															 fieldLabel:'SKPD',
-															 displayField:'un_kode',
+															 fieldLabel:'No SPP',
+															 displayField:'sppm_no',
 															 typeAhead: false,
 															 enableKeyEvents :true, 
 															 valueField:'sppm_no',
@@ -432,6 +575,24 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 															 itemSelector: 'div.search-spp',
 															 listeners: {
 							  										select: function(thiscombo,record, index){
+							  											Ext.getCmp('spmm_benda1').setValue(record.get('spmm_benda'));
+							  											Ext.getCmp('spmm_bendanama1').setValue(record.get('spmm_bendanama'));
+							  											Ext.getCmp('spmm_banknorek1').setValue(record.get('bank_norek'))
+							  												Ext.getCmp('spmm_banknama1').setValue(record.get('bank_nama'));
+							  											Ext.getCmp('spmm_un_id2').setValue(record.get('un_id'));
+							  											Ext.getCmp('spmm_un_nama2').setValue(record.get('un_nama'));
+							  											Ext.getCmp('spmm_spdm_no1').setValue(record.get('spdm_no'));
+							  											Ext.getCmp('spmm_spdm_tgl1').setValue(record.get('spdm_tgl'));
+							  											Ext.getCmp('spmm_sppm_tgl1').setValue(record.get('sppm_tgl'));
+							  											 spmdBebanStore.removeAll();
+							  											 detailSPP1Store.load({params: {
+																				 
+																				 sppm_no:record.get("sppm_no")
+																		 }})
+																		 spmdPajakStore.removeAll();
+																		  detailPajakStore.load();
+																		  spmdPotStore.removeAll();
+							  											 detailPotonganStore.load();
 																	/*	  
 																		 Ext.getCmp('un_nama1').setValue(record.get('un_nama'));
 																		 Ext.getCmp('spmm_angg1').setValue(record.get('dpa_angg'));
@@ -444,9 +605,9 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 										
 															 }),
 													{	xtype:'textfield',
-														id:'spmm_un_nama1',
+														id:'spmm_sppm_tgl1',
 														fieldLabel: '',
-														name: 'data[SpdperMaster][un_nama]',
+														name: 'data[SpmMaster][sppm_tgl]',
 														flex : 1,
 														readOnly:true 
 													}
@@ -454,8 +615,8 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 											}, //end of composite
 											{	 xtype:'datefield',
 												fieldLabel: 'Tanggal SPP',
-												id:'sppm_tgl2',
-												name: 'data[SpmMaster][sppm_tglspp]',
+												id:'spmm_tgl2',
+												name: 'data[SpmMaster][sppm_tgl]',
 												maxLength:50, 
 												format:'Y-m-d',
 												value:new Date(),
@@ -486,9 +647,9 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 									 items: [
 										{	      
 											 
-											layout: 'fit',
+											layout: 'form',
 											border: false, 	
-										 	columnWidth:'.50',
+										 	columnWidth:'.70',
 										 	items :[
 									 				{   
 											            xtype:'fieldset',
@@ -496,73 +657,138 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 											            anchor:'95%',
 											            collapsible: false,
 											            autoHeight:true,
-											            labelWidth:100,
+											            labelWidth:150,
 											            defaults: {anchor:'95%',labelWidth:'200px'},
 											            defaultType: 'textfield',
 											            items : [
 													            {
 												                    fieldLabel: 'SKPD',
 												                    name: 'data[SpmMaster][un_nama]',
-												                    id:'spm_un_nama2',
+												                    id:'spmm_un_nama2',
 												                    value: '' 
 												                   
 												                },
-												                new Ext.form.ComboBox({
-												 						 id:'spmm_benda1',
-																		 store: bendaSearchStore,
-																		 hiddenName:'data[SpmMaster][spdm_benda]',
-																		 fieldLabel:'Bendahara',
-																		 displayField:'pn_nip',
-																		 typeAhead: false,
-																		 enableKeyEvents :true, 
-																		 valueField:'pn_nip',
-																		  triggerAction: 'all',
-																		 loadingText: 'Searching...',
-																		 minChars:0,
-																		 pageSize:20,
-																		 boxMinWidth: 80,
-																		 boxMinHeight: 100,
-																		 width:120,
-																		 hideTrigger:false,
-																		 forceSelection: true,
-																		 tpl:bendaComboTpl,
-																		 allowBlank:false,
-																		 itemSelector: 'div.search-benda',
-																		 listeners: {
-										 
+												                {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'Bendahara Pengeluaran',
+											                        items : [ 
+													              		  new Ext.form.ComboBox({
+																 						 id:'spmm_benda1',
+																						 store: bendaSearchStore,
+																						 hiddenName:'data[SpmMaster][spmm_benda]',
+																						 fieldLabel:'Bendahara Pengeluaran',
+																						 displayField:'pn_nip',
+																						 typeAhead: false,
+																						 enableKeyEvents :true, 
+																						 valueField:'pn_nip',
+																						  triggerAction: 'all',
+																						 loadingText: 'Searching...',
+																						 minChars:0,
+																						 pageSize:20,
+																						 boxMinWidth: 80,
+																						 boxMinHeight: 100,
+																						 width:120,
+																						 hideTrigger:false,
+																						 forceSelection: true,
+																						 tpl:bendaComboTpl,
+																						 allowBlank:false,
+																						 itemSelector: 'div.search-benda',
+																						 listeners: {
+														 
+																								 
+																								select: function(thiscombo,record, index){
+																									  
+																									 Ext.getCmp('spmm_bendanama1').setValue(record.get('pn_nama'));
+																									 
+																								}	
+																							}
+																						 
+																	
+																						 }),
+																				{	xtype:'textfield',
+																					id:'spmm_bendanama1',
+																					fieldLabel: '',
+																					name: 'data[SpmMaster][spmm_bendanama]',
+																					flex : 1,
+																					readOnly:true 
+																				}
+																		]
+													                },
+													                 {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'Bank',
+											                        items : [ 
+											                        	new Ext.form.ComboBox({
+														 						 id:'spmm_banknorek1',
+																				 store: bankSearchStore,
+																				 hiddenName:'data[SpmMaster][bank_norek]',
+																				 fieldLabel:' ',
+																				 displayField:'bank_norek',
+																				 typeAhead: true,
+																				 enableKeyEvents :true, 
+																				 valueField:'bank_norek',
+																				 triggerAction: 'all',
+																				 loadingText: 'Searching...',
+																				 minChars:0,
+																				 pageSize:20,
+																				 boxMinWidth: 80,
+																				 boxMinHeight: 100,
+																				 width:120,
+																				 hideTrigger:false,
+																				 forceSelection: false,
+																				  tpl:bankComboTpl,
+																				 allowBlank:false,
+																				  itemSelector: 'div.search-bank',
+																				 listeners: {
+												 
+																						 
+																						select: function(thiscombo,record, index){
+																							  
+																							 Ext.getCmp('spmm_banknama1').setValue(record.get('bank_nama'));
+																							 
+																						}	
+																					}
 																				 
-																				select: function(thiscombo,record, index){
-																					  
-																					 Ext.getCmp('spdm_bendanama1').setValue(record.get('pn_nama'));
-																					 
-																				}	
-																			}
-																		 
-													
-																		 }),
+															
+																				 }),
+																		{	xtype:'textfield',
+																			id:'spmm_banknama1',
+																			fieldLabel: '',
+																			name: 'data[SpmMaster][bank_nama]',
+																			flex : 1,
+																			readOnly:true 
+																		}
+											                        ]
+								               					  },  {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'SPD',
+											                        items : [ 
+																			{	xtype:'textfield',
+																			 	id:'spmm_spdm_no1',
+																				fieldLabel: 'Nomor SPD',
+																				name: 'data[SpmMaster][spdm_no]' 
+																				 
+																			 
+																			},
+																			{xtype:'displayfield',
+																			value:'Tgl SPD'
+																			},
+																			{	xtype:'textfield',
+																			 	id:'spmm_spdm_tgl1',
+																				fieldLabel: 'Nomor SPD',
+																				name: 'data[SpmMaster][spdm_tgl]' 
+																				 
+																			 
+																			}]
+								               					  },
 																{	xtype:'textfield',
-																	id:'spmm_bendanama1',
-																	fieldLabel: '',
-																	name: 'data[SpmMaster][spdm_bendanama]',
-																	 
-																	readOnly:true 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Rekening Bank',
-																	name: 'data[SpmMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Nomor SPD',
-																	name: 'data[SpmMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
+																 	id:'spmm_spdm_uraian1',
 																	fieldLabel: 'Keperluan',
 																	name: 'data[SpmMaster][spdm_bendanama]' 
 																	 
@@ -577,7 +803,7 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 											            collapsible: false,
 											            autoHeight:true,
 											            layout:'fit',
-											            
+											           
 											            defaults: {anchor:'95%' },
 											            defaultType: 'textfield',
 											            items:
@@ -588,7 +814,7 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 																border: true,
 																frame:false,
 																stripeRows: true,
-																store: spmdPotStore,
+																store: spmdBebanStore,
 																
 																columns: [{
 																	header: "Kode Rekening",
@@ -602,12 +828,13 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 																	isCellEditable: true
 																}, 
 																 {
-																	header: "Uraian",
-																	width: 100,
+																	header: "Nama Rekening",
+																	width: 150,
 																	sortable: true,
 																	editor:new Ext.form.TextField({enableKeyEvents :true }),
-																	dataIndex: 'spmd_ket'
+																	dataIndex: 'akun_nama'
 																},   
+																
 																{
 																	header: "Nilai",
 																	width: 80,
@@ -621,6 +848,14 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 																	renderer: Ext.util.Format.numberRenderer('0,000.00')
 																
 																}, 
+																 {
+																	header: "Keterangan",
+																	width: 150,
+																	sortable: true,
+																	editor:new Ext.form.TextField({enableKeyEvents :true }),
+																	dataIndex: 'spmd_ket'
+																},   
+																
 																 {
 																	header: "ID",
 																	hidden:true,
@@ -642,9 +877,9 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 											html:'&nbsp'
 										}
 										,{
-											layout:'fit',
+											layout:'form',
 											border:false,
-											columnWidth:'.48',
+											columnWidth:'.28',
 											items :[{
 									 			xtype:'fieldset',
 									            title: 'Potongan',
@@ -652,13 +887,14 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 									            collapsible: false,
 									            autoHeight:true,
 									         	 layout:'fit',
+									         	 width:200,
 									            labelWidth:100,
 									            defaults: {anchor:'95%' },
 									            defaultType: 'textfield',
 									            items:
 									           		 aspmPotGrid = new spmPotGrid({
 															id: 'aspmPotGrid',
-															autoWidth:true,
+															width:200,
 															height: 125,
 															border: true,
 															frame:false,
@@ -710,15 +946,16 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 									            title: 'Pajak',
 									          
 									            collapsible: false,
-									            autoHeight:true,
+									          
 									         	 layout:'fit',
 									            labelWidth:100,
+									            width:200,
 									            defaults: {anchor:'95%' },
 									            defaultType: 'textfield',
 									            items:
 									           		 aspmPajakGrid = new spmPajakGrid({
 															id: 'aspmPajakGrid',
-											 				 autoWidth:true,
+											 				width:200,
 															height: 125,
 															border: true,
 															frame:false,
@@ -779,39 +1016,38 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 						 	items: [{
 						 		text: 'Create New',
 								id:'spm1-new',
-								disabled:true,
+							 
 						 		iconCls: 'new',
 						 		handler: function(){
-						 			addspdmasterform.getForm().reset();
-						 			PurchaseDetailStore.load({
+						 			entryspmform.getForm().reset();
+						 			spmdBebanStore.load({
 						 				params: {
 						 					spmm_id: 0
 						 				}
 						 			});
-									PurchaseBonusStore.load({
+									spmdPajakStore.load({
 						 				params: {
 						 					spmm_id: 0
 						 				}
 						 			});
-						 			Ext.getCmp('spmm_date1').setValue(new Date());
-									Ext.getCmp('spmm_date1').setReadOnly(false);
+						 			spmdPotStore.load({
+						 				params: {
+						 					spmm_id: 0
+						 				}
+						 			});
+						 			Ext.getCmp('spmm_tgl1').setValue(new Date());
+							 
 									Ext.getCmp('spmm_id1').setValue(0);
-									Ext.getCmp('spmm_pay_type').setValue(0);
-									Ext.getCmp('vend_code2').enable();
-									Ext.getCmp('spmm_wh_code').enable();
-									Ext.getCmp('spddetailGrid').enable();  
-									Ext.getCmp('spmm_inctax').setReadOnly(false);
-									Ext.getCmp('spmm_pay_type').enable();
-									Ext.getCmp('spm1-save').enable();
+								 
 						 		}
 						 	},{
 										text:'Print',
-										id:'print_spd',
-										tooltip:'Print Purchase ',
+										id:'print_spm',
+										tooltip:'Print SPM',
 										iconCls:'printer',
 										handler:function(){
 											aid=Ext.getCmp('spmm_id1').getValue();
-											aurl=HOST_PATH+'/rptspd/spd/'+aid;
+											aurl=HOST_PATH+'/rptspm/spm/'+aid;
 											window.open(aurl,'_blank');
 	
 										}
@@ -822,12 +1058,12 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 						 		text: 'Save',
 						 		iconCls: 'save',
 								id:'spm1-save',
-								disabled:true,
+						 
 						 		handler: function(){
-									hitungTotalPurchase2();
-						 			if (addspdmasterform.getForm().isValid()) {
-						 				addspdmasterform.getForm().submit({
-						 					url: urladdspdmaster,
+									 
+						 			if (entryspmform.getForm().isValid()) {
+						 				entryspmform.getForm().submit({
+						 					url: urladdspmmaster,
 						 					waitMsg: 'Saving data...',
 						 					success: function(form, action){
 						 						newid = action.result.newid;
@@ -839,11 +1075,12 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 														Ext.getCmp('spmm_no1').setValue(newno);
 														Ext.getCmp('spmm_id1').setValue(newid)
 														Ext.getCmp('spmm_no1').setReadOnly(true);
-														PurchaseDetailStore.setBaseParam('master', newid);
-														PurchaseBonusStore.setBaseParam('master', newid);
-														
-														PurchaseDetailStore.save();
-														PurchaseBonusStore.save();
+														spmdBebanStore.setBaseParam('master', newid);
+														spmdPotStore.setBaseParam('master', newid);
+														spmdPajakStore.setBaseParam('master', newid);
+														spmdBebanStore.save();
+														spmdPotStore.save();
+														spmdPajakStore.save();
 														
 													}
 													
@@ -867,11 +1104,11 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 								}, {
 									text: 'Cancel',
 									id:'spm1-cancel',
-									disabled:true,
+									 
 									margins:'0',
 									handler: function(){
-										SpdperMasterStore.reload();
-										MyDesktop.getSingleModule('addspdmaster-win').closeWindow();
+										SpmMasterStore.reload();
+										MyDesktop.getSingleModule('entryspm-win').closeWindow();
 										
 										
 									}
@@ -949,6 +1186,12 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 								dataIndex: 'data[SpmMaster][sppm_no]',
 								width: 150,
 								sortable: true
+							},
+							 {
+								header: "SKPD",
+								dataIndex: 'data[SpmMaster][un_nama]',
+								width: 150,
+								sortable: true
 							} 
 							 
 							],
@@ -1009,8 +1252,9 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 										handler: function(){
 											 
 											 MyDesktop.getSingleModule('entryspm-win').createWindow();
-											 
-															 
+											 spmdBebanStore.load({params:{spmm_id:mid}});	
+										 	 spmdPajakStore.load({params:{spmm_id:mid}});	
+											 spmdPotStore.load({params:{spmm_id:mid}});			 
 										}
 									} , {
 										id: 'editspmbutt',
@@ -1018,7 +1262,17 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 										iconCls: 'edit',
 										disabled: true,
 										handler: function(){
+											 mid=gridspm.getSelectionModel().getSelected().get("SpmMasterList.sppm_id");
+			 
+			 
+										 	 spmdBebanStore.load({params:{spmm_id:mid}});	
+										 	 spmdPajakStore.load({params:{spmm_id:mid}});	
+											 spmdPotStore.load({params:{spmm_id:mid}});	
+											 
+											 MyDesktop.getSingleModule('entryspm-win').createWindow();
+											 Ext.getCmp("entryspmform").getForm().loadRecord(gridspm.getSelectionModel().getSelected());
 										 
+								
 										}
 									},{
 											id: 'delspmbutt',
@@ -1124,7 +1378,15 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 	 
 		 
 		gridspm.on('rowdblclick',function(sm, rowindex, eventobject){ 
-			
+			 mid=gridspm.getSelectionModel().getSelected().get("SpmMasterList.sppm_id");
+			 
+			 
+			 	 spmdBebanStore.load({params:{spmm_id:mid}});	
+			 	 spmdPajakStore.load({params:{spmm_id:mid}});	
+				 spmdPotStore.load({params:{spmm_id:mid}});	
+				 
+				 MyDesktop.getSingleModule('entryspm-win').createWindow();
+				 Ext.getCmp("entryspmform").getForm().loadRecord(gridspm.getSelectionModel().getSelected());
 			 
 									 
 			

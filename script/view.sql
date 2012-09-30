@@ -1,4 +1,12 @@
 
+drop view if exists dpa_detail_lists cascade;
+create or replace view dpa_detail_lists as 
+select d.*,a.angg_kodeper as akun_kode, a.angg_namaper as akun_nama,
+m.dpam_no,m.un_nama
+from dpa_details  d
+left join dpa_master_lists m on (d.dpam_id=m.dpam_id)
+left join anggarans a on (d.angg_kode=a.angg_kode);
+
 
 drop view if exists spdper_master_lists cascade;
 create or replace view spdper_master_lists as
@@ -145,4 +153,109 @@ as
 select r.*, u.un_kode,u.un_nama from reg_spds r
 left join units u on (r.un_id=u.un_id)
 
+drop view if exists spp_master_lists cascade;
+create or replace view spp_master_lists 
+as
+select m.*,s.spdm_tgl,s.spdm_total,s.spdm_uraian,s.spdm_angg,s.spdm_sisa,s.spdm_bln1,s.spdm_bln2,u.un_kode,u.un_nama,b.bank_nama,b.bank_cabang,b.bank_kota,
+p.pn_nama as sppm_bendanama
+from spp_masters m
+left join spd_masters s on (m.spdm_no=s.spdm_no)
+left join units u on (m.un_id=u.un_id)
+left join banks  b on (m.bank_norek=b.bank_norek)
+left join pns p on (m.sppm_benda=p.pn_nip)
 
+
+
+drop view if exists spp_detail2_lists cascade;
+create or replace view spp_detail2_lists as
+select d.*,a.angg_namaper as akun_nama,m.sppm_no,m.sppm_tgl,m.un_id,m.un_kode,m.un_nama from spp_detail2s d
+left join spp_master_lists m on (d.sppm_id=m.sppm_id)
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists spp_detail1_lists cascade;
+create or replace view spp_detail1_lists as
+select d.*,a.keg_kode,a.keg_nama as keg_nama,m.sppm_no,m.sppm_tgl,m.un_id,m.un_kode,m.un_nama from spp_detail1s d
+left join spp_master_lists m on (d.sppm_id=m.sppm_id)
+left join dpa_bl a on (d.dpam_no=a.dpam_no);
+
+ 
+drop view if exists gaji_master_lists cascade;
+create or replace view gaji_master_lists 
+as
+select m.*, u.un_kode,u.un_nama
+from gaji_masters m
+left join units u on (m.un_id=u.un_id);
+
+
+
+drop view if exists gaji_detail1_lists cascade;
+create or replace view gaji_detail1_lists as
+select d.*,a.angg_namaper as akun_nama,m.gm_no,m.gm_tgl,m.un_id,m.un_kode,m.un_nama 
+from gaji_detail1s d
+left join gaji_master_lists m on (d.gm_id=m.gm_id)
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists spp_detail2_lists cascade;
+create or replace view spp_detail2_lists as
+select d.*, m.gm_no,m.gm_tgl,m.un_id,m.un_kode,m.un_nama 
+from gaji_detail2s d
+left join gaji_master_lists m on (d.gm_id=m.gm_id);
+
+
+drop view if exists acara_master_lists cascade;
+create or replace view acara_master_lists
+as
+select m.*,p.prog_nama,k.keg_nama,u.un_nama
+from acara_masters m
+left join units u on (m.un_id=u.un_id)
+left join programs  p on (m.prog_kode=p.prog_kode)
+left join kegiatans k on (m.keg_kode=k.keg_kode);
+
+
+drop view if exists acara_detail_lists cascade;
+create or replace view acara_detail_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from acara_details d
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists bansos_master_lists cascade;
+create or replace view bansos_master_lists
+as
+select m.*,p.prog_nama,k.keg_nama,u.un_nama
+from bansos_masters m
+left join units u on (m.un_id=u.un_id)
+left join programs  p on (m.prog_kode=p.prog_kode)
+left join kegiatans k on (m.keg_kode=k.keg_kode);
+
+
+drop view if exists bansos_detail_lists cascade;
+create or replace view bansos_detail_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from bansos_details d
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists spm_master_lists cascade;
+create or replace view spm_master_lists
+as
+select m.*,b.bank_nama,s.un_id,s.un_nama,s.sppm_tipe,s.sppm_tgl,s.sppm_benda,s.sppm_bendanama,s.spdm_no,s.spdm_tgl,s.spdm_uraian from spm_masters m
+left join spp_master_lists s on (m.sppm_no=s.sppm_no)
+left join banks b on (m.bank_norek=b.bank_norek)
+
+drop view if exists spm_detail1_lists cascade;
+create or replace view spm_detail1_lists
+as 
+select d.* from spm_detail1s d;
+
+drop view if exists spm_detail2_lists cascade;
+create or replace view spm_detail2_lists
+as 
+select d.* from spm_detail2s d;
+
+drop view if exists spm_detail3_lists cascade;
+create or replace view spm_detail3_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from spm_detail3s d
+left join anggarans a on (d.akun_kode=a.angg_kodeper);

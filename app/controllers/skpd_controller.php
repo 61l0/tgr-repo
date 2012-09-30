@@ -11,7 +11,7 @@ class SkpdController extends AppController
     }
 	
 	function searchskpd(){
-		Configure::write('debug',1);
+		Configure::write('debug',2);
 		$this->layout = 'ajax';
 		$limit=10;$start=0;
 		if(isset($_POST['query']))
@@ -32,13 +32,13 @@ class SkpdController extends AppController
 		if ($key!=""){
 			$key=strtolower($key);
 		
-			$whereis=array('conditions'=>array('OR'=>array(array('lower(SkpdList.un_kode) LIKE '=>"%$key%"),
+			$whereis=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(SkpdList.un_kode) LIKE '=>"%$key%"),
 											array('lower(SkpdList.un_nama) LIKE '=>"%$key%"))),
-											array('AND'=>array(array('SkpdList.dpa_year' =>$ayear))),
+											array('AND'=>array(array('SkpdList.dpa_year' =>$ayear)))),
 										'order'=>'SkpdList.un_kode','limit'=>$limit,'page'=>$page);
-			$wherecount=array('conditions'=>array('OR'=>array(array('lower(SkpdList.un_kode) LIKE '=>"%$key%"),
+			$wherecount=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(SkpdList.un_kode) LIKE '=>"%$key%"),
 											array('lower(SkpdList.un_nama) LIKE '=>"%$key%"))),
-												array('AND'=>array(array('SkpdList.dpa_year' =>$ayear))));
+												array('AND'=>array(array('SkpdList.dpa_year' =>$ayear)))));
 			$dataAll=$skpd->find('all',$whereis);
 			$count=$skpd->find('count',$wherecount);
 		}

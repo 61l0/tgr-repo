@@ -1470,10 +1470,10 @@ MyDesktop.EntrySPDForm = Ext.extend(Ext.app.Module, {
 									                        items : [
 									                        		{
 									                        		region:'north',
-									                        		height:70,
+									                        		height:80,
 									                        		layout:'fit',
 									                        		items :
-									                        
+									                        			  
 											                        	    entrybtl_spd = new Ext.FormPanel({
 																			id:'entrybtl_spd',
 																	      	layout:'column',

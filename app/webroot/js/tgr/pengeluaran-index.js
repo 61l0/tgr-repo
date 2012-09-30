@@ -1,8 +1,15 @@
 var urlsppsearch=HOST_PATH+'/spp/searchspp';
 var  urlbendasearch=HOST_PATH+'/pns/searchbenda';
+var urlbanksearch=HOST_PATH+'/bank/searchbank';
 var urlskpdsearch=HOST_PATH+'/skpd/searchskpd';
 var urldpablsearch=HOST_PATH+'/dpa/searchdpabl';
 var urldpabtlsearch=HOST_PATH+'/dpa/searchdpabtl';
+var urlspdsearch=HOST_PATH+'/spd/getforcombo';
+var urldpabtlsearchbyun=HOST_PATH+'/dpa/searchdpabtlbyun';
+var urldpadetailsearchbykeg=HOST_PATH+'/dpa/searchdpadetailbykeg';
+var urlkegsearch=HOST_PATH+'/kegiatan/getkeglist';
+var urlprogsearch=HOST_PATH+'/kegiatan/getproglist';
+
 var MyDesktop = new Ext.app.App({
 	init :function(){
 		  
@@ -15,7 +22,16 @@ var MyDesktop = new Ext.app.App({
 		        new MyDesktop.SP2DGridWindow(),
 		        new MyDesktop.EntrySP2DForm(),
 		        new MyDesktop.GajiGridWindow(),
-		        new MyDesktop.EntryGajiForm()
+		        new MyDesktop.EntryGajiForm(),
+		        new MyDesktop.SPPGridWindow(),
+		        new MyDesktop.EntrySPPUPForm(),
+		        new MyDesktop.EntrySPPGUForm(),
+		        new MyDesktop.EntrySPPTUForm(),
+		        new MyDesktop.EntrySPPLSForm(),
+		        new MyDesktop.AcaraGridWindow(),
+		        new MyDesktop.EntryAcaraForm(),
+		        new MyDesktop.BansosGridWindow(),
+		        new MyDesktop.EntryBansosForm()
 		        
 		];
 		
@@ -31,9 +47,29 @@ var sppComboTpl = new Ext.XTemplate(
 	        '',
 	    '</div></tpl>'
 	);
+
+var programComboTpl = new Ext.XTemplate(
+	    '<tpl for="."><div class="search-program"><p style="padding:3px">',
+	        '{prog_kode} (<b>{prog_nama}</b>) </p>',
+	        '',
+	    '</div></tpl>'
+	);
+var kegiatanComboTpl = new Ext.XTemplate(
+	    '<tpl for="."><div class="search-kegiatan"><p style="padding:3px">',
+	        '{keg_kode} (<b>{keg_nama}</b>) </p>',
+	        '',
+	    '</div></tpl>'
+	);
 var bendaComboTpl = new Ext.XTemplate(
 	    '<tpl for="."><div class="search-benda"><p style="padding:3px">',
 	        '{pn_nama} (<b>{pn_nip}</b>) </p>',
+	        '',
+	    '</div></tpl>'
+	);
+
+var bankComboTpl = new Ext.XTemplate(
+	    '<tpl for="."><div class="search-bank"><p style="padding:3px">',
+	        '{bank_norek} (<b>{bank_nama}</b>) </p>',
 	        '',
 	    '</div></tpl>'
 	);
@@ -104,6 +140,45 @@ var dpaBTLSearchStore = new Ext.data.Store({
         
     ])
 });
+var dpaBTLByUNSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urldpabtlsearchbyun
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'dpadetails',
+        totalProperty: 'total',
+        id: 'akun_kode'
+    }, [
+        {name: 'angg_kode'},
+        {name:'akun_kode'},
+        {name: 'akun_nama'},
+        {name: 'nilaiangg',type:'float'},
+      
+        {name: 'nilaiakum',type:'float'},
+        {name: 'nilaitersedia',type:'float'} 
+       
+        
+    ])
+});
+
+
+var dpaDetailByKegSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urldpadetailsearchbykeg
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'dpadetails',
+        totalProperty: 'total',
+        id: 'dpad_id'
+    }, [
+        {name: 'angg_kode'},
+        {name:'akun_kode'},
+        {name: 'akun_nama'},
+        {name: 'dpad_nilai',type:'float'} 
+       
+        
+    ])
+});
 var sppSearchStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: urlsppsearch
@@ -111,11 +186,23 @@ var sppSearchStore = new Ext.data.Store({
     reader: new Ext.data.JsonReader({
         root: 'sppmasters',
         totalProperty: 'total',
-        id: 'id'
+        id: 'sppm_id'
     }, [
-        {name: 'id'},
+        {name: 'sppm_id'},
         {name: 'sppm_no'},
-        {name: 'un_nama'}
+        {name: 'sppm_tgl'},
+        {name: 'un_id'},
+        {name: 'un_nama'},
+        {name: 'un_nama'},
+        {name: 'sppm_benda'},
+        {name: 'sppm_bendanama'},
+        {name: 'bank_norek'},
+        {name: 'bank_nama'},
+        
+        
+        {name: 'spdm_no'},
+        {name: 'spdm_tgl'},
+        {name: 'spdm_uraian'}
         
         
     ])
@@ -158,6 +245,79 @@ var skpdSearchStore = new Ext.data.Store({
         {name: 'dpa_akum',type:'float'},
         {name: 'dpa_tersedia',type:'float'} 
         
+        
+        
+    ])
+});
+
+var spdSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlspdsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'spdmasters',
+        totalProperty: 'total',
+        id: 'id'
+    }, [
+        {name: 'id'},
+        {name: 'spdm_no'},
+        {name: 'un_nama'}
+        
+        
+    ])
+});
+
+
+var bankSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlbanksearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'banks',
+        totalProperty: 'total',
+        id: 'bank_norek'
+    }, [
+        {name: 'bank_norek'},
+        {name: 'bank_nama'},
+        {name: 'bank_cabang'}
+        
+        
+    ])
+});
+
+
+var programSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlprogsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'prog_kode'
+    }, [
+        {name: 'prog_kode'},
+        {name: 'un_id'},
+        {name: 'prog_nama'}
+        
+        
+    ])
+});
+
+
+
+var kegiatanSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlkegsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'keg_kode'
+    }, [
+        {name: 'prog_kode'},
+        {name: 'keg_kode'},
+        {name: 'un_id'},
+        {name: 'keg_nama'}
         
         
     ])

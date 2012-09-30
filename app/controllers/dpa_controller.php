@@ -9,7 +9,58 @@ class DpaController extends AppController
 		
      	
     }
-	
+	function readdetailbykeg($form_no=0){
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','dpadetaillist');
+		$detaillist=new DpaDetailList;
+		$mid=0;
+		if(isset($_POST['keg_kode']))
+			$mid = $_POST['keg_kode'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('keg_kode'=>$mid)));
+		$count=$detaillist->find('count',array('conditions'=>array('keg_kode'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.DpaDetailList');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
+	function readdetailbyun($form_no=0){
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','dpabtl');
+		$detaillist=new DpaBtl;
+		$mid=0;
+		if(isset($_POST['un_id']))
+			$mid = $_POST['un_id'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('un_id'=>$mid)));
+		$count=$detaillist->find('count',array('conditions'=>array('un_id'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.DpaBtl');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
+	function readdetailbyno($form_no=0){
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','dpadetaillist');
+		$detaillist=new DpaDetailList;
+		$mid=0;
+		if(isset($_POST['dpam_no']))
+			$mid = $_POST['dpam_no'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('dpam_no'=>$mid)));
+		$count=$detaillist->find('count',array('conditions'=>array('dpam_no'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.DpaDetailList');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
+	function readdetail($form_no=0){
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','dpadetaillist');
+		$detaillist=new DpaDetail1List;
+		$mid=0;
+		if(isset($_POST['dpam_id']))
+			$mid = $_POST['dpam_id'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('dpam_id'=>$mid)));
+		$count=$detaillist->find('count',array('conditions'=>array('dpam_id'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.DpaDetailList');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
 	function searchmasterbtl(){
 		Configure::write('debug',1);
 		$this->layout = 'ajax';
@@ -19,11 +70,11 @@ class DpaController extends AppController
 		else $key="";
 		if(isset($_POST['limit']))
 			$limit = $_POST['limit'];
-		$limit=20;
+		
 	 	$this->layout='ajax';
 		if(isset($_POST['start']))
 			$start= $_POST['start'];
-		$start=0;
+		 
 		$page = ($start/$limit)+1;
 		App::import('Model','dpamasterbtl');
 		$dpa=new DpaMasterBtl();
@@ -60,11 +111,11 @@ class DpaController extends AppController
 		else $key="";
 		if(isset($_POST['limit']))
 			$limit = $_POST['limit'];
-		$limit=20;
+		 
 	 	$this->layout='ajax';
 		if(isset($_POST['start']))
 			$start= $_POST['start'];
-		$start=0;
+		 
 		if(isset($_POST['un_id']))
 			$un_id = $_POST['un_id'];
 		else $un_id="";
@@ -100,11 +151,11 @@ class DpaController extends AppController
 		else $key="";
 		if(isset($_POST['limit']))
 			$limit = $_POST['limit'];
-		$limit=20;
+		 
 	 	$this->layout='ajax';
 		if(isset($_POST['start']))
 			$start= $_POST['start'];
-		$start=0;
+		 
 		$page = ($start/$limit)+1;
 		App::import('Model','dpamasterlist');
 		$dpa=new DpaMasterList();
@@ -141,6 +192,86 @@ class DpaController extends AppController
 		$count=$dpa->find('count',array('conditions'=>array('dpam_no'=>$master_id)));
 		 
 		$dataAll = Set::extract($dataAll,'{n}.DpaBtl');
+		$this->set('dataAll','{"total":'.$count.',"dpadetails":'.json_encode($dataAll).'}');
+	}  
+	function searchdpabtlbyun(){
+		Configure::write('debug',1);
+		$this->layout = 'ajax';
+		$limit=10;$start=0;
+		if(isset($_POST['query']))
+			$key = $_POST['query'];
+		else $key="";
+		if(isset($_POST['limit']))
+			$limit = $_POST['limit'];
+		$limit=20;
+	 	$this->layout='ajax';
+		if(isset($_POST['start']))
+			$start= $_POST['start'];
+	 
+		if(isset($_POST['un_id']))
+			$master_id = $_POST['un_id'];
+		else $master_id="";
+		$page = ($start/$limit)+1;
+		App::import('Model','dpabtl');
+		$dpa=new DpaBtl();
+		if ($key!=""){
+			$key=strtolower($key);
+		$ayear=date('YYYY');
+		$whereis=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(DpaBtl.akun_kode) LIKE '=>"%$key%"),
+										array('lower(DpaBtl.akun_nama) LIKE '=>"%$key%"))),
+										array('AND'=>array('DpaBtl.un_id'=>$master_id))),
+									'order'=>'DpaBtl.akun_kode','limit'=>$limit,'page'=>$page);
+		$wherecount=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(DpaBtl.akun_kode) LIKE '=>"%$key%"),
+										array('lower(DpaBtl.akun_nama) LIKE '=>"%$key%"))) ,
+										array('AND'=>array('DpaBtl.un_id'=>$master_id))));
+		$dataAll=$dpa->find('all',$whereis);
+		$count=$dpa->find('count',$wherecount);
+		}
+		else {
+			$dataAll=$dpa->find('all' ,array('conditions'=>array('DpaBtl.un_id'=>$master_id),'limit'=>$limit,'page'=>$page));
+			$count=$dpa->find('count',array('conditions'=>array('DpaBtl.un_id'=>$master_id)));
+		}
+		$dataAll = Set::extract($dataAll,'{n}.DpaBtl');
+		$this->set('dataAll','{"total":'.$count.',"dpadetails":'.json_encode($dataAll).'}');
+	}  
+	function searchdpadetailbykeg(){
+		Configure::write('debug',1);
+		$this->layout = 'ajax';
+		$limit=10;$start=0;
+		if(isset($_POST['query']))
+			$key = $_POST['query'];
+		else $key="";
+		if(isset($_POST['limit']))
+			$limit = $_POST['limit'];
+		$limit=20;
+	 	$this->layout='ajax';
+		if(isset($_POST['start']))
+			$start= $_POST['start'];
+	 
+		if(isset($_POST['keg_kode']))
+			$master_id = $_POST['keg_kode'];
+		else $master_id="";
+		$page = ($start/$limit)+1;
+		App::import('Model','dpadetaillist');
+		$dpa=new DpaDetailList();
+		if ($key!=""){
+			$key=strtolower($key);
+		$ayear=date('YYYY');
+		$whereis=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(DpaDetailList.akun_kode) LIKE '=>"%$key%"),
+										array('lower(DpaDetailList.akun_nama) LIKE '=>"%$key%"))),
+										array('AND'=>array('DpaDetailList.keg_kode'=>$master_id))),
+									'order'=>'DpaDetailList.akun_kode','limit'=>$limit,'page'=>$page);
+		$wherecount=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(DpaDetailList.akun_kode) LIKE '=>"%$key%"),
+										array('lower(DpaDetailList.akun_nama) LIKE '=>"%$key%"))) ,
+										array('AND'=>array('DpaDetailList.keg_kode'=>$master_id))));
+		$dataAll=$dpa->find('all',$whereis);
+		$count=$dpa->find('count',$wherecount);
+		}
+		else {
+			$dataAll=$dpa->find('all' ,array('conditions'=>array('DpaDetailList.keg_kode'=>$master_id),'limit'=>$limit,'page'=>$page));
+			$count=$dpa->find('count',array('conditions'=>array('DpaDetailList.keg_kode'=>$master_id)));
+		}
+		$dataAll = Set::extract($dataAll,'{n}.DpaDetailList');
 		$this->set('dataAll','{"total":'.$count.',"dpadetails":'.json_encode($dataAll).'}');
 	}  
 	function searchdpabtl(){
