@@ -233,7 +233,7 @@ CREATE OR REPLACE FUNCTION sp2d_masters_bef_ins0() RETURNS TRIGGER AS $$
 	 
 	BEGIN
 		 
-		if (new.sp2dm_id is null or new.spdm_id='0') then
+		if (new.sp2dm_id is null or new.sp2dm_id='0') then
 			new.sp2dm_id :=   trim(to_char(nextval('sp2d_masters_sp2dm_id_seq'),'0000000000')); 
 		end if;
 		RETURN NEW;

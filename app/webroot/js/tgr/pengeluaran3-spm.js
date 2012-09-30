@@ -418,7 +418,8 @@ var SpmMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[SpmMaster][bank_nama]',mapping:'SpmMasterList.bank_nama'},
 		{name:'data[SpmMaster][spmm_benda]',mapping:'SpmMasterList.spmm_benda'},
 		{name:'data[SpmMaster][spmm_bendanama]',mapping:'SpmMasterList.spmm_bendanama'},
-		{name:'data[SpmMaster][spmm_catatan]',mapping:'SpmMasterList.spmm_catatan'} 
+		{name:'data[SpmMaster][spmm_catatan]',mapping:'SpmMasterList.spmm_catatan'},
+		{name:'data[SpmMaster][spmm_total]',mapping:'SpmMasterList.spmm_total'} 
 	 
 	]
 	 
@@ -553,7 +554,7 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 						                        fieldLabel: 'No SPP',
 						                        items : [ 
 													new Ext.form.ComboBox({
-									 						 id:'spm_spmm_no1',
+									 						 id:'spm_sppm_no1',
 															 store: sppSearchStore,
 															 hiddenName:'data[SpmMaster][sppm_no]',
 															 fieldLabel:'No SPP',
@@ -575,16 +576,17 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 															 itemSelector: 'div.search-spp',
 															 listeners: {
 							  										select: function(thiscombo,record, index){
-							  											Ext.getCmp('spmm_benda1').setValue(record.get('spmm_benda'));
-							  											Ext.getCmp('spmm_bendanama1').setValue(record.get('spmm_bendanama'));
+							  											Ext.getCmp('spmm_benda1').setValue(record.get('sppm_benda'));
+							  											Ext.getCmp('spmm_bendanama1').setValue(record.get('sppm_bendanama'));
 							  											Ext.getCmp('spmm_banknorek1').setValue(record.get('bank_norek'))
 							  												Ext.getCmp('spmm_banknama1').setValue(record.get('bank_nama'));
 							  											Ext.getCmp('spmm_un_id2').setValue(record.get('un_id'));
 							  											Ext.getCmp('spmm_un_nama2').setValue(record.get('un_nama'));
 							  											Ext.getCmp('spmm_spdm_no1').setValue(record.get('spdm_no'));
 							  											Ext.getCmp('spmm_spdm_tgl1').setValue(record.get('spdm_tgl'));
-							  											Ext.getCmp('spmm_sppm_tgl1').setValue(record.get('sppm_tgl'));
-							  											 spmdBebanStore.removeAll();
+							  										 	Ext.getCmp('spmm_sppm_tgl2').setValue(record.get('sppm_tgl'));
+							  											Ext.getCmp('spmm_spmm_total1').setValue(record.get("sppm_total"));
+							  											spmdBebanStore.removeAll();
 							  											 detailSPP1Store.load({params: {
 																				 
 																				 sppm_no:record.get("sppm_no")
@@ -603,19 +605,12 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 																}
 															 
 										
-															 }),
-													{	xtype:'textfield',
-														id:'spmm_sppm_tgl1',
-														fieldLabel: '',
-														name: 'data[SpmMaster][sppm_tgl]',
-														flex : 1,
-														readOnly:true 
-													}
+															 }) 
 													]
 											}, //end of composite
 											{	 xtype:'datefield',
 												fieldLabel: 'Tanggal SPP',
-												id:'spmm_tgl2',
+												id:'spmm_sppm_tgl2',
 												name: 'data[SpmMaster][sppm_tgl]',
 												maxLength:50, 
 												format:'Y-m-d',
@@ -790,7 +785,15 @@ MyDesktop.EntrySPMForm = Ext.extend(Ext.app.Module, {
 																{	xtype:'textfield',
 																 	id:'spmm_spdm_uraian1',
 																	fieldLabel: 'Keperluan',
-																	name: 'data[SpmMaster][spdm_bendanama]' 
+																	name: 'data[SpmMaster][spmm_ket]' 
+																	 
+																 
+																},
+																{	xtype:'numberfield',
+																 	id:'spmm_spmm_total1',
+																	fieldLabel: 'Nilai',
+																	name: 'data[SpmMaster][spmm_total]',
+																	align:'right'
 																	 
 																 
 																}
@@ -1192,6 +1195,14 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 								dataIndex: 'data[SpmMaster][un_nama]',
 								width: 150,
 								sortable: true
+							},
+							{
+								header: "Nilai",
+								dataIndex: 'data[SpmMaster][spmm_total]',
+								width: 150,
+								sortable: true,
+								align: 'right', 
+								renderer: Ext.util.Format.numberRenderer('0,000.00')
 							} 
 							 
 							],
@@ -1206,19 +1217,10 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 									 
 									selectionchange: function(sm){
 										if (sm.getCount()) {
-											if (pv_spm >= 1) {
+											 
 												Ext.getCmp('editspmbutt').enable();
 												Ext.getCmp('applyspmbutt').enable();
 												
-											}
-										 	if (pv_spm>=2)
-											 Ext.getCmp('delspmbutt').enable();
-										 }
-										else {
-										 	Ext.getCmp('delspmbutt').disable();
-										 	Ext.getCmp('editspmbutt').disable();
-											Ext.getCmp('applyspmbutt').disable();
-										 	 
 										}
 									}
 								}
@@ -1262,7 +1264,7 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 										iconCls: 'edit',
 										disabled: true,
 										handler: function(){
-											 mid=gridspm.getSelectionModel().getSelected().get("SpmMasterList.sppm_id");
+											 mid=gridspm.getSelectionModel().getSelected().get("SpmMasterList.spmm_id");
 			 
 			 
 										 	 spmdBebanStore.load({params:{spmm_id:mid}});	
@@ -1378,7 +1380,7 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 	 
 		 
 		gridspm.on('rowdblclick',function(sm, rowindex, eventobject){ 
-			 mid=gridspm.getSelectionModel().getSelected().get("SpmMasterList.sppm_id");
+			 mid=gridspm.getSelectionModel().getSelected().get("SpmMasterList.spmm_id");
 			 
 			 
 			 	 spmdBebanStore.load({params:{spmm_id:mid}});	

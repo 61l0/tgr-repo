@@ -524,6 +524,7 @@ create table spm_masters(
 	bank_norek	varchar(30),
 	npwp_no		varchar(30),
 	spmm_ket	varchar(500),
+	spmm_total	numeric(24,2) default 0,
  	spm_tipe	integer default 0,
 	constraint spm_masters_pk primary key(spmm_id)
 );
@@ -575,13 +576,13 @@ create table sp2d_masters(
 	sp2dm_tgl	date,
 	sp2dm_tipe		integer default 0,
 	sp2dm_state	integer default 0,
-	spm_no		varchar(50),
+	spmm_no		varchar(50),
 	
 	sp2dm_benda	varchar(30),
 	bank_norek	varchar(30),
 	npwp_no		varchar(30),
 	sp2dm_ket	varchar(500),
- 	
+ 	sp2dm_total	numeric(24,2) default 0,
 	sp2dm_norek2	varchar(30),
 	sp2dm_bank2		varchar(50),
 	sp2dm_npwp2	varchar(30),
@@ -622,8 +623,8 @@ create table sp2d_detail3s (
 	sp2dm_id		varchar(20),
 	
 	akun_kode		varchar(30),
-	spmd_nilai		numeric(22,4) default 0,
-	spmd_ket		varchar(150),
+	sp2dd_nilai		numeric(22,4) default 0,
+	ss2dd_ket		varchar(150),
 	constraint sp2d_detail3s_pk primary key (sp2dd_id),
 	constraint sp2d_detail3s_fk1 foreign key (sp2dm_id) references sp2d_masters(sp2dm_id) on delete cascade 
 );

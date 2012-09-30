@@ -9,7 +9,81 @@ class SpmController extends AppController
 		
      	
     }
-	
+	 function readdetail_1_byno($form_no=0){
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','spmdetail1list');
+		$detaillist=new SpmDetail1List;
+		$mid=0;
+		if(isset($_POST['spmm_no']))
+			$mid = $_POST['spmm_no'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('spmm_no'=>$mid)));
+		$count=$detaillist->find('count',array('conditions'=>array('spmm_no'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.SpmDetail1List');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
+	 function readdetail_2_byno($form_no=0){
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','spmdetail2list');
+		$detaillist=new SpmDetail2List;
+		$mid=0;
+		if(isset($_POST['spmm_no']))
+			$mid = $_POST['spmm_no'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('spmm_no'=>$mid),'order'=>'pjk_kode'));
+		$count=$detaillist->find('count',array('conditions'=>array('spmm_no'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.SpmDetail2List');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
+	 function readdetail_3_byno($form_no=0){
+		Configure::write('debug',3);
+		$this->layout='ajax';
+		App::import('Model','spmdetail3list');
+		$detaillist=new SpmDetail3List;
+		$mid=0;
+		if(isset($_POST['spmm_no']))
+			$mid = $_POST['spmm_no'];
+		$dataall=$detaillist->find('all',array('conditions'=>array('spmm_no'=>$mid),'order'=>'akun_kode'));
+		$count=$detaillist->find('count',array('conditions'=>array('spmm_no'=>$mid)));
+		 $results = Set::extract($dataall,'{n}.SpmDetail3List');
+		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');
+	}
+	function searchspm(){
+		Configure::write('debug',1);
+		$this->layout = 'ajax';
+		$limit=10;$start=0;
+		if(isset($_POST['query']))
+			$key = $_POST['query'];
+		else $key="";
+		if(isset($_POST['limit']))
+			$limit = $_POST['limit'];
+		$limit=20;
+	 	$this->layout='ajax';
+		if(isset($_POST['start']))
+			$start= $_POST['start'];
+		$start=0;
+		$page = ($start/$limit)+1;
+		App::import('Model','spmmasterlist');
+		$master=new SpmMasterList();
+		$un_id="";
+		if(isset($_POST['un_id']))
+			$un_id= $_POST['un_id']; 
+		if ($key!=""){
+			$key=strtolower($key);
+		
+			$whereis=array('conditions'=> array('AND'=>array(array('lower(SpmMasterList.spmm_no) LIKE '=>"%$key%") )) ,
+										'order'=>'SpmMasterList.sppm_no','limit'=>$limit,'page'=>$page);
+			$wherecount=array('conditions'=>array('AND'=>array(array('lower(SpmMasterList.spmm_no) LIKE '=>"%$key%") )) );
+			$dataAll=$master->find('all',$whereis);
+			$count=$master->find('count',$wherecount);
+		}
+		else {
+			$dataAll=$master->find('all' ,array( 'limit'=>$limit,'page'=>$page));
+			$count=$master->find('count');
+		}
+		$dataAll = Set::extract($dataAll,'{n}.SpmMasterList');
+		$this->set('dataAll','{"total":'.$count.',"spmmasters":'.json_encode($dataAll).'}');
+	}  
 	function getsingle(){
 		Configure::write('debug',1);
 		$this->layout = 'ajax';
@@ -143,7 +217,7 @@ class SpmController extends AppController
 				 else {
 				 	$spmmaster->spmm_id=$this->data['SpmMaster']['spmm_id'];
 				 }
-				 
+				 $this->data['SpmMaster']['spmm_total']=r(',','',$this->data['SpmMaster']['spmm_total']);
 					try {
 						if ($spmmaster->save($this->data)) {
 						//	$newid=$salesmaster->getLastInsertID();
@@ -222,7 +296,7 @@ class SpmController extends AppController
 		$mid=0;
 		if(isset($_POST['spmm_id']))
 			$mid = $_POST['spmm_id'];
-		$dataall=$detaillist->find('all',array('conditions'=>array('spmm_id'=>$mid),'order'=>'akun_kode'));
+		$dataall=$detaillist->find('all',array('conditions'=>array('spmm_id'=>$mid),'order'=>'pjk_kode'));
 		$count=$detaillist->find('count',array('conditions'=>array('spmm_id'=>$mid)));
 		 $results = Set::extract($dataall,'{n}.SpmDetail2List');
 		$this->set('data','{"total":'.$count.',"data":'.json_encode($results).'}');

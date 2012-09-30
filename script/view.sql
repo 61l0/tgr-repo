@@ -241,21 +241,50 @@ create or replace view spm_master_lists
 as
 select m.*,b.bank_nama,s.un_id,s.un_nama,s.sppm_tipe,s.sppm_tgl,s.sppm_benda,s.sppm_bendanama,s.spdm_no,s.spdm_tgl,s.spdm_uraian from spm_masters m
 left join spp_master_lists s on (m.sppm_no=s.sppm_no)
-left join banks b on (m.bank_norek=b.bank_norek)
+left join banks b on (m.bank_norek=b.bank_norek);
 
 drop view if exists spm_detail1_lists cascade;
 create or replace view spm_detail1_lists
 as 
-select d.* from spm_detail1s d;
+select d.*,m.spmm_no from spm_detail1s d
+left join spm_masters m on (d.spmm_id=m.spmm_id);
 
 drop view if exists spm_detail2_lists cascade;
 create or replace view spm_detail2_lists
 as 
-select d.* from spm_detail2s d;
+select d.*,m.spmm_no from spm_detail2s d
+left join spm_masters m on (d.spmm_id=m.spmm_id);
 
 drop view if exists spm_detail3_lists cascade;
 create or replace view spm_detail3_lists
 as
-select d.*,a.angg_namaper as akun_nama
+select d.*,m.spmm_no,a.angg_namaper as akun_nama
 from spm_detail3s d
+left join anggarans a on (d.akun_kode=a.angg_kodeper)
+left join spm_masters m on (d.spmm_id=m.spmm_id);
+
+
+
+drop view if exists sp2d_master_lists cascade;
+create or replace view sp2d_master_lists
+as
+select m.*,b.bank_nama,s.un_id,s.un_nama, s.spmm_tgl,s.sppm_tipe,s.sppm_no,s.sppm_tgl,s.sppm_benda,s.sppm_bendanama,s.spdm_no,s.spdm_tgl,s.spdm_uraian from sp2d_masters m
+left join spm_master_lists s on (m.spmm_no=s.spmm_no)
+left join banks b on (m.bank_norek=b.bank_norek);
+
+drop view if exists sp2d_detail1_lists cascade;
+create or replace view sp2d_detail1_lists
+as 
+select d.* from sp2d_detail1s d;
+
+drop view if exists sp2d_detail2_lists cascade;
+create or replace view sp2d_detail2_lists
+as 
+select d.* from sp2d_detail2s d;
+
+drop view if exists sp2d_detail3_lists cascade;
+create or replace view sp2d_detail3_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from sp2d_detail3s d
 left join anggarans a on (d.akun_kode=a.angg_kodeper);

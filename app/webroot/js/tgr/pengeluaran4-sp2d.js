@@ -1,6 +1,135 @@
-var urladdsp2d=HOST_PATH+'/sp2d/add'; 
+var urladdsp2dmaster=HOST_PATH+'/sp2d/add'; 
 var urlsp2d=HOST_PATH+'/sp2d/getall'; 
+var urlgetbebanbyno=HOST_PATH+'/spm/readdetail_3_byno'; 
+var urlgetpotongan2=HOST_PATH+'/spm/readdetail_1_byno'; 
+var urlgetpajak2=HOST_PATH+'/spm/readdetail_2_byno'; 
+var detailPotongan2Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpotongan2
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'ptg_kode',
+    fields : [
+        	{name: 'ptg_kode'},
+	 
+	{name: 'ptg_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new sp2ddPotStore.recordType({
+					sp2dd_id: 0,
+					sppm_id: '',
+				  
+					ptg_kode:recordlist[i].get('ptg_kode'),
+					 
+					sp2dd_nilai:0
+				 
+			
+			});
+		 
+			sp2ddPotStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
 
+var detailPajak2Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpajak2
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'pjk_kode',
+    fields : [
+        	{name: 'pjk_kode'},
+	 
+	{name: 'pjk_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new sp2ddPajakStore.recordType({
+					sp2dd_id: 0,
+					sppm_id: '',
+				 	 
+					pjk_kode:recordlist[i].get('pjk_kode'),
+					 
+					sp2dd_nilai:0
+				 
+			
+			});
+		 
+			sp2ddPajakStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
+var detailBeban2Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetbebanbyno
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'sppd_id',
+    fields : [
+        	{name: 'sppd_id'},
+	 
+	{name: 'akun_kode'},
+	{name: 'akun_nama'},
+	{name: 'sppd_nilai'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new sp2ddBebanStore.recordType({
+					sp2dd_id: 0,
+					sppm_id: '',
+				 	sp2dd_ket:'',
+					akun_kode:recordlist[i].get('akun_kode'),
+					akun_nama:recordlist[i].get('akun_nama'),
+					 
+					sp2dd_nilai:recordlist[i].get('spmd_nilai') 
+				 
+			
+			});
+		 
+			sp2ddBebanStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
 function proc_sp2dpot(){
 	
 }
@@ -12,10 +141,10 @@ function proc_sp2dbeban(){
 }
 var sp2ddPot_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/sp2d/readdetail_pot',
-        create : HOST_PATH+'/sp2d/createdetail_pot',
-        update:  HOST_PATH+'/sp2d/updatedetail_pot',
-        destroy:  HOST_PATH+'/sp2d/destroydetail_pot'
+        read : HOST_PATH+'/sp2d/readdetail_1',
+        create : HOST_PATH+'/sp2d/createdetail_1',
+        update:  HOST_PATH+'/sp2d/updatedetail_1',
+        destroy:  HOST_PATH+'/sp2d/destroydetail_1'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -98,10 +227,10 @@ var sp2dPotGrid = Ext.extend( Ext.grid.EditorGridPanel, {
 
 var sp2ddPajak_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/sp2d/readdetail_pajak',
-        create : HOST_PATH+'/sp2d/createdetail_pajak',
-        update:  HOST_PATH+'/sp2d/updatedetail_pajak',
-        destroy:  HOST_PATH+'/sp2d/destroydetail_pajak'
+        read : HOST_PATH+'/sp2d/readdetail_2',
+        create : HOST_PATH+'/sp2d/createdetail_2',
+        update:  HOST_PATH+'/sp2d/updatedetail_2',
+        destroy:  HOST_PATH+'/sp2d/destroydetail_2'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -131,7 +260,7 @@ var sp2ddPajak_reader = new Ext.data.JsonReader({
 }, [  
 	{name: 'sp2dd_id'},
 	{name: 'sp2dm_id'},
-	{name: 'ptg_kode'},
+	{name: 'pjk_kode'},
 	 
 	{name: 'sp2dd_nilai',type:'float'},
 	{name: 'sp2dd_ket',type:'float'} 
@@ -186,10 +315,10 @@ var sp2dPajakGrid = Ext.extend( Ext.grid.EditorGridPanel, {
 
 var sp2ddBeban_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/sp2d/readdetail_beban',
-        create : HOST_PATH+'/sp2d/createdetail_beban',
-        update:  HOST_PATH+'/sp2d/updatedetail_beban',
-        destroy:  HOST_PATH+'/sp2d/destroydetail_beban'
+        read : HOST_PATH+'/sp2d/readdetail_3',
+        create : HOST_PATH+'/sp2d/createdetail_3',
+        update:  HOST_PATH+'/sp2d/updatedetail_3',
+        destroy:  HOST_PATH+'/sp2d/destroydetail_3'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -220,9 +349,9 @@ var sp2ddBeban_reader = new Ext.data.JsonReader({
 	{name: 'sp2dd_id'},
 	{name: 'sp2dm_id'},
 	{name: 'akun_kode'},
-	 
+    {name: 'akun_nama'},
 	{name: 'sp2dd_nilai',type:'float'},
-	{name: 'sp2dd_ket',type:'float'} 
+	{name: 'sp2dd_ket',type:'string'} 
  
 	 
 ]); 
@@ -269,7 +398,7 @@ var sp2dBebanGrid = Ext.extend( Ext.grid.EditorGridPanel, {
 var Sp2dMasterJsonReader =  new Ext.data.JsonReader({
  
 	remoteSort: false,
-	root: 'sp2ds',
+	root: 'sp2dmasters',
 	totalProperty: 'total',
     idProperty: 'Sp2dMasterList.sp2dm_id',
 	fields: [
@@ -277,12 +406,25 @@ var Sp2dMasterJsonReader =  new Ext.data.JsonReader({
 	 
 		{name:'data[Sp2dMaster][sp2dm_id]',mapping:'Sp2dMasterList.sp2dm_id'},
 		{name:'data[Sp2dMaster][sp2dm_no]',mapping:'Sp2dMasterList.sp2dm_no'},
+		{name:'data[Sp2dMaster][sppm_no]',mapping:'Sp2dMasterList.sppm_no'},
+		{name:'data[Sp2dMaster][sppm_tgl]',mapping:'Sp2dMasterList.sppm_tgl', type: 'date', dateFormat: 'Y-m-d'},
+		{name:'data[Sp2dMaster][spdm_no]',mapping:'Sp2dMasterList.sppm_no'},
+		{name:'data[Sp2dMaster][spdm_tgl]',mapping:'Sp2dMasterList.spdm_tgl', type: 'date', dateFormat: 'Y-m-d'},
 		{name:'data[Sp2dMaster][sp2dm_tgl]',mapping:'Sp2dMasterList.sp2dm_tgl', type: 'date', dateFormat: 'Y-m-d'},
 		{name:'data[Sp2dMaster][un_id]',mapping:'Sp2dMasterList.un_id'},
 		{name:'data[Sp2dMaster][un_kode]',mapping:'Sp2dMasterList.un_kode'},
 		{name:'data[Sp2dMaster][un_nama]',mapping:'Sp2dMasterList.un_nama'},
-		{name:'data[Sp2dMaster][sp2dm_catatan]',mapping:'Sp2dMasterList.sp2dm_catatan'} 
-	 
+		{name:'data[Sp2dMaster][bank_norek]',mapping:'Sp2dMasterList.bank_norek'},
+		{name:'data[Sp2dMaster][bank_nama]',mapping:'Sp2dMasterList.bank_nama'},
+		{name:'data[Sp2dMaster][sp2dm_benda]',mapping:'Sp2dMasterList.sp2dm_benda'},
+		{name:'data[Sp2dMaster][sp2dm_bendanama]',mapping:'Sp2dMasterList.sp2dm_bendanama'},
+		{name:'data[Sp2dMaster][sp2dm_catatan]',mapping:'Sp2dMasterList.sp2dm_catatan'},
+		{name:'data[Sp2dMaster][sp2dm_total]',mapping:'Sp2dMasterList.sp2dm_total'}, 
+		{name:'data[Sp2dMaster][sp2dm_norek2]',mapping:'Sp2dMasterList.sp2dm_norek2'}, 
+		{name:'data[Sp2dMaster][sp2dm_bank2]',mapping:'Sp2dMasterList.sp2dm_bank2'},
+		{name:'data[Sp2dMaster][sp2dm_npwp2]',mapping:'Sp2dMasterList.sp2dm_npwp2'},
+		{name:'data[Sp2dMaster][sp2dm_nama2]',mapping:'Sp2dMasterList.sp2dm_nama2'}, 
+		{name:'data[Sp2dMaster][sp2dm_ket2]',mapping:'Sp2dMasterList.sp2dm_ket2'}  
 	]
 	 
 	 
@@ -323,7 +465,7 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
         if(!win7){
             win7 = desktop.createWindow({
                 id: this.id,
-                title:'Surat Perintah Membayar',
+                title:'SP2D',
                 width:800,
                 height:500,
                 iconCls: 'icon-form',
@@ -371,6 +513,12 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 												id:'sp2dm_id1' 
 												 
 											},
+											{	 xtype:'hidden',
+												 name: 'data[Sp2dMaster][un_id]',
+												 
+												id:'sp2dm_un_id2' 
+												 
+											},
 											 
 											{	 xtype:'textfield',
 												fieldLabel: 'No Surat',
@@ -410,14 +558,14 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 						                        fieldLabel: 'No SPM',
 						                        items : [ 
 													new Ext.form.ComboBox({
-									 						 id:'sp2d_sppm_no1',
-															 store: sppSearchStore,
-															 hiddenName:'data[Sp2dMaster][sppm_no]',
-															 fieldLabel:'SKPD',
-															 displayField:'un_kode',
+									 						 id:'sp2d_spmm_no1',
+															 store: spmSearchStore,
+															 hiddenName:'data[Sp2dMaster][spmm_no]',
+															 fieldLabel:'No SPP',
+															 displayField:'spmm_no',
 															 typeAhead: false,
 															 enableKeyEvents :true, 
-															 valueField:'sppm_no',
+															 valueField:'spmm_no',
 															  triggerAction: 'all',
 															 loadingText: 'Searching...',
 															 minChars:0,
@@ -427,11 +575,36 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 															 width:150,
 															 hideTrigger:false,
 															 forceSelection: true,
-															 tpl:sppComboTpl,
+															 tpl:spmComboTpl,
 															 allowBlank:false,
-															 itemSelector: 'div.search-spp',
+															 itemSelector: 'div.search-spm',
 															 listeners: {
 							  										select: function(thiscombo,record, index){
+							  											Ext.getCmp('sp2dm_benda1').setValue(record.get('sppm_benda'));
+							  											 
+							  											Ext.getCmp('sp2dm_banknorek1').setValue(record.get('bank_norek'))
+							  												Ext.getCmp('sp2dm_banknama1').setValue(record.get('bank_nama'));
+							  											Ext.getCmp('sp2dm_un_id2').setValue(record.get('un_id'));
+							  											Ext.getCmp('sp2dm_un_nama2').setValue(record.get('un_nama'));
+							  											Ext.getCmp('sp2dm_spdm_no1').setValue(record.get('spdm_no'));
+							  											Ext.getCmp('sp2dm_spdm_tgl1').setValue(record.get('spdm_tgl'));
+							  										 	Ext.getCmp('sp2dm_sppm_tgl2').setValue(record.get('sppm_tgl'));
+							  											Ext.getCmp('sp2dm_sp2dm_total1').setValue(record.get("spmm_total"));
+							  											sp2ddBebanStore.removeAll();
+							  											 detailBeban2Store.load({params: {
+																				 
+																				 spmm_no:record.get("spmm_no")
+																		 }});
+																		 sp2ddPajakStore.removeAll();
+																		  detailPajak2Store.load({params: {
+																				 
+																				 spmm_no:record.get("spmm_no")
+																		 }});
+																		  sp2ddPotStore.removeAll();
+							  											 detailPotongan2Store.load({params: {
+																				 
+																				 spmm_no:record.get("spmm_no")
+																		 }});
 																	/*	  
 																		 Ext.getCmp('un_nama1').setValue(record.get('un_nama'));
 																		 Ext.getCmp('sp2dm_angg1').setValue(record.get('dpa_angg'));
@@ -442,20 +615,13 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 																}
 															 
 										
-															 }),
-													{	xtype:'textfield',
-														id:'sp2dm_un_nama1',
-														fieldLabel: '',
-														name: 'data[SpdperMaster][un_nama]',
-														flex : 1,
-														readOnly:true 
-													}
+															 }) 
 													]
 											}, //end of composite
 											{	 xtype:'datefield',
 												fieldLabel: 'Tanggal SPM',
-												id:'sppm_tgl3',
-												name: 'data[Sp2dMaster][sppm_tglspp]',
+												id:'sp2dm_sppm_tgl2',
+												name: 'data[Sp2dMaster][sppm_tgl]',
 												maxLength:50, 
 												format:'Y-m-d',
 												value:new Date(),
@@ -486,39 +652,118 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 									 items: [
 										{	      
 											 
-											layout: 'fit',
+											layout: 'form',
 											border: false, 	
-										 	columnWidth:'.50',
+										 	columnWidth:'.70',
 										 	items :[
 									 				{   
 											            xtype:'fieldset',
-											            title: 'Dari',
+											            title: 'Dasar',
 											            anchor:'95%',
 											            collapsible: false,
 											            autoHeight:true,
-											            labelWidth:100,
+											            labelWidth:150,
 											            defaults: {anchor:'95%',labelWidth:'200px'},
 											            defaultType: 'textfield',
 											            items : [
-													            
+													            {
+												                    fieldLabel: 'SKPD',
+												                    name: 'data[Sp2dMaster][un_nama]',
+												                    id:'sp2dm_un_nama2',
+												                    value: '' 
+												                   
+												                },
+												                {
+												                    fieldLabel: 'Bendahara',
+												                    name: 'data[Sp2dMaster][sp2dm_benda]',
+												                    id:'sp2dm_benda1',
+												                    value: '',
+												                    hidden:true 
+												                   
+												                }, 
+													                 {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'Bank',
+											                        items : [ 
+											                        	new Ext.form.ComboBox({
+														 						 id:'sp2dm_banknorek1',
+																				 store: bankSearchStore,
+																				 hiddenName:'data[Sp2dMaster][bank_norek]',
+																				 fieldLabel:' ',
+																				 displayField:'bank_norek',
+																				 typeAhead: true,
+																				 enableKeyEvents :true, 
+																				 valueField:'bank_norek',
+																				 triggerAction: 'all',
+																				 loadingText: 'Searching...',
+																				 minChars:0,
+																				 pageSize:20,
+																				 boxMinWidth: 80,
+																				 boxMinHeight: 100,
+																				 width:120,
+																				 hideTrigger:false,
+																				 forceSelection: false,
+																				  tpl:bankComboTpl,
+																				 allowBlank:false,
+																				  itemSelector: 'div.search-bank',
+																				 listeners: {
+												 
+																						 
+																						select: function(thiscombo,record, index){
+																							  
+																							 Ext.getCmp('sp2dm_banknama1').setValue(record.get('bank_nama'));
+																							 
+																						}	
+																					}
+																				 
+															
+																				 }),
+																		{	xtype:'textfield',
+																			id:'sp2dm_banknama1',
+																			fieldLabel: '',
+																			name: 'data[Sp2dMaster][bank_nama]',
+																			flex : 1,
+																			readOnly:true 
+																		}
+											                        ]
+								               					  },  {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'SPD',
+											                        items : [ 
+																			{	xtype:'textfield',
+																			 	id:'sp2dm_spdm_no1',
+																				fieldLabel: 'Nomor SPD',
+																				name: 'data[Sp2dMaster][spdm_no]' 
+																				 
+																			 
+																			},
+																			{xtype:'displayfield',
+																			value:'Tgl SPD'
+																			},
+																			{	xtype:'textfield',
+																			 	id:'sp2dm_spdm_tgl1',
+																				fieldLabel: 'TGL SPD',
+																				name: 'data[Sp2dMaster][spdm_tgl]' 
+																				 
+																			 
+																			}]
+								               					  },
 																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Bank/Pos',
+																 	id:'sp2dm_spdm_uraian1',
+																	fieldLabel: 'Keperluan',
 																	name: 'data[Sp2dMaster][spdm_bendanama]' 
 																	 
 																 
 																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Rekening',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Sebesar',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
+																{	xtype:'numberfield',
+																 	id:'sp2dm_sp2dm_total1',
+																	fieldLabel: 'Nilai',
+																	name: 'data[Sp2dMaster][sp2dm_total]',
+																	align:'right'
 																	 
 																 
 																}
@@ -530,46 +775,63 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 											            anchor:'95%',
 											            collapsible: false,
 											            autoHeight:true,
-											            labelWidth:100,
+											            labelWidth:150,
 											            defaults: {anchor:'95%',labelWidth:'200px'},
 											            defaultType: 'textfield',
 											            items : [
-													            
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Kepada',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'NPWP',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'No Rekening',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Bank/Pos',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
-																	 
-																 
-																},
-																{	xtype:'textfield',
-																 
-																	fieldLabel: 'Keperluan',
-																	name: 'data[Sp2dMaster][spdm_bendanama]' 
-																	 
-																 
-																}
+													             
+													              {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'Nama',
+											                        items : [ 
+											                        	 {	xtype:'textfield',
+																		 
+																			fieldLabel: '',
+																			name: 'data[Sp2dMaster][sp2dm_nama2]',
+																			value:'',
+																			width:150 
+																			 
+																		},{
+																			xtype:'displayfield',
+																			value:'NPWP'
+																		}
+																		,
+																		{	xtype:'textfield',
+																		 
+																			fieldLabel: '',
+																			name: 'data[Sp2dMaster][sp2dm_npwp2]',
+																			flex : 1,
+																			readOnly:false 
+																		}
+											                        ]
+								               					  },    {
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'No Rekening',
+											                        items : [ 
+											                        	 {	xtype:'textfield',
+																		    width:150,
+																			fieldLabel: '',
+																			name: 'data[Sp2dMaster][sp2dm_norek2]',
+																			value:''
+																			 
+																		},{
+																			xtype:'displayfield',
+																			value:'Bank/Pos'
+																		}
+																		,
+																		{	xtype:'textfield',
+																		 
+																			fieldLabel: '',
+																			name: 'data[Sp2dMaster][sp2dm_bank2]',
+																			flex : 1,
+																			readOnly:false 
+																		}
+											                        ]
+								               					  } 
 											            ]
 									 				},
 									 				{
@@ -579,7 +841,7 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 											            collapsible: false,
 											            autoHeight:true,
 											            layout:'fit',
-											            
+											           
 											            defaults: {anchor:'95%' },
 											            defaultType: 'textfield',
 											            items:
@@ -590,7 +852,7 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 																border: true,
 																frame:false,
 																stripeRows: true,
-																store: sp2ddPotStore,
+																store: sp2ddBebanStore,
 																
 																columns: [{
 																	header: "Kode Rekening",
@@ -604,12 +866,13 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 																	isCellEditable: true
 																}, 
 																 {
-																	header: "Uraian",
-																	width: 100,
+																	header: "Nama Rekening",
+																	width: 150,
 																	sortable: true,
 																	editor:new Ext.form.TextField({enableKeyEvents :true }),
-																	dataIndex: 'sp2dd_ket'
+																	dataIndex: 'akun_nama'
 																},   
+																
 																{
 																	header: "Nilai",
 																	width: 80,
@@ -623,6 +886,14 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 																	renderer: Ext.util.Format.numberRenderer('0,000.00')
 																
 																}, 
+																 {
+																	header: "Keterangan",
+																	width: 150,
+																	sortable: true,
+																	editor:new Ext.form.TextField({enableKeyEvents :true }),
+																	dataIndex: 'sp2dd_ket'
+																},   
+																
 																 {
 																	header: "ID",
 																	hidden:true,
@@ -644,9 +915,9 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 											html:'&nbsp'
 										}
 										,{
-											layout:'fit',
+											layout:'form',
 											border:false,
-											columnWidth:'.48',
+											columnWidth:'.28',
 											items :[{
 									 			xtype:'fieldset',
 									            title: 'Potongan',
@@ -654,13 +925,14 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 									            collapsible: false,
 									            autoHeight:true,
 									         	 layout:'fit',
+									         	 width:200,
 									            labelWidth:100,
 									            defaults: {anchor:'95%' },
 									            defaultType: 'textfield',
 									            items:
 									           		 asp2dPotGrid = new sp2dPotGrid({
 															id: 'asp2dPotGrid',
-															autoWidth:true,
+															width:200,
 															height: 125,
 															border: true,
 															frame:false,
@@ -712,15 +984,16 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 									            title: 'Pajak',
 									          
 									            collapsible: false,
-									            autoHeight:true,
+									          
 									         	 layout:'fit',
 									            labelWidth:100,
+									            width:200,
 									            defaults: {anchor:'95%' },
 									            defaultType: 'textfield',
 									            items:
 									           		 asp2dPajakGrid = new sp2dPajakGrid({
 															id: 'asp2dPajakGrid',
-											 				 autoWidth:true,
+											 				width:200,
 															height: 125,
 															border: true,
 															frame:false,
@@ -781,39 +1054,38 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 						 	items: [{
 						 		text: 'Create New',
 								id:'sp2d1-new',
-								disabled:true,
+							 
 						 		iconCls: 'new',
 						 		handler: function(){
-						 			addspdmasterform.getForm().reset();
-						 			PurchaseDetailStore.load({
+						 			entrysp2dform.getForm().reset();
+						 			sp2ddBebanStore.load({
 						 				params: {
 						 					sp2dm_id: 0
 						 				}
 						 			});
-									PurchaseBonusStore.load({
+									sp2ddPajakStore.load({
 						 				params: {
 						 					sp2dm_id: 0
 						 				}
 						 			});
-						 			Ext.getCmp('sp2dm_date1').setValue(new Date());
-									Ext.getCmp('sp2dm_date1').setReadOnly(false);
+						 			sp2ddPotStore.load({
+						 				params: {
+						 					sp2dm_id: 0
+						 				}
+						 			});
+						 			Ext.getCmp('sp2dm_tgl1').setValue(new Date());
+							 
 									Ext.getCmp('sp2dm_id1').setValue(0);
-									Ext.getCmp('sp2dm_pay_type').setValue(0);
-									Ext.getCmp('vend_code2').enable();
-									Ext.getCmp('sp2dm_wh_code').enable();
-									Ext.getCmp('spddetailGrid').enable();  
-									Ext.getCmp('sp2dm_inctax').setReadOnly(false);
-									Ext.getCmp('sp2dm_pay_type').enable();
-									Ext.getCmp('sp2d1-save').enable();
+								 
 						 		}
 						 	},{
 										text:'Print',
-										id:'print_spd',
-										tooltip:'Print Purchase ',
+										id:'print_sp2d',
+										tooltip:'Print SP2D',
 										iconCls:'printer',
 										handler:function(){
 											aid=Ext.getCmp('sp2dm_id1').getValue();
-											aurl=HOST_PATH+'/rptspd/spd/'+aid;
+											aurl=HOST_PATH+'/rptsp2d/sp2d/'+aid;
 											window.open(aurl,'_blank');
 	
 										}
@@ -824,12 +1096,12 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 						 		text: 'Save',
 						 		iconCls: 'save',
 								id:'sp2d1-save',
-								disabled:true,
+						 
 						 		handler: function(){
-									hitungTotalPurchase2();
-						 			if (addspdmasterform.getForm().isValid()) {
-						 				addspdmasterform.getForm().submit({
-						 					url: urladdspdmaster,
+									 
+						 			if (entrysp2dform.getForm().isValid()) {
+						 				entrysp2dform.getForm().submit({
+						 					url: urladdsp2dmaster,
 						 					waitMsg: 'Saving data...',
 						 					success: function(form, action){
 						 						newid = action.result.newid;
@@ -841,11 +1113,12 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 														Ext.getCmp('sp2dm_no1').setValue(newno);
 														Ext.getCmp('sp2dm_id1').setValue(newid)
 														Ext.getCmp('sp2dm_no1').setReadOnly(true);
-														PurchaseDetailStore.setBaseParam('master', newid);
-														PurchaseBonusStore.setBaseParam('master', newid);
-														
-														PurchaseDetailStore.save();
-														PurchaseBonusStore.save();
+														sp2ddBebanStore.setBaseParam('master', newid);
+														sp2ddPotStore.setBaseParam('master', newid);
+														sp2ddPajakStore.setBaseParam('master', newid);
+														sp2ddBebanStore.save();
+														sp2ddPotStore.save();
+														sp2ddPajakStore.save();
 														
 													}
 													
@@ -869,11 +1142,11 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 								}, {
 									text: 'Cancel',
 									id:'sp2d1-cancel',
-									disabled:true,
+									 
 									margins:'0',
 									handler: function(){
-										SpdperMasterStore.reload();
-										MyDesktop.getSingleModule('addspdmaster-win').closeWindow();
+										Sp2dMasterStore.reload();
+										MyDesktop.getSingleModule('entrysp2d-win').closeWindow();
 										
 										
 									}
@@ -912,7 +1185,7 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
         if(!win2){
             win2 = desktop.createWindow({
                 id: this.id,
-                title:'Surat Perintah Pencarian Dana (SP2D)',
+                title:'Surat Perintah Pencairan Dana (SP2D)',
                 width:700,
                 height:400,
                 iconCls: 'icon-grid',
@@ -951,6 +1224,20 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 								dataIndex: 'data[Sp2dMaster][sppm_no]',
 								width: 150,
 								sortable: true
+							},
+							 {
+								header: "SKPD",
+								dataIndex: 'data[Sp2dMaster][un_nama]',
+								width: 150,
+								sortable: true
+							},
+							{
+								header: "Nilai",
+								dataIndex: 'data[Sp2dMaster][sp2dm_total]',
+								width: 150,
+								sortable: true,
+								align: 'right', 
+								renderer: Ext.util.Format.numberRenderer('0,000.00')
 							} 
 							 
 							],
@@ -965,19 +1252,10 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 									 
 									selectionchange: function(sm){
 										if (sm.getCount()) {
-											if (pv_sp2d >= 1) {
+											 
 												Ext.getCmp('editsp2dbutt').enable();
-												Ext.getCmp('applysp2dbutt').enable();
+											 
 												
-											}
-										 	if (pv_sp2d>=2)
-											 Ext.getCmp('delsp2dbutt').enable();
-										 }
-										else {
-										 	Ext.getCmp('delsp2dbutt').disable();
-										 	Ext.getCmp('editsp2dbutt').disable();
-											Ext.getCmp('applysp2dbutt').disable();
-										 	 
 										}
 									}
 								}
@@ -1011,8 +1289,9 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 										handler: function(){
 											 
 											 MyDesktop.getSingleModule('entrysp2d-win').createWindow();
-											 
-															 
+											 sp2ddBebanStore.load({params:{sp2dm_id:mid}});	
+										 	 sp2ddPajakStore.load({params:{sp2dm_id:mid}});	
+											 sp2ddPotStore.load({params:{sp2dm_id:mid}});			 
 										}
 									} , {
 										id: 'editsp2dbutt',
@@ -1020,7 +1299,17 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 										iconCls: 'edit',
 										disabled: true,
 										handler: function(){
+											 mid=gridsp2d.getSelectionModel().getSelected().get("Sp2dMasterList.sp2dm_id");
+			 
+			 
+										 	 sp2ddBebanStore.load({params:{sp2dm_id:mid}});	
+										 	 sp2ddPajakStore.load({params:{sp2dm_id:mid}});	
+											 sp2ddPotStore.load({params:{sp2dm_id:mid}});	
+											 
+											 MyDesktop.getSingleModule('entrysp2d-win').createWindow();
+											 Ext.getCmp("entrysp2dform").getForm().loadRecord(gridsp2d.getSelectionModel().getSelected());
 										 
+								
 										}
 									},{
 											id: 'delsp2dbutt',
@@ -1126,7 +1415,15 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 	 
 		 
 		gridsp2d.on('rowdblclick',function(sm, rowindex, eventobject){ 
-			
+			 mid=gridsp2d.getSelectionModel().getSelected().get("Sp2dMasterList.sp2dm_id");
+			 
+			 
+			 	 sp2ddBebanStore.load({params:{sp2dm_id:mid}});	
+			 	 sp2ddPajakStore.load({params:{sp2dm_id:mid}});	
+				 sp2ddPotStore.load({params:{sp2dm_id:mid}});	
+				 
+				 MyDesktop.getSingleModule('entrysp2d-win').createWindow();
+				 Ext.getCmp("entrysp2dform").getForm().loadRecord(gridsp2d.getSelectionModel().getSelected());
 			 
 									 
 			

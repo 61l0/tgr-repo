@@ -191,6 +191,7 @@ Ext.onReady(function(){
 	function onSP2DClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 		 MyDesktop.getSingleModule('sp2dgrid-win').createWindow();
+		 MyDesktop.getSingleModule('entrysp2d-win').createWindow();
 	}
 	function onGeserKasClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();

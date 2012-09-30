@@ -9,7 +9,7 @@ var urldpabtlsearchbyun=HOST_PATH+'/dpa/searchdpabtlbyun';
 var urldpadetailsearchbykeg=HOST_PATH+'/dpa/searchdpadetailbykeg';
 var urlkegsearch=HOST_PATH+'/kegiatan/getkeglist';
 var urlprogsearch=HOST_PATH+'/kegiatan/getproglist';
-
+var urlspmsearch=HOST_PATH+'/spm/searchspm';
 var MyDesktop = new Ext.app.App({
 	init :function(){
 		  
@@ -44,6 +44,13 @@ var MyDesktop = new Ext.app.App({
 var sppComboTpl = new Ext.XTemplate(
 	    '<tpl for="."><div class="search-spp"><p style="padding:3px">',
 	        '{sppm_no} (<b>{un_nama}</b>) </p>',
+	        '',
+	    '</div></tpl>'
+	);
+
+var spmComboTpl = new Ext.XTemplate(
+	    '<tpl for="."><div class="search-spm"><p style="padding:3px">',
+	        '{spmm_no} (<b>{un_nama}</b>) </p>',
 	        '',
 	    '</div></tpl>'
 	);
@@ -199,7 +206,40 @@ var sppSearchStore = new Ext.data.Store({
         {name: 'bank_norek'},
         {name: 'bank_nama'},
         
+        {name:'sppm_total'},
+        {name: 'spdm_no'},
+        {name: 'spdm_tgl'},
+        {name: 'spdm_uraian'}
         
+        
+    ])
+});
+
+var spmSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlspmsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'spmmasters',
+        totalProperty: 'total',
+        id: 'spmm_id'
+    }, [
+        {name: 'spmm_id'},
+        {name: 'spmm_no'},
+        {name: 'spmm_tgl'},
+        
+        {name: 'spmm_total'},
+        {name: 'sppm_no'},
+        {name: 'sppm_tgl'},
+        {name: 'un_id'},
+        {name: 'un_nama'},
+      
+        {name: 'sppm_benda'},
+        {name: 'sppm_bendanama'},
+        {name: 'bank_norek'},
+        {name: 'bank_nama'},
+        
+        {name:'sppm_total'},
         {name: 'spdm_no'},
         {name: 'spdm_tgl'},
         {name: 'spdm_uraian'}
