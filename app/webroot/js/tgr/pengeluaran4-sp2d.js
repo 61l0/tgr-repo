@@ -1289,9 +1289,10 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 										handler: function(){
 											 
 											 MyDesktop.getSingleModule('entrysp2d-win').createWindow();
-											 sp2ddBebanStore.load({params:{sp2dm_id:mid}});	
-										 	 sp2ddPajakStore.load({params:{sp2dm_id:mid}});	
-											 sp2ddPotStore.load({params:{sp2dm_id:mid}});			 
+											  entrysp2dform.getForm().reset();
+											 sp2ddBebanStore.load({params:{sp2dm_id:0}});	
+										 	 sp2ddPajakStore.load({params:{sp2dm_id:0}});	
+											 sp2ddPotStore.load({params:{sp2dm_id:0}});			 
 										}
 									} , {
 										id: 'editsp2dbutt',

@@ -1254,9 +1254,11 @@ MyDesktop.SPMGridWindow = Ext.extend(Ext.app.Module, {
 										handler: function(){
 											 
 											 MyDesktop.getSingleModule('entryspm-win').createWindow();
-											 spmdBebanStore.load({params:{spmm_id:mid}});	
-										 	 spmdPajakStore.load({params:{spmm_id:mid}});	
-											 spmdPotStore.load({params:{spmm_id:mid}});			 
+											  entryspmform.getForm().reset();
+											 
+											 spmdBebanStore.load({params:{spmm_id:0}});	
+										 	 spmdPajakStore.load({params:{spmm_id:0}});	
+											 spmdPotStore.load({params:{spmm_id:0}});			 
 										}
 									} , {
 										id: 'editspmbutt',
