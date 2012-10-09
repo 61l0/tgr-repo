@@ -195,15 +195,17 @@ Ext.onReady(function(){
 	}
 	function onGeserKasClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('geserkasgrid-win').createWindow();
+		 MyDesktop.getSingleModule('entrygeserkas-win').createWindow();
 	}
 	function onKeluarBiayaClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('pembiayaangrid-win').createWindow();
+		 MyDesktop.getSingleModule('entrypembiayaan-win').createWindow();
 	}
 	function onBelanjaClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
-	}
-	function mnKeluarBiaya(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('belanjagrid-win').createWindow();
+		 MyDesktop.getSingleModule('entrybelanja-win').createWindow();
 	}
 	 
 	 

@@ -434,3 +434,62 @@ CREATE OR REPLACE FUNCTION bansos_details_bef_ins1() RETURNS TRIGGER AS $$
 $$ LANGUAGE 'plpgsql';
 DROP TRIGGER IF EXISTS bansos_details_bef_ins1 on bansos_details;
 CREATE TRIGGER bansos_details_bef_ins1  BEFORE INSERT ON bansos_details FOR EACH ROW  EXECUTE PROCEDURE bansos_details_bef_ins1();
+
+
+
+CREATE OR REPLACE FUNCTION geser_kas_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.gk_id is null or new.gk_id='0') then
+			new.gk_id :=   trim(to_char(nextval('geser_kas_gk_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS geser_kas_bef_ins1 on geser_kas;
+CREATE TRIGGER geser_kas_bef_ins1  BEFORE INSERT ON geser_kas FOR EACH ROW  EXECUTE PROCEDURE geser_kas_bef_ins1();
+
+
+
+
+CREATE OR REPLACE FUNCTION belanja_masters_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bm_id is null or new.bm_id='0') then
+			new.bm_id :=   trim(to_char(nextval('belanja_masters_bm_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS belanja_masters_bef_ins0 on belanja_masters;
+CREATE TRIGGER belanja_masters_bef_ins0  BEFORE INSERT ON belanja_masters FOR EACH ROW  EXECUTE PROCEDURE belanja_masters_bef_ins0();
+ 
+CREATE OR REPLACE FUNCTION belanja_details_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bd_id is null or new.bd_id='0') then
+			new.bd_id :=   trim(to_char(nextval('belanja_details_bd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS belanja_details_bef_ins1 on belanja_details;
+CREATE TRIGGER belanja_details_bef_ins1  BEFORE INSERT ON belanja_details FOR EACH ROW  EXECUTE PROCEDURE belanja_details_bef_ins1();
+
+
+
+CREATE OR REPLACE FUNCTION pembiayaans_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bia_id is null or new.bia_id='0') then
+			new.bia_id :=   trim(to_char(nextval('pembiayaans_bia_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS pembiayaans_bef_ins1 on pembiayaans;
+CREATE TRIGGER pembiayaans_bef_ins1  BEFORE INSERT ON pembiayaans FOR EACH ROW  EXECUTE PROCEDURE pembiayaans_bef_ins1();

@@ -40,3 +40,11 @@ create sequence acara_details_ad_id_seq increment 1;
 
 create sequence bansos_masters_bm_id_seq increment 1;
 create sequence bansos_details_bd_id_seq increment 1;
+
+create sequence geser_kas_gk_id_seq increment 1;
+
+
+create sequence belanja_masters_bm_id_seq increment 1;
+create sequence belanja_details_bd_id_seq increment 1;
+
+create sequence pembiayaans_bia_id_seq increment 1;

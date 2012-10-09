@@ -10,6 +10,7 @@ var urldpadetailsearchbykeg=HOST_PATH+'/dpa/searchdpadetailbykeg';
 var urlkegsearch=HOST_PATH+'/kegiatan/getkeglist';
 var urlprogsearch=HOST_PATH+'/kegiatan/getproglist';
 var urlspmsearch=HOST_PATH+'/spm/searchspm';
+var urlanggsearch=HOST_PATH+'/dpa/searchangg';
 var MyDesktop = new Ext.app.App({
 	init :function(){
 		  
@@ -31,7 +32,14 @@ var MyDesktop = new Ext.app.App({
 		        new MyDesktop.AcaraGridWindow(),
 		        new MyDesktop.EntryAcaraForm(),
 		        new MyDesktop.BansosGridWindow(),
-		        new MyDesktop.EntryBansosForm()
+		        new MyDesktop.EntryBansosForm(),
+		        new MyDesktop.EntryBansosForm(),
+		        new MyDesktop.EntryGeserKasForm(),
+		        new MyDesktop.GeserKasGridWindow(),
+		        new MyDesktop.BelanjaGridWindow(),
+		        new MyDesktop.EntryBelanjaForm(),
+		        new MyDesktop.PembiayaanGridWindow(),
+		        new MyDesktop.EntryPembiayaanForm()
 		        
 		];
 		
@@ -90,7 +98,7 @@ var skpdComboTpl = new Ext.XTemplate(
 
 var dpaBTLComboTpl= new Ext.XTemplate(
 	    '<tpl for="."><div class="search-dpabtl"><p style="padding:3px">',
-        '{akun_kode} (<b>{akun_nama}</b>)',
+        '{akun_kode} (<b>{akun_nama}</b>) </p>',
         '',
     '</div></tpl>'
 );
@@ -100,7 +108,26 @@ var dpaBLComboTpl= new Ext.XTemplate(
         '',
     '</div></tpl>'
 );
+var anggaranComboTpl= new Ext.XTemplate(
+	    '<tpl for="."><div class="search-anggaran"><p style="padding:3px">',
+        '{angg_kodeper} (<b>{angg_namaper}</b>)</p>',
+        '',
+    '</div></tpl>'
+);
 
+var AnggaranSearchStore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlanggsearch
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'anggarans',
+        totalProperty: 'total',
+        id: 'angg_kodeper'
+    }, [
+        {name:'angg_namaper'},
+        {name: 'angg_kodeper'} 
+    ])
+});
 var dpaBLSearchStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: urldpablsearch

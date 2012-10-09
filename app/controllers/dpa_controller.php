@@ -194,6 +194,44 @@ class DpaController extends AppController
 		$dataAll = Set::extract($dataAll,'{n}.DpaBtl');
 		$this->set('dataAll','{"total":'.$count.',"dpadetails":'.json_encode($dataAll).'}');
 	}  
+	function searchangg(){
+		Configure::write('debug',1);
+		$this->layout = 'ajax';
+		$limit=10;$start=0;
+		if(isset($_POST['query']))
+			$key = $_POST['query'];
+		else $key="";
+		if(isset($_POST['limit']))
+			$limit = $_POST['limit'];
+		$limit=20;
+	 	$this->layout='ajax';
+		if(isset($_POST['start']))
+			$start= $_POST['start'];
+	 
+		if(isset($_POST['un_id']))
+			$master_id = $_POST['un_id'];
+		else $master_id="";
+		$page = ($start/$limit)+1;
+		App::import('Model','anggaran');
+		$data=new Anggaran();
+		if ($key!=""){
+			$key=strtolower($key);
+		$ayear=date('YYYY');
+		$whereis=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(Anggaran.angg_kodeper) LIKE '=>"%$key%"),
+										array('lower(Anggaran.angg_namaper) LIKE '=>"%$key%")))) ,
+									'order'=>'Anggaran.angg_kodeper','limit'=>$limit,'page'=>$page);
+		$wherecount=array('conditions'=>array('AND'=>array('OR'=>array(array('lower(Anggaran.angg_kodeper) LIKE '=>"%$key%"),
+										array('lower(Anggaran.angg_namaper) LIKE '=>"%$key%")))));
+		$dataAll=$data->find('all',$whereis);
+		$count=$data->find('count',$wherecount);
+		}
+		else {
+			$dataAll=$data->find('all' ,array( 'limit'=>$limit,'page'=>$page));
+			$count=$data->find('count',array());
+		}
+		$dataAll = Set::extract($dataAll,'{n}.Anggaran');
+		$this->set('dataAll','{"total":'.$count.',"anggarans":'.json_encode($dataAll).'}');
+	}  
 	function searchdpabtlbyun(){
 		Configure::write('debug',1);
 		$this->layout = 'ajax';

@@ -939,7 +939,7 @@ MyDesktop.EntrySPPLSForm = Ext.extend(Ext.app.Module, {
 																			flex:'1', 
 																			allowBlank:false 
 																			 
-																		},
+																		} 
 																	]
 									                        },{
 															id:'tabspp4a',

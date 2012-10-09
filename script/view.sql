@@ -187,6 +187,13 @@ from gaji_masters m
 left join units u on (m.un_id=u.un_id);
 
 
+drop view if exists geser_kas_lists cascade;
+create or replace view geser_kas_lists 
+as
+select m.*, u.un_kode,u.un_nama
+from geser_kas m
+left join units u on (m.un_id=u.un_id);
+
 
 drop view if exists gaji_detail1_lists cascade;
 create or replace view gaji_detail1_lists as
@@ -288,3 +295,31 @@ as
 select d.*,a.angg_namaper as akun_nama
 from sp2d_detail3s d
 left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+
+
+drop view if exists belanja_master_lists cascade;
+create or replace view belanja_master_lists
+as
+select m.*,p.prog_nama,k.keg_nama,u.un_nama
+from belanja_masters m
+left join units u on (m.un_id=u.un_id)
+left join programs  p on (m.prog_kode=p.prog_kode)
+left join kegiatans k on (m.keg_kode=k.keg_kode);
+
+
+drop view if exists belanja_detail_lists cascade;
+create or replace view belanja_detail_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from belanja_details d
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+
+
+drop view if exists pembiayaan_lists cascade;
+create or replace view pembiayaan_lists 
+as
+select m.*,a.angg_namaper as akun_nama
+from pembiayaans m
+left join anggarans a on (m.akun_kode=a.angg_kodeper);

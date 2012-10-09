@@ -99,6 +99,7 @@ function proc_gaji2(o){
 }
 function proc_gaji1(o){ 
 	if (o.field=="akun_kode"){
+		var idxRec=-1;
 		idxRec=dpaBTLByUNSearchStore.findBy(function(record, id){
 			  	 
 		        if(record.get('akun_kode') === o.value  ) {
@@ -959,10 +960,11 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																					sortable: true,
 																					editor: {
 																						xtype:'combo',
-																						store: dpaBTLByUNSearchStore,
+																						 store: dpaBTLByUNSearchStore,
+																						//store:dpaBTLSearchStore,
 																						displayField: 'akun_kode',
 																						typeAhead: false,
-																						enableKeyEvents: true,
+																					 
 																						valueField: 'akun_kode',
 																						loadingText: 'Searching...',
 																						minChars: 2,
@@ -970,6 +972,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																						pageSize: 10,
 																						boxMinWidth: 250,
 																						boxMinHeight: 100,
+																						height:100,
 																						hideTrigger: false,
 																						// forceSelection: true,
 																						tpl: dpaBTLComboTpl,
@@ -977,7 +980,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																						itemSelector: 'div.search-dpabtl',
 																						listeners : {
 																							focus : function(){
-																								 dpaBTLByUNSearchStore.baseParams={un_id:Ext.getCmp('gaji_gaji_un_id1').getValue()};
+																							  dpaBTLByUNSearchStore.baseParams={un_id:Ext.getCmp('gaji_un_id1').getValue()};
 																							}
 																						}
 																					
@@ -1239,9 +1242,7 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 														GajiDetail2Store.save();
 														GajiDetail1Store.save();
 														Ext.getCmp('gm_id1').setValue(newid);
-														entrybtl_gaji.getForm().submit({
-						 											url: urladdgajidetail0
-						 											});
+														 
 														
 													}
 													

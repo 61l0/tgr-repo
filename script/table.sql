@@ -755,24 +755,32 @@ create table belanja_masters(
 	bm_id	varchar(20),
 	bm_no	varchar(50),
 	bm_tgl	date,
-	dpam_no	varchar(30),
+	un_id		varchar(30),
+	prog_kode		varchar(30),
+	keg_kode		varchar(30),
+	bm_panjar		integer default 0,
+	bm_nilaipanjar	numeric(24,2) default 0,
+	
 	constraint belanja_masters_pk primary key(bm_id)
 );
 
 create table belanja_details( 
 	bd_id	varchar(20),
+	bm_id	varchar(20),
 	akun_kode		varchar(30),
 	bd_nilai	numeric(24,2) default 0,
 	constraint belanja_details_pk primary key(bd_id),
 	constraint belanja_details_fk foreign key (bm_id) references belanja_masters(bm_id) on delete cascade 
 );
-
+create index belanja_details_idx0 on belanja_details(akun_kode);
 create table pembiayaans (
 	bia_id	varchar(20),
 	bia_no	varchar(50),
 	bia_tgl	date,
 	bia_nonota	varchar(50),
+	bia_noperda	varchar(50),
 	akun_kode	varchar(30),
+	bia_nilai	numeric(24,2) default 0,
 	bia_tglsp2d	date,
 	constraint pembiayaan_pk primary key(bia_id)
 );
@@ -804,6 +812,7 @@ create table geser_kas(
 	gk_id		varchar(20),
 	un_id		varchar(20),
 	gk_no		varchar(50),
+	gk_tahun	integer,
 	gk_tgl		date,
 	gk_tipe		integer default 0,
 	gk_nilai	numeric(24,2) default 0,
