@@ -912,6 +912,31 @@ create table belanja_details(
 	constraint belanja_details_fk foreign key (bm_id) references belanja_masters(bm_id) on delete cascade 
 );
 create index belanja_details_idx0 on belanja_details(akun_kode);
+
+
+-- daftar potongan belanja
+drop table if exists belanja_detail1s cascade;
+create table belanja_detail1s (
+	bd_id		varchar(20),
+	bm_id		varchar(20),
+	ptg_kode	varchar(20),
+	bd_nilai	numeric(24,2) default 0,
+	bd_ket	varchar(150),
+	constraint belanja_detail1s_pk primary key(bd_id),
+	constraint belanja_detail1s_fk1 foreign key (bm_id) references belanja_masters(bm_id) on delete cascade 
+);
+-- belanja pajak
+drop table if exists belanja_detail2s cascade;
+create table belanja_detail2s (
+	bd_id		varchar(20),
+	bm_id		varchar(20),
+	pjk_kode	varchar(20),
+	bd_nilai	numeric(24,2) default 0,
+	bd_ket	varchar(150),
+	constraint belanja_detail2s_pk primary key (bd_id),
+	constraint belanja_detail2s_fk1 foreign key (bm_id) references belanja_masters(bm_id) on delete cascade 
+);
+
 create table pembiayaans (
 	bia_id	varchar(20),
 	bia_no	varchar(50),
