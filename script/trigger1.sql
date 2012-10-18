@@ -479,7 +479,32 @@ $$ LANGUAGE 'plpgsql';
 DROP TRIGGER IF EXISTS belanja_details_bef_ins1 on belanja_details;
 CREATE TRIGGER belanja_details_bef_ins1  BEFORE INSERT ON belanja_details FOR EACH ROW  EXECUTE PROCEDURE belanja_details_bef_ins1();
 
+CREATE OR REPLACE FUNCTION belanja_detail1s_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bd_id is null or new.bd_id='0') then
+			new.bd_id :=   trim(to_char(nextval('belanja_detail1s_bd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS belanja_detail1s_bef_ins1 on belanja_detail1s;
+CREATE TRIGGER belanja_detail1s_bef_ins1  BEFORE INSERT ON belanja_detail1s FOR EACH ROW  EXECUTE PROCEDURE belanja_detail1s_bef_ins1();
 
+
+CREATE OR REPLACE FUNCTION belanja_detail2s_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bd_id is null or new.bd_id='0') then
+			new.bd_id :=   trim(to_char(nextval('belanja_detail2s_bd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS belanja_detail2s_bef_ins1 on belanja_detail2s;
+CREATE TRIGGER belanja_detail2s_bef_ins1  BEFORE INSERT ON belanja_detail2s FOR EACH ROW  EXECUTE PROCEDURE belanja_detail2s_bef_ins1();
 
 CREATE OR REPLACE FUNCTION pembiayaans_bef_ins1() RETURNS TRIGGER AS $$
 	 
@@ -607,6 +632,22 @@ CREATE OR REPLACE FUNCTION kas_balances_bef_ins0() RETURNS TRIGGER AS $$
 $$ LANGUAGE 'plpgsql';
 DROP TRIGGER IF EXISTS kas_balances_bef_ins0 on kas_balances;
 CREATE TRIGGER kas_balances_bef_ins0  BEFORE INSERT ON kas_balances FOR EACH ROW  EXECUTE PROCEDURE kas_balances_bef_ins0();
+
+
+
+CREATE OR REPLACE FUNCTION subkas_balances_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.cb_id is null or new.cb_id='0') then
+			new.cb_id :=   trim(to_char(nextval('subkas_balances_cb_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS subkas_balances_bef_ins0 on subkas_balances;
+CREATE TRIGGER subkas_balances_bef_ins0  BEFORE INSERT ON subkas_balances FOR EACH ROW  EXECUTE PROCEDURE subkas_balances_bef_ins0();
+
 
 CREATE OR REPLACE FUNCTION bank_balances_bef_ins0() RETURNS TRIGGER AS $$
 	 

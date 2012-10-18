@@ -1,29 +1,4 @@
 
-drop view if exists dpa_detail_lists cascade;
-create or replace view dpa_detail_lists as 
-select d.*,a.angg_kodeper as akun_kode, a.angg_namaper as akun_nama,
-m.dpam_no,m.un_nama
-from dpa_details  d
-left join dpa_master_lists m on (d.dpam_id=m.dpam_id)
-left join anggarans a on (d.angg_kode=a.angg_kode);
-
-
-drop view if exists spdper_master_lists cascade;
-create or replace view spdper_master_lists as
-select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama,(m.spdm_angg-m.spdm_akum) as spdm_tersedia
-from spdper_masters m
-left join units u on (m.un_id=u.un_id)
-left join pns p on (m.spdm_benda=p.pn_nip)
-left join pns p2 on (m.spdm_ppkd=p2.pn_nip);
-
-drop view if exists spd_master_lists cascade;
-create or replace view spd_master_lists as
-select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama,(m.spdm_angg-m.spdm_akum) as spdm_tersedia
-from spd_masters m
-left join units u on (m.un_id=u.un_id)
-left join pns p on (m.spdm_benda=p.pn_nip)
-left join pns p2 on (m.spdm_ppkd=p2.pn_nip);
-
 /* nilai total per dpa */ 
 drop view if exists dpa_total cascade;
 create or replace view dpa_total as
@@ -66,6 +41,33 @@ from dpa_masters m
 left join units u on (m.un_id=u.un_id)
 left join dpa_total t on (m.dpam_no=t.dpam_no)
 left join dpa_akum a on (m.dpam_no=a.dpam_no);
+
+drop view if exists dpa_detail_lists cascade;
+create or replace view dpa_detail_lists as 
+select d.*,a.angg_kodeper as akun_kode, a.angg_namaper as akun_nama,
+m.dpam_no,m.un_nama
+from dpa_details  d
+left join dpa_master_lists m on (d.dpam_id=m.dpam_id)
+left join anggarans a on (d.angg_kode=a.angg_kode);
+
+
+drop view if exists spdper_master_lists cascade;
+create or replace view spdper_master_lists as
+select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama,(m.spdm_angg-m.spdm_akum) as spdm_tersedia
+from spdper_masters m
+left join units u on (m.un_id=u.un_id)
+left join pns p on (m.spdm_benda=p.pn_nip)
+left join pns p2 on (m.spdm_ppkd=p2.pn_nip);
+
+drop view if exists spd_master_lists cascade;
+create or replace view spd_master_lists as
+select m.*,u.un_kode,u.un_nama,p.pn_nama as spdm_bendanama, p2.pn_nama as spdm_ppkdnama,(m.spdm_angg-m.spdm_akum) as spdm_tersedia
+from spd_masters m
+left join units u on (m.un_id=u.un_id)
+left join pns p on (m.spdm_benda=p.pn_nip)
+left join pns p2 on (m.spdm_ppkd=p2.pn_nip);
+
+
 
 /* ini untuk daftar belanja langsung */
 drop view if exists dpa_bl0 cascade;
@@ -315,6 +317,16 @@ select d.*,a.angg_namaper as akun_nama
 from belanja_details d
 left join anggarans a on (d.akun_kode=a.angg_kodeper);
 
+
+drop view if exists belanja_detail1_lists cascade;
+create or replace view belanja_detail1_lists
+as 
+select d.* from belanja_detail1s d;
+
+drop view if exists belanja_detail2_lists cascade;
+create or replace view belanja_detail2_lists
+as 
+select d.* from belanja_detail2s d;
 
 
 drop view if exists pembiayaan_lists cascade;

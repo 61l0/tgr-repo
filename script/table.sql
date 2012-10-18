@@ -167,8 +167,8 @@ create table subkas_balances(
 	mark			smallint default 0,
 	modi_by			varchar(30),
 	modi_date		timestamp default current_timestamp,
-	constraint cash_bal_pk primary key(cb_id),
-	constraint cash_bal_fk1 foreign key (kas_kode) references kas(kas_kode) on delete cascade
+	constraint subkas_bal_pk primary key(cb_id),
+	constraint subkas_bal_fk1 foreign key (kas_kode) references kas(kas_kode) on delete cascade
 );
 create index subkas_balances_idx1 on subkas_balances(kas_kode);
 create index subkas_balances_idx2 on subkas_balances(cb_refno);

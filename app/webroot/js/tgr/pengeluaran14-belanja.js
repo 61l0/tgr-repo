@@ -3,6 +3,89 @@ var  urlbelanjamaster=HOST_PATH+'/belanja/getall';
 var urladdbelanjamaster=HOST_PATH+'/belanja/add';
 var urlgetdpadetailbykeg=HOST_PATH+'/dpa/readdetailbykeg';
 
+var detailPotongan3Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpotongan
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'ptg_kode',
+    fields : [
+        	{name: 'ptg_kode'},
+	 
+	{name: 'ptg_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new belanjaPotStore.recordType({
+					bd_id: 0,
+					bm_id: '',
+				  
+					ptg_kode:recordlist[i].get('ptg_kode'),
+					 
+					bd_nilai:0
+				 
+			
+			});
+		 
+			belanjaPotStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
+
+var detailPajak3Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpajak
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'pjk_kode',
+    fields : [
+        	{name: 'pjk_kode'},
+	 
+	{name: 'pjk_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new belanjaPajakStore.recordType({
+					bd_id: 0,
+					bm_id: '',
+				 	 
+					pjk_kode:recordlist[i].get('pjk_kode'),
+					 
+					bd_nilai:0
+				 
+			
+			});
+		 
+			belanjaPajakStore.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
 var detailDPADetail4Store = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: urlgetdpadetailbykeg
@@ -76,6 +159,12 @@ function hitungTotalBelanja(){
 function proc_belanja2(o){ 
 	hitungTotalBelanja();
 }
+function proc_belanjapajak(o){
+	
+}
+function proc_belanjapot(o){
+	
+}
 function proc_belanja1(o){ 
 	if (o.field=="akun_kode"){
 		idxRec=dpaDetailByKegSearchStore.findBy(function(record, id){
@@ -109,10 +198,10 @@ var BelanjaMasterStore = new Ext.data.GroupingStore({
 
 var belanjaDetail1_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/belanja/readdetail_1',
-        create : HOST_PATH+'/belanja/createdetail_1',
-        update:  HOST_PATH+'/belanja/updatedetail_1',
-        destroy:  HOST_PATH+'/belanja/destroydetail_1'
+        read : HOST_PATH+'/belanja/readdetail_0',
+        create : HOST_PATH+'/belanja/createdetail_0',
+        update:  HOST_PATH+'/belanja/updatedetail_0',
+        destroy:  HOST_PATH+'/belanja/destroydetail_0'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
@@ -268,6 +357,178 @@ var BelanjaDetail1Grid = Ext.extend( Ext.grid.EditorGridPanel, {
 
  
 
+
+var belanjaPot_proxy = new Ext.data.HttpProxy({
+    api: {
+        read : HOST_PATH+'/belanja/readdetail_1',
+        create : HOST_PATH+'/belanja/createdetail_1',
+        update:  HOST_PATH+'/belanja/updatedetail_1',
+        destroy:  HOST_PATH+'/belanja/destroydetail_1'
+    },
+	listeners: {
+		beforewrite : function(proxy, action) {
+			App.setAlert(App.STATUS_NOTICE,"belanja : "+action+": Menyimpan data...");
+			},
+		 write : function(proxy, action, result, res, rs) {
+			App.setAlert(true, "belanja  :"+action+":"+res.message);
+			},
+		exception : function(proxy, type, action, options, res) {
+			if (type === 'remote') {
+			Ext.Msg.show({
+				title: 'REMOTE EXCEPTION',
+				msg: res.message,
+				icon: Ext.MessageBox.ERROR,
+				buttons: Ext.Msg.OK
+			});
+			}
+			}
+	}
+});
+var belanjaPot_reader = new Ext.data.JsonReader({
+	totalProperty: 'total',
+    successProperty: 'success',
+    idProperty: 'bd_id',
+    root: 'data',
+    messageProperty: 'message'  // <-- New "messageProperty" meta-data
+}, [  
+	{name: 'bd_id'},
+	{name: 'bm_id'},
+	{name: 'ptg_kode'},
+	 
+	{name: 'bd_nilai',type:'float'},
+	{name: 'bd_ket',type:'float'} 
+ 
+	 
+]); 
+
+// The new DataWriter component.
+var belanjaPot_writer = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true,
+	listful:true
+});
+
+// Typical Store collecting the Proxy, Reader and Writer together.
+var belanjaPotStore = new Ext.data.Store({
+    id: 'belanjaPotStore',
+    proxy: belanjaPot_proxy,
+    reader: belanjaPot_reader,
+    writer: belanjaPot_writer,  // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave: false, // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+	autoLoad: true  
+});
+ 
+var belanjaPotGrid = Ext.extend( Ext.grid.EditorGridPanel, {
+    iconCls: 'icon-form',
+    frame:false,
+	border:false,
+	loadMask: true,
+//	 plugins:[ new Ext.ux.grid.GridSummary({position:'bottom',height:0})],
+	sm: new Ext.grid.RowSelectionModel({	moveEditorOnEnter:false,
+								singleSelect: true }),
+    initComponent : function() {
+ 
+	this.relayEvents(this.store, ['destroy', 'save', 'update']); 
+	 
+    belanjaPotGrid.superclass.initComponent.call(this);
+    },
+ 
+   
+	listeners : {
+		afteredit: function (o){
+			//alert(o.field+":"+o.value+":"+o.originalValue+":"+o.row+":"+o.column );			
+			proc_belanjapot(o);
+		}
+		 
+	}
+});
+// pajak,belanja_detail2
+
+var belanjaPajak_proxy = new Ext.data.HttpProxy({
+    api: {
+        read : HOST_PATH+'/belanja/readdetail_2',
+        create : HOST_PATH+'/belanja/createdetail_2',
+        update:  HOST_PATH+'/belanja/updatedetail_2',
+        destroy:  HOST_PATH+'/belanja/destroydetail_2'
+    },
+	listeners: {
+		beforewrite : function(proxy, action) {
+			App.setAlert(App.STATUS_NOTICE,"belanja : "+action+": Menyimpan data...");
+			},
+		 write : function(proxy, action, result, res, rs) {
+			App.setAlert(true, "belanja  :"+action+":"+res.message);
+			},
+		exception : function(proxy, type, action, options, res) {
+			if (type === 'remote') {
+			Ext.Msg.show({
+				title: 'REMOTE EXCEPTION',
+				msg: res.message,
+				icon: Ext.MessageBox.ERROR,
+				buttons: Ext.Msg.OK
+			});
+			}
+			}
+	}
+});
+var belanjaPajak_reader = new Ext.data.JsonReader({
+	totalProperty: 'total',
+    successProperty: 'success',
+    idProperty: 'bd_id',
+    root: 'data',
+    messageProperty: 'message'  // <-- New "messageProperty" meta-data
+}, [  
+	{name: 'bd_id'},
+	{name: 'bm_id'},
+	{name: 'pjk_kode'},
+	 
+	{name: 'bd_nilai',type:'float'},
+	{name: 'bd_ket',type:'float'} 
+ 
+	 
+]); 
+ 
+var belanjaPajak_writer = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true,
+	listful:true
+});
+ 
+var belanjaPajakStore = new Ext.data.Store({
+    id: 'belanjaPajakStore',
+    proxy: belanjaPajak_proxy,
+    reader: belanjaPajak_reader,
+    writer: belanjaPajak_writer,  // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave: false, // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+	autoLoad: true  
+});
+var gridsumPajak=new Ext.ux.grid.GridSummary({position:'bottom',height:0});
+var belanjaPajakGrid = Ext.extend( Ext.grid.EditorGridPanel, {
+    iconCls: 'icon-form',
+    frame:false,
+	border:false,
+	loadMask: true,
+	// plugins:[ new Ext.ux.grid.GridSummary({position:'bottom',height:0})],
+	 
+	sm: new Ext.grid.RowSelectionModel({	moveEditorOnEnter:false,
+								singleSelect: true }),
+    initComponent : function() {
+ 
+	this.relayEvents(this.store, ['destroy', 'save', 'update']); 
+	 
+    belanjaPajakGrid.superclass.initComponent.call(this);
+    },
+ 
+   
+	listeners : {
+		afteredit: function (o){
+			//alert(o.field+":"+o.value+":"+o.originalValue+":"+o.row+":"+o.column );			
+			proc_belanjapajak(o);
+		}
+		 
+	}
+});
+
+ 
  
 MyDesktop.BelanjaGridWindow = Ext.extend(Ext.app.Module, {
     id:'belanjagrid-win',
@@ -405,6 +666,16 @@ MyDesktop.BelanjaGridWindow = Ext.extend(Ext.app.Module, {
 									 					bm_id: 0
 									 				}
 									 			});
+									 			belanjaPajakStore.load({
+									 				params: {
+									 					bm_id: 0
+									 				}
+									 			});
+									 			belanjaPotStore.load({
+									 				params: {
+									 					bm_id: 0
+									 				}
+									 			});
 									 			Ext.getCmp('blm_tgl1').setValue(new Date());
 												Ext.getCmp('blm_tgl1').setReadOnly(false);
 												Ext.getCmp('blm_id1').setValue(0);
@@ -419,7 +690,8 @@ MyDesktop.BelanjaGridWindow = Ext.extend(Ext.app.Module, {
 										 	 mid=gridbelanja.getSelectionModel().getSelected().get("BelanjaMasterList.bm_id");
 										 	 BelanjaDetail0Store.load({params:{bm_id:mid}});				 
 										 
-											 BelanjaDetail1Store.load({params:{bm_id:mid}});
+											 belanjaPajakStore.load({params:{bm_id:mid}});
+											 belanjaPotStore.load({params:{bm_id:mid}});
 											 MyDesktop.getSingleModule('entrybelanja-win').createWindow();
 											 Ext.getCmp("entrybelanjaform").getForm().loadRecord(gridbelanja.getSelectionModel().getSelected());
 										}
@@ -532,6 +804,8 @@ MyDesktop.BelanjaGridWindow = Ext.extend(Ext.app.Module, {
 		   
 		 
 			 BelanjaDetail1Store.load({params:{bm_id:mid}});
+			 belanjaPajakStore.load({params:{bm_id:mid}});
+			 belanjaPotStore.load({params:{bm_id:mid}});
 			 MyDesktop.getSingleModule('entrybelanja-win').createWindow();
 			 Ext.getCmp("entrybelanjaform").getForm().loadRecord(gridbelanja.getSelectionModel().getSelected());
 			 
@@ -803,6 +1077,11 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 																 					keg_kode:record.get('keg_kode') 
 																 				}
 																 			});
+																 			
+																 			belanjaPajakStore.removeAll();
+																		  detailPajak3Store.load();
+																		  belanjaPotStore.removeAll();
+							  											 detailPotongan3Store.load();
 																	}	
 																}
 															 
@@ -914,7 +1193,124 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 											                       
 																	
 									                        
-														   } 
+														   },//end of tab no 1
+														   {
+														   	 id:'tabbelanja3',
+									                        layout:'fit',
+									                        frame:true,
+									                       
+									                        title: 'Potongan',
+									                        bodyStyle:'0 5px 5px 0',
+									                        anchor:'95%',
+									                        defaults: {anchor:'95%'},
+									                        items :  abelanjaPotGrid = new belanjaPotGrid({
+																	id: 'abelanjaPotGrid',
+																	width:200,
+																	height: 125,
+																	border: true,
+																	frame:false,
+																	stripeRows: true,
+																	store: belanjaPotStore,
+																
+																	columns: [{
+																	header: "Potongan",
+																	dataIndex: 'ptg_kode',
+																	sortable: true,
+																	width:80,
+																	editor: {
+																	xtype:'textfield'
+																
+																	},
+																	isCellEditable: true
+																	}, 
+																	{
+																	header: "Nilai",
+																	width: 80,
+																	sortable: true,
+																	align:'right',
+																	summaryType: 'sum',
+																	dataIndex: 'bd_nilai',
+																	isCellEditable: true,
+																	allowBlank: false,
+																	editor:new Ext.form.NumberField({enableKeyEvents :true }),
+																	renderer: Ext.util.Format.numberRenderer('0,000.00')
+																
+																	}, {
+																	header: "Keterangan",
+																	width: 100,
+																	sortable: true,
+																	editor:new Ext.form.TextField({enableKeyEvents :true }),
+																	dataIndex: 'bd_ket'
+																	},   
+																	{
+																	header: "ID",
+																	hidden:true,
+																	width: 40,
+																	sortable: true,
+																	dataIndex: 'bd_id' 
+																	} ]
+																
+																	}) //end of grid  
+														   }//end of tab
+														   ,
+														   {
+																 id:'tabbelanja4',
+										                        layout:'fit',
+										                        frame:true,
+										                       
+										                        title: 'Pajak',
+										                        bodyStyle:'0 5px 5px 0',
+										                        anchor:'95%',
+										                        defaults: {anchor:'95%'},
+										                        items :   	abelanjaPajakGrid = new belanjaPajakGrid({
+																	id: 'abelanjaPajakGrid',
+													 				width:200,
+																	height: 125,
+																	border: true,
+																	frame:false,
+																	stripeRows: true,
+																	 
+																	store: belanjaPajakStore,
+																	columns: [{
+																		header: "Pajak",
+																		dataIndex: 'pjk_kode',
+																		sortable: true,
+																		width:80,
+																		editor: {
+																			 xtype:'textfield'
+																		
+																		},
+																		isCellEditable: true
+																	}, 
+																	{
+																		header: "Nilai",
+																		width: 80,
+																		sortable: true,
+																		align:'right',
+																		summaryType: 'sum',
+																		dataIndex: 'bd_nilai',
+																		isCellEditable: true,
+																		allowBlank: false,
+																		editor:new Ext.form.NumberField({enableKeyEvents :true }),
+																		renderer: Ext.util.Format.numberRenderer('0,000.00')
+																	
+																	}, {
+																		header: "Keterangan",
+																		width: 100,
+																		sortable: true,
+																		editor:new Ext.form.TextField({enableKeyEvents :true }),
+																		dataIndex: 'bd_ket'
+																	},   
+																	 {
+																		header: "ID",
+																		hidden:true,
+																		width: 40,
+																		sortable: true,
+																		dataIndex: 'bd_id' 
+																	} ]
+																
+																}) //end of grid
+														   }
 									                        
 									                  ]
 												})//end of tab
@@ -954,6 +1350,16 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 						 		 
 						 			 
 									BelanjaDetail1Store.load({
+						 				params: {
+						 					bm_id: 0
+						 				}
+						 			});
+									belanjaPajakStore.load({
+						 				params: {
+						 					bm_id: 0
+						 				}
+						 			});
+									belanjaPotStore.load({
 						 				params: {
 						 					bm_id: 0
 						 				}
@@ -1002,9 +1408,11 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 														Ext.getCmp('blm_no1').setReadOnly(true);
 														 
 														BelanjaDetail1Store.setBaseParam('master', newid);
-														
-													 
 														BelanjaDetail1Store.save();
+														belanjaPajakStore.setBaseParam('master', newid);
+														belanjaPajakStore.save();
+														belanjaPotStore.setBaseParam('master', newid);
+														belanjaPotStore.save();
 														Ext.getCmp('blm_id1').setValue(newid);
 														 
 														

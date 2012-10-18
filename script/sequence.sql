@@ -46,6 +46,9 @@ create sequence geser_kas_gk_id_seq increment 1;
 
 create sequence belanja_masters_bm_id_seq increment 1;
 create sequence belanja_details_bd_id_seq increment 1;
+create sequence belanja_detail1s_bd_id_seq increment 1;
+create sequence belanja_detail2s_bd_id_seq increment 1;
+
 
 create sequence pembiayaans_bia_id_seq increment 1;
 create sequence limpah_ups_lu_id_seq increment 1;
@@ -60,4 +63,5 @@ create sequence akun_bal1s_ab_id_seq increment 1;
 create sequence akun_bal2s_ab_id_seq increment 1;
 
 create sequence kas_balances_cb_id_seq increment 1;
+create sequence subkas_balances_cb_id_seq increment 1;
 create sequence bank_balances_bb_id_seq increment 1;
