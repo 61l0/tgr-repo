@@ -92,7 +92,11 @@ Ext.onReady(function(){
         		id:'mnGeserKas',
         		handler: onGeserKasClick
         	},
-            
+        	 {
+        		text:'Pelimpahan UP',
+        		id:'mnLimpahUp',
+        		handler: onLimpahUpClick
+        	},
              {
         		text:'Belanja',
         		id:'mnBelanja',
@@ -208,7 +212,10 @@ Ext.onReady(function(){
 		 MyDesktop.getSingleModule('entrybelanja-win').createWindow();
 	}
 	 
-	 
+	function onLimpahUpClick(){
+		 MyDesktop.getSingleModule('limpahupgrid-win').createWindow();
+		 MyDesktop.getSingleModule('entrylimpahup-win').createWindow();
+	}
 	function onTextReportClick(item){
         MyDesktop.getSingleModule('reportlist-win').createWindow();
     }

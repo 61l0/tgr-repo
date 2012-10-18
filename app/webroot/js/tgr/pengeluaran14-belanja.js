@@ -64,7 +64,7 @@ var BelanjaMasterJsonReader =  new Ext.data.JsonReader({
 		 {name:'data[BelanjaMaster][keg_kode]',mapping:'BelanjaMasterList.keg_kode'},
 		{name:'data[BelanjaMaster][keg_nama]',mapping:'BelanjaMasterList.keg_nama'},
 		 {name:'data[BelanjaMaster][bm_panjar]',mapping:'BelanjaMasterList.bm_panjar'},
-		 {name:'data[BelanjaMaster][bm_panjar]',mapping:'BelanjaMasterList.bm_panjar'} 
+		 {name:'data[BelanjaMaster][bm_nilaipanjar]',mapping:'BelanjaMasterList.bm_nilaipanjar'} 
 	]
 	 
 	 

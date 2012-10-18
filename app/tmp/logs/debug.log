@@ -42,3 +42,7 @@
 2012-09-30 00:24:49 Notice: Notice (8): Undefined variable: dataall in [/var/www/tgr/app/controllers/kegiatan_controller.php, line 36]
 2012-09-30 00:31:41 Notice: Notice (8): Undefined variable: dpa in [/var/www/tgr/app/controllers/kegiatan_controller.php, line 65]
 2012-09-30 00:35:13 Notice: Notice (8): Undefined variable: dataall in [/var/www/tgr/app/controllers/kegiatan_controller.php, line 72]
+2012-10-16 02:58:03 Notice: Notice (8): Undefined variable: search in [/var/www/tgr/app/controllers/je_controller.php, line 198]
+2012-10-16 02:58:03 Notice: Notice (8): Undefined variable: jemasterlist in [/var/www/tgr/app/controllers/je_controller.php, line 217]
+2012-10-16 02:58:22 Notice: Notice (8): Undefined variable: search in [/var/www/tgr/app/controllers/je_controller.php, line 198]
+2012-10-16 02:58:22 Notice: Notice (8): Undefined variable: jemasterlist in [/var/www/tgr/app/controllers/je_controller.php, line 217]

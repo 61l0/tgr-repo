@@ -37,3 +37,13 @@ select  trim(idxdask), trim(mtgkey),trim(unitkey),nilai from daskrtls;
 --select angg_kodeper,trim(substring(angg_kodeper,0,length(angg_kodeper))) from anggarans
 --menghilangkan titik di belakang
 update anggarans set angg_kodeper=trim(substring(angg_kodeper,0,length(angg_kodeper)));
+
+insert into akun (akun_id,akun_kode,akun_nama,akun_parent,akun_left,akun_right)
+select id,kode,name,parent_id,lft,rght from akuns;
+
+update akun set akun_normal=0 where akun_kode like '1%';
+update akun set akun_normal=1 where akun_kode like '2%';
+update akun set akun_normal=1 where akun_kode like '3%';
+update akun set akun_normal=0 where akun_kode like '4%';
+update akun set akun_normal=1 where akun_kode like '5%';
+update akun set akun_normal=0 where akun_kode like '6%';

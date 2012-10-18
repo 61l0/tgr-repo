@@ -14,7 +14,8 @@
 		echo $javascript->link('tgr/pengeluaran12-bansos'); 	
 		echo $javascript->link('tgr/pengeluaran13-geserkas');
 		echo $javascript->link('tgr/pengeluaran14-belanja'); 
-		echo $javascript->link('tgr/pengeluaran15-pembiayaan'); 		
+		echo $javascript->link('tgr/pengeluaran15-pembiayaan'); 
+		echo $javascript->link('tgr/pengeluaran16-limpahup'); 		
  ?>
  
 </script> 

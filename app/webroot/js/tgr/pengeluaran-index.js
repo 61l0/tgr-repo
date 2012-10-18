@@ -39,7 +39,9 @@ var MyDesktop = new Ext.app.App({
 		        new MyDesktop.BelanjaGridWindow(),
 		        new MyDesktop.EntryBelanjaForm(),
 		        new MyDesktop.PembiayaanGridWindow(),
-		        new MyDesktop.EntryPembiayaanForm()
+		        new MyDesktop.EntryPembiayaanForm(),
+		        new MyDesktop.EntryLimpahUpForm(),
+		        new MyDesktop.LimpahUpGridWindow()
 		        
 		];
 		

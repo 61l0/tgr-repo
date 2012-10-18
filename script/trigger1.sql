@@ -493,3 +493,130 @@ CREATE OR REPLACE FUNCTION pembiayaans_bef_ins1() RETURNS TRIGGER AS $$
 $$ LANGUAGE 'plpgsql';
 DROP TRIGGER IF EXISTS pembiayaans_bef_ins1 on pembiayaans;
 CREATE TRIGGER pembiayaans_bef_ins1  BEFORE INSERT ON pembiayaans FOR EACH ROW  EXECUTE PROCEDURE pembiayaans_bef_ins1();
+
+
+CREATE OR REPLACE FUNCTION limpah_ups_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.lu_id is null or new.lu_id='0') then
+			new.lu_id :=   trim(to_char(nextval('limpah_ups_lu_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS limpah_ups_bef_ins1 on limpah_ups;
+CREATE TRIGGER limpah_ups_bef_ins1  BEFORE INSERT ON limpah_ups FOR EACH ROW  EXECUTE PROCEDURE limpah_ups_bef_ins1();
+
+
+ CREATE OR REPLACE FUNCTION kembali_masters_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.km_id is null or new.km_id='0') then
+			new.km_id :=   trim(to_char(nextval('kembali_masters_km_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS kembali_masters_bef_ins0 on kembali_masters;
+CREATE TRIGGER kembali_masters_bef_ins0  BEFORE INSERT ON kembali_masters FOR EACH ROW  EXECUTE PROCEDURE kembali_masters_bef_ins0();
+ 
+CREATE OR REPLACE FUNCTION kembali_details_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.kd_id is null or new.kd_id='0') then
+			new.kd_id :=   trim(to_char(nextval('kembali_details_kd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS kembali_details_bef_ins1 on kembali_details;
+CREATE TRIGGER kembali_details_bef_ins1  BEFORE INSERT ON kembali_details FOR EACH ROW  EXECUTE PROCEDURE kembali_details_bef_ins1();
+
+
+
+ CREATE OR REPLACE FUNCTION je_masters_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.jm_id is null or new.jm_id='0') then
+			new.jm_id :=   trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS je_masters_bef_ins0 on je_masters;
+CREATE TRIGGER je_masters_bef_ins0  BEFORE INSERT ON je_masters FOR EACH ROW  EXECUTE PROCEDURE je_masters_bef_ins0();
+ 
+CREATE OR REPLACE FUNCTION je_details_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.jd_id is null or new.jd_id='0') then
+			new.jd_id :=   trim(to_char(nextval('je_details_jd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS je_details_bef_ins0 on je_details;
+CREATE TRIGGER je_details_bef_ins0  BEFORE INSERT ON je_details FOR EACH ROW  EXECUTE PROCEDURE je_details_bef_ins0();
+
+
+
+CREATE OR REPLACE FUNCTION akun_bal1s_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.ab_id is null or new.ab_id='0') then
+			new.ab_id :=   trim(to_char(nextval('akun_bal1s_ab_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS akun_bal1s_bef_ins0 on akun_bal1s;
+CREATE TRIGGER akun_bal1s_bef_ins0  BEFORE INSERT ON akun_bal1s FOR EACH ROW  EXECUTE PROCEDURE akun_bal1s_bef_ins0();
+
+
+
+CREATE OR REPLACE FUNCTION akun_bal2s_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.ab_id is null or new.ab_id='0') then
+			new.ab_id :=   trim(to_char(nextval('akun_bal2s_ab_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS akun_bal2s_bef_ins0 on akun_bal2s;
+CREATE TRIGGER akun_bal2s_bef_ins0  BEFORE INSERT ON akun_bal2s FOR EACH ROW  EXECUTE PROCEDURE akun_bal2s_bef_ins0();
+
+
+
+CREATE OR REPLACE FUNCTION kas_balances_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.cb_id is null or new.cb_id='0') then
+			new.cb_id :=   trim(to_char(nextval('kas_balances_cb_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS kas_balances_bef_ins0 on kas_balances;
+CREATE TRIGGER kas_balances_bef_ins0  BEFORE INSERT ON kas_balances FOR EACH ROW  EXECUTE PROCEDURE kas_balances_bef_ins0();
+
+CREATE OR REPLACE FUNCTION bank_balances_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bb_id is null or new.bb_id='0') then
+			new.bb_id :=   trim(to_char(nextval('bank_balances_bb_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS bank_balances_bef_ins0 on bank_balances;
+CREATE TRIGGER bank_balances_bef_ins0  BEFORE INSERT ON bank_balances FOR EACH ROW  EXECUTE PROCEDURE bank_balances_bef_ins0();

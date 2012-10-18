@@ -151,7 +151,7 @@ drop view if exists reg_spd_lists cascade;
 create or replace view reg_spd_lists 
 as
 select r.*, u.un_kode,u.un_nama from reg_spds r
-left join units u on (r.un_id=u.un_id)
+left join units u on (r.un_id=u.un_id);
 
 drop view if exists spp_master_lists cascade;
 create or replace view spp_master_lists 
@@ -162,7 +162,7 @@ from spp_masters m
 left join spd_masters s on (m.spdm_no=s.spdm_no)
 left join units u on (m.un_id=u.un_id)
 left join banks  b on (m.bank_norek=b.bank_norek)
-left join pns p on (m.sppm_benda=p.pn_nip)
+left join pns p on (m.sppm_benda=p.pn_nip);
 
 
 
@@ -323,3 +323,69 @@ as
 select m.*,a.angg_namaper as akun_nama
 from pembiayaans m
 left join anggarans a on (m.akun_kode=a.angg_kodeper);
+
+drop view if exists limpah_up_lists cascade;
+create or replace view limpah_up_lists
+as
+select m.*,u.un_nama
+from limpah_ups m
+left join units u on (m.un_id=u.un_id);
+
+
+drop view if exists kembali_master_lists cascade;
+create or replace view kembali_master_lists
+as
+select m.*,p.prog_nama,k.keg_nama,u.un_nama
+from kembali_masters m
+left join units u on (m.un_id=u.un_id)
+left join programs  p on (m.prog_kode=p.prog_kode)
+left join kegiatans k on (m.keg_kode=k.keg_kode);
+
+
+drop view if exists kembali_detail_lists cascade;
+create or replace view kembali_detail_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from kembali_details d
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists je_master_lists cascade;
+create or replace view je_master_lists
+as
+select m.*,u.un_nama
+from je_masters m
+left join units u on (m.un_id=u.un_id);
+
+
+drop view if exists je_detail_lists cascade;
+create or replace view je_detail_lists
+as
+select d.*,a.angg_namaper as akun_nama
+from je_details d
+left join anggarans a on (d.akun_kode=a.angg_kodeper);
+
+drop view if exists akun_bal1_lists cascade;
+create or replace view akun_bal1_lists
+as 
+select b.*,a.akun_nama,a.akun_normal,a.akun_parent from akun_bal1s b
+left join akun a on (b.akun_kode=a.akun_kode);
+
+drop view if exists akun_bal2_lists cascade;
+create or replace view akun_bal2_lists
+as 
+select b.*,a.akun_nama,a.akun_normal,a.akun_parent from akun_bal2s b
+left join akun a on (b.akun_kode=a.akun_kode);
+
+drop view if exists kas_balance_lists cascade;
+create or replace view kas_balance_lists
+as
+select c.*,a.akun_nama,k.kas_nama,k.un_id from kas_balances c
+join kas k on (c.kas_kode=k.kas_kode)
+left join akun a on(c.akun_kode=a.akun_kode);
+
+drop view if exists bank_balance_lists cascade;
+create or replace view bank_balance_lists
+as
+select c.*,a.akun_nama,b.bank_nama,b.un_id from bank_balances c
+join banks b on (c.bank_norek=b.bank_norek)
+left join akun a on(c.akun_kode=a.akun_kode);

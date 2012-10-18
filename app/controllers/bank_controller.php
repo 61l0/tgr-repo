@@ -43,6 +43,44 @@ class BankController extends AppController
 		$dataAll = Set::extract($dataAll,'{n}.Bank');
 		$this->set('dataAll','{"total":'.$count.',"banks":'.json_encode($dataAll).'}');
 	}  
+	function getbalance(){
+		
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','bankbalancelist');
+		$bankbal=new BankBalanceList;
+		$limit=20;$start=0;
+		$un_id='*';
+		 
+		if(isset($_POST['limit']))
+			$limit = $_POST['limit'];
+	 	if(isset($_POST['start']))
+			$start= $_POST['start'];
+		if(isset($_POST['un_id']))
+			$un_id=(trim($_POST['un_id']));
+		 
+		$page = ($start/$limit)+1;
+	 
+			$whereis=array( 'conditions'=>array('AND'=>
+			array('AND'=>array(
+					 
+					array('un_id' =>"$un_id") 
+				 )) 
+			),
+			'order'=> 'BankBalanceList.bb_seq asc' ,'limit'=>$limit,'page'=>$page);
+			$wherecount=array('conditions'=>array('AND'=>
+				array('AND'=>array(
+					 
+					array('un_id' =>"$un_id") 
+				 )) 
+			));
+		 
+		$dataAll=$bankbal->find('all',$whereis);
+		$count=$bankbal->find('count',$wherecount);
+		$results = Set::extract($dataAll,'{n}.BankBalanceList');
+ 		$this->set('dataAll','{"total":'.$count.',"data":'.json_encode($results).'}');
+
+	}
 	 
 }
 ?>

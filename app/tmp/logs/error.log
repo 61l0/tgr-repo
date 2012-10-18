@@ -1158,3 +1158,93 @@ LINE 1: ...  WHERE ((lower(bia_no) LIKE '%11111%') OR (lower(un_kode) L...
 2012-10-09 09:55:52 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "un_kode" does not exist
 LINE 1: ...  WHERE ((lower(bia_no) LIKE '%11111%') OR (lower(un_kode) L...
                                                              ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-10 17:21:46 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column JeMasterList.jm_tgl does not exist
+LINE 1: ...lists" AS "JeMasterList"   WHERE 1 = 1   ORDER BY "JeMasterL...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-10 17:21:46 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column JeMasterList.jm_tgl does not exist
+LINE 1: ...lists" AS "JeMasterList"   WHERE 1 = 1   ORDER BY "JeMasterL...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-10 17:55:55 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column JeMasterList.jm_tgl does not exist
+LINE 1: ...lists" AS "JeMasterList"   WHERE 1 = 1   ORDER BY "JeMasterL...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-10 17:55:55 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column JeMasterList.jm_tgl does not exist
+LINE 1: ...lists" AS "JeMasterList"   WHERE 1 = 1   ORDER BY "JeMasterL...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-10 17:55:57 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column JeMasterList.jm_tgl does not exist
+LINE 1: ...lists" AS "JeMasterList"   WHERE 1 = 1   ORDER BY "JeMasterL...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-10 17:55:57 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column JeMasterList.jm_tgl does not exist
+LINE 1: ...lists" AS "JeMasterList"   WHERE 1 = 1   ORDER BY "JeMasterL...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 03:13:27 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  null value in column "ab_id" violates not-null constraint
+CONTEXT:  SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+		values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date,master.jm_no||'-'||new.jd_id,'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_ins1" line 5 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 03:13:27 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  null value in column "ab_id" violates not-null constraint
+CONTEXT:  SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+		values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date,master.jm_no||'-'||new.jd_id,'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_ins1" line 5 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 03:27:27 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  function fixaccbalseq1(character varying) does not exist
+LINE 1: SELECT fixAccBalSeq1(new.ab_id)
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+QUERY:  SELECT fixAccBalSeq1(new.ab_id)
+CONTEXT:  PL/pgSQL function "akun_bal1s_aft_ins1" line 5 at PERFORM
+SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+		values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date,master.jm_no||'-'||new.jd_id,'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_ins1" line 5 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 03:27:27 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  function fixaccbalseq1(character varying) does not exist
+LINE 1: SELECT fixAccBalSeq1(new.ab_id)
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+QUERY:  SELECT fixAccBalSeq1(new.ab_id)
+CONTEXT:  PL/pgSQL function "akun_bal1s_aft_ins1" line 5 at PERFORM
+SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+		values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date,master.jm_no||'-'||new.jd_id,'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_ins1" line 5 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 11:03:22 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  null value in column "ab_id" violates not-null constraint
+CONTEXT:  SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+		values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date,master.jm_no||'-'||new.jd_id,'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_ins1" line 5 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 11:03:22 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  null value in column "ab_id" violates not-null constraint
+CONTEXT:  SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+		values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date,master.jm_no||'-'||new.jd_id,'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_ins1" line 5 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 11:59:02 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  null value in column "ab_id" violates not-null constraint
+CONTEXT:  SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+				values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date, (master.jm_no||'-'||new.jd_id),'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_upd1" line 15 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 11:59:02 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  null value in column "ab_id" violates not-null constraint
+CONTEXT:  SQL statement "insert into akun_bal1s(un_id,akun_kode,ab_action,ab_debit,ab_credit, ab_realdate,ab_refno,ab_refname,ab_refmode,ab_desc)
+				values(master.un_id,new.akun_kode,'J',new.jd_debit,new.jd_credit,master.jm_date, (master.jm_no||'-'||new.jd_id),'Journal Entry',0,new.jd_desc)"
+PL/pgSQL function "je_details_aft_upd1" line 15 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 15:36:14 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "sppm_id" does not exist
+LINE 1: ...M "spp_detail2_lists" AS "SppDetail2List"   WHERE "sppm_id" ...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 15:36:14 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "sppm_id" does not exist
+LINE 1: ...M "spp_detail2_lists" AS "SppDetail2List"   WHERE "sppm_id" ...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 15:36:15 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "sppm_id" does not exist
+LINE 1: ...M "spp_detail2_lists" AS "SppDetail2List"   WHERE "sppm_id" ...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 15:36:15 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "sppm_id" does not exist
+LINE 1: ...M "spp_detail2_lists" AS "SppDetail2List"   WHERE "sppm_id" ...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 15:36:15 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "sppm_id" does not exist
+LINE 1: ...M "spp_detail2_lists" AS "SppDetail2List"   WHERE "sppm_id" ...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 15:36:15 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "sppm_id" does not exist
+LINE 1: ...M "spp_detail2_lists" AS "SppDetail2List"   WHERE "sppm_id" ...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 21:52:43 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "un_id" does not exist
+LINE 1: ...M "kas_balance_lists" AS "KasBalanceList"   WHERE "un_id" = ...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 21:52:43 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "un_id" does not exist
+LINE 1: ...M "kas_balance_lists" AS "KasBalanceList"   WHERE "un_id" = ...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-10-16 21:52:46 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "un_id" does not exist
+LINE 1: ...M "kas_balance_lists" AS "KasBalanceList"   WHERE "un_id" = ...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-10-16 21:52:46 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "un_id" does not exist
+LINE 1: ...M "kas_balance_lists" AS "KasBalanceList"   WHERE "un_id" = ...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]

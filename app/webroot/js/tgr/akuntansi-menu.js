@@ -54,7 +54,23 @@ Ext.onReady(function(){
         		text:'Rekening Koran',
         		id:'mnRekKoran',
         		handler: onRekKoranClick
-        	} 
+        	},
+        	'-',
+        	{
+        		text:'Saldo Akun',
+        		id:'mnSaldoAkun',
+        		handler: onSaldoAkunClick
+        	},
+        	{
+        		text:'Saldo Kas',
+        		id:'mnSaldoKas',
+        		handler: onSaldoKasClick
+        	},
+        	{
+        		text:'Saldo Bank',
+        		id:'mnSaldoBank',
+        		handler: onSaldoBankClick
+        	},
             
         ]
     });
@@ -107,11 +123,28 @@ Ext.onReady(function(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 	}
 	function onKembaliBelanjaClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('kembaligrid-win').createWindow();
+		 MyDesktop.getSingleModule('entrykembali-win').createWindow();
 	}
 	 function onJurnalClick(){
-	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('jegrid-win').createWindow();
+		 MyDesktop.getSingleModule('entryje-win').createWindow();
 	}
+	 function onSaldoAkunClick(){
+		 
+		 MyDesktop.getSingleModule('accbalgrid-win').createWindow();
+		// MyDesktop.getSingleModule('jegrid-win').createWindow();
+		 //MyDesktop.getSingleModule('entryje-win').createWindow();
+	}
+	 function onSaldoKasClick(){
+			 MyDesktop.getSingleModule('kasbalgrid-win').createWindow();
+			 //MyDesktop.getSingleModule('entryje-win').createWindow();
+		}
+	 function onSaldoBankClick(){
+			  MyDesktop.getSingleModule('bankbalgrid-win').createWindow();
+			 //MyDesktop.getSingleModule('entryje-win').createWindow();
+		}
+ 
 	 function onRekKoranClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
 	}

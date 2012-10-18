@@ -48,3 +48,16 @@ create sequence belanja_masters_bm_id_seq increment 1;
 create sequence belanja_details_bd_id_seq increment 1;
 
 create sequence pembiayaans_bia_id_seq increment 1;
+create sequence limpah_ups_lu_id_seq increment 1;
+
+create sequence kembali_masters_km_id_seq increment 1;
+create sequence kembali_details_kd_id_seq increment 1;
+
+create sequence je_masters_jm_id_seq increment 1;
+create sequence je_details_jd_id_seq increment 1;
+
+create sequence akun_bal1s_ab_id_seq increment 1;
+create sequence akun_bal2s_ab_id_seq increment 1;
+
+create sequence kas_balances_cb_id_seq increment 1;
+create sequence bank_balances_bb_id_seq increment 1;

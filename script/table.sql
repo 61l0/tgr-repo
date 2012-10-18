@@ -1,17 +1,19 @@
-
+drop table akun cascade;
 create table akun(
 	akun_id		serial,
 	akun_kode	varchar(30),
 	akun_nama	varchar(150),
-	akun_lft	integer,
+	akun_left	integer,
 	akun_right	integer,
-	akun_parent	integer,
+	akun_normal integer default 0,
+	akun_parent integer,
 	constraint akun_pk primary key (akun_id)
 	
 );
-create unique index akun_idx0 on akun(akun_kode);
+create  index akun_idx0 on akun(akun_kode);
 create index akun_idx1 on akun(akun_parent);
  
+drop table akun_detail cascade;
 create table akun_detail(
 		ad_id	serial,
 		ad_saldoawal	numeric(24,2) default 0,
@@ -22,10 +24,13 @@ create table akun_detail(
 );
 create index akun_detail_idx0 on akun_detail(akun_id);
 
-
-create table akun_balances(
+-- 1 untuk skpd (balancenya per skpd)
+-- 2 untuk total
+drop table akun_bal1s cascade;
+create table akun_bal1s(
 	ab_id		varchar(50),
 	ab_seq		integer,
+	un_id			varchar(30),
 	akun_kode		varchar(30),
 	ab_action	varchar(2) default 'J',
 	ab_debit	numeric(22,4) default 0,
@@ -38,13 +43,35 @@ create table akun_balances(
 	ab_refmode		smallint default 0,
 	ab_desc		varchar(250),
 	afix		integer default 0,
-	constraint akun_balance_pk primary key(ab_id),
-	constraint akun_balance_fk1 foreign key (akun_kode) references akun(akun_kode) on delete cascade
+	constraint akun_bal1s_pk primary key(ab_id) 
+	 
 );
  
-create index akun_balance_idx1 on account_balances(ab_refno);
-create index akun_balance_idx2 on account_balances(akun_kode,ab_seq);
+create index akun_bal1s_idx1 on akun_bal1s(ab_refno);
+create index akun_bal1s_idx2 on akun_bal1s(akun_kode,ab_seq);
 
+drop table akun_bal2s cascade;
+create table akun_bal2s(
+	ab_id		varchar(50),
+	ab_seq		integer,
+	un_id			varchar(30),
+	akun_kode		varchar(30),
+	ab_action	varchar(2) default 'J',
+	ab_debit	numeric(22,4) default 0,
+	ab_credit	numeric(22,4) default 0,
+	ab_balance	numeric(22,4) default 0,
+	ab_realdate	date,
+	ab_date		timestamp default current_timestamp,
+	ab_refno	varchar(50),
+	ab_refname	varchar(50),
+	ab_refmode		smallint default 0,
+	ab_desc		varchar(250),
+	afix		integer default 0,
+	constraint akun_bal2s_pk primary key(ab_id) 
+);
+ 
+create index akun_bal2s_idx1 on akun_bal2s(ab_refno);
+create index akun_bal2s_idx2 on akun_bal2s(akun_kode,ab_seq);
 /*
  * angg_kode=mtgkey
  * 
@@ -61,6 +88,38 @@ create table banks (
 	constraint banks_pk primary key (bank_norek)
 );
 
+
+create table bank_balances(
+	bb_id			varchar(50),
+	bb_seq			integer,
+	bb_realdate		date,
+	bb_date			timestamp default current_timestamp,
+	bank_norek		varchar(20),
+	bb_debit		numeric(22,4) default 0,
+	bb_credit		numeric(22,4) default 0,
+	bb_balance		numeric(22,4) default 0,
+	bb_desc			varchar(250),
+	src_code	varchar(20),
+	ori_code	varchar(20),
+	akun_kode		varchar(30),
+	bb_refno		varchar(50),
+	bb_refname		varchar(100),
+	bb_refmode		integer default 0,
+	bb_reftype		smallint default 0,
+	afix			integer default 0,
+	mark			smallint default 0,
+	modi_by			varchar(30),
+	modi_date		timestamp default current_timestamp,
+	constraint bank_bal_pk primary key(bb_id),
+	constraint bank_bal_fk foreign key (bank_norek) references banks(bank_norek) on delete cascade
+);
+create index bank_balances_idx1 on bank_balances(bank_norek);
+create index bank_balances_idx2 on bank_balances(bb_refno);
+create index bank_balances_idx3 on bank_balances(bank_norek,bb_seq);
+create index bank_balances_idx4 on bank_balances(bank_norek,bb_seq,bank_realdate);
+
+
+
 --  data kas digenerate saja pake kode SKPD
 drop table if exists kas cascade;
 create table kas (
@@ -72,11 +131,89 @@ create table kas (
 	constraint kas_pk primary key(kas_kode)
 );
 
+create unique index kas_idx0 on kas(un_id);
+
+--  data kas digenerate saja pake kode SKPD
+-- exactly same with kas but un_id is not unique
+drop table if exists subkas cascade;
+create table subkas (
+	kas_kode	varchar(30),
+	un_id		varchar(20),
+	kas_nama	varchar(50),
+	bpp_no		integer default 1,
+	akun_kode	varchar(20),
+	constraint subkas_pk primary key(kas_kode)
+);
+
+
+create table subkas_balances(
+	cb_id			varchar(50),
+	cb_seq			integer,
+	cb_realdate		date,
+	cb_date			timestamp default current_timestamp,
+	kas_kode		varchar(20),
+	akun_kode		varchar(30),
+	cb_debit		numeric(22,4) default 0,
+	cb_credit		numeric(22,4) default 0,
+	cb_balance		numeric(22,4) default 0,
+	cb_desc			varchar(250),
+	cb_refmode		integer default 0,
+	src_code	varchar(20),
+	ori_code	varchar(20),
+	cb_refno		varchar(50),
+	cb_refname		varchar(100),
+	cb_reftype		smallint default 0,
+	afix			integer default 0,
+	mark			smallint default 0,
+	modi_by			varchar(30),
+	modi_date		timestamp default current_timestamp,
+	constraint cash_bal_pk primary key(cb_id),
+	constraint cash_bal_fk1 foreign key (kas_kode) references kas(kas_kode) on delete cascade
+);
+create index subkas_balances_idx1 on subkas_balances(kas_kode);
+create index subkas_balances_idx2 on subkas_balances(cb_refno);
+create index subkas_balances_idx3 on subkas_balances(kas_kode,cb_seq);
+create index subkas_balances_idx4 on subkas_balances(kas_kode,cb_seq,cb_realdate);
+
+
+
+
+create table kas_balances(
+	cb_id			varchar(50),
+	cb_seq			integer,
+	cb_realdate		date,
+	cb_date			timestamp default current_timestamp,
+	kas_kode		varchar(20),
+	akun_kode		varchar(30),
+	cb_debit		numeric(22,4) default 0,
+	cb_credit		numeric(22,4) default 0,
+	cb_balance		numeric(22,4) default 0,
+	cb_desc			varchar(250),
+	cb_refmode		integer default 0,
+	src_code	varchar(20),
+	ori_code	varchar(20),
+	cb_refno		varchar(50),
+	cb_refname		varchar(100),
+	cb_reftype		smallint default 0,
+	afix			integer default 0,
+	mark			smallint default 0,
+	modi_by			varchar(30),
+	modi_date		timestamp default current_timestamp,
+	constraint cash_bal_pk primary key(cb_id),
+	constraint cash_bal_fk1 foreign key (kas_kode) references kas(kas_kode) on delete cascade
+);
+create index kas_balances_idx1 on kas_balances(kas_kode);
+create index kas_balances_idx2 on kas_balances(cb_refno);
+create index kas_balances_idx3 on kas_balances(kas_kode,cb_seq);
+create index kas_balances_idx4 on kas_balances(kas_kode,cb_seq,cb_realdate);
+
+
 drop table if exists potongans cascade;
 create table potongans (
 	ptg_kode 	varchar(50),
 	ptg_nama	varchar(80),
 	ptg_catatan	varchar(150),
+	akun_kode	varchar(30),
 	constraint potongan_pk primary key(ptg_kode)
 );
 
@@ -85,6 +222,7 @@ create table pajaks (
 	pjk_kode	varchar(20),
 	pjk_persen	numeric(10,2) default 0,
 	pjk_catatan	varchar(250),
+	akun_kode	varchar(30),
 	constraint pajaks_pk primary key(pjk_kode)
 );
 -- daftar skpd/unit
@@ -630,12 +768,13 @@ create table sp2d_detail3s (
 );
 
 
-
+-- jm_type=0, jurnal umu, jm_type=1 postingan dari transaksi lain
 create table je_masters (
 	jm_id		varchar(50),
 	jm_no		varchar(30),
 	jm_date		date,
 	jm_note		varchar(250),
+	jm_type			integer default 0,
 	un_id			varchar(20),
 	astate			smallint default 0,
 	locked			smallint default 0,
@@ -790,23 +929,25 @@ create table kembali_masters (
 	un_id		varchar(20),
 	km_no		varchar(50),
 	km_tgl	 	date,
-	dpam_no		varchar(50),
+ 
+	prog_kode		varchar(30),
+	keg_kode		varchar(30),
 	constraint kembali_master_pk primary key (km_id)
 	 
 );
-create index kembali_master_idx0 kembali_masters(km_no);
+create index kembali_master_idx0 on kembali_masters(km_no);
 
 create table kembali_details(
 	kd_id		varchar(20),
 	km_id		varchar(20),
 	akun_kode	varchar(30),
-	km_nilaiblj	numeric(24,2) default 0,
-	km_nilaikmbl	numeric(24,2) default 0,
+	kd_nilaiblj	numeric(24,2) default 0,
+	kd_nilaikmbl	numeric(24,2) default 0,
 	constraint kembali_details_pk primary key(kd_id),
-	constraint kembali_details_fk foreign key (km_id) references kembali_details(km_id) on delete cascade 
+	constraint kembali_details_fk foreign key (km_id) references kembali_masters(km_id) on delete cascade 
 );
 
-create index kembali_details_idx0 kembali_details(akun_kode);
+create index kembali_details_idx0 on kembali_details(akun_kode);
 
 create table geser_kas( 
 	gk_id		varchar(20),
@@ -962,3 +1103,15 @@ create table trm_pembiayaans(
 	tp_tgltrm		date,
 	constraint trm_pk primary key(tp_id)
 );
+
+create table limpah_ups(
+	lu_id		varchar(20),
+	lu_no		varchar(50),
+	lu_tgl		date,
+	lu_tahun	integer,
+	un_id		varchar(30),
+	lu_ke		varchar(5) default 'BPP1',
+	lu_nilai	numeric(24,2) default 0,
+	constraint limpah_ups_pk primary key(lu_id)
+);
+create index limpah_ups_idx0 on limpah_ups(un_id);

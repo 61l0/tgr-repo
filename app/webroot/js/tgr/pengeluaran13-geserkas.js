@@ -187,16 +187,7 @@ MyDesktop.GeserKasGridWindow = Ext.extend(Ext.app.Module, {
 											 MyDesktop.getSingleModule('entrygeserkas-win').createWindow();
 											 entrygeserkasform.getForm().reset();
 									 			 
-									 			GeserKasDetail2Store.load({
-									 				params: {
-									 					gk_id: 0
-									 				}
-									 			});
-												GeserKasDetail1Store.load({
-									 				params: {
-									 					gk_id: 0
-									 				}
-									 			});
+									 		 
 									 			Ext.getCmp('gk_tgl1').setValue(new Date());
 												Ext.getCmp('gk_tgl1').setReadOnly(false);
 												Ext.getCmp('gk_id1').setValue(0);
@@ -543,7 +534,7 @@ MyDesktop.EntryGeserKasForm = Ext.extend(Ext.app.Module, {
 														Ext.getCmp('gk_no1').setReadOnly(true);
 													 
 														 
-														
+														Ext.MessageBox.alert('Message', 'Data telah disimpan');
 													}
 													
 												},
