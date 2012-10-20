@@ -380,6 +380,20 @@ DROP TRIGGER IF EXISTS gaji_detail2s_bef_ins1 on gaji_detail2s;
 CREATE TRIGGER gaji_detail2s_bef_ins1  BEFORE INSERT ON gaji_detail2s FOR EACH ROW  EXECUTE PROCEDURE gaji_detail2s_bef_ins1();
 
 
+CREATE OR REPLACE FUNCTION gaji_detail3s_bef_ins1() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.gd_id is null or new.gd_id='0') then
+			new.gd_id :=   trim(to_char(nextval('gaji_detail3s_gd_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS gaji_detail3s_bef_ins1 on gaji_detail3s;
+CREATE TRIGGER gaji_detail3s_bef_ins1  BEFORE INSERT ON gaji_detail3s FOR EACH ROW  EXECUTE PROCEDURE gaji_detail3s_bef_ins1();
+
+
 
 CREATE OR REPLACE FUNCTION acara_masters_bef_ins0() RETURNS TRIGGER AS $$
 	 

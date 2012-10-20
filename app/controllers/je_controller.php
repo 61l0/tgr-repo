@@ -216,6 +216,49 @@ class JeController extends AppController
  		 $this->set('dataAll','{"total":'.$count.',"data":'.json_encode($results).'}');
 
 	}
+   function getallposted(){
+		
+		Configure::write('debug',2);
+		$this->layout='ajax';
+		App::import('Model','jemasterlist');
+		$jemasterlist=new JeMasterList;
+		$limit=20;$start=0;
+		$search='*';
+		if(isset($_POST['limit']))
+			$limit = $_POST['limit'];
+	 	if(isset($_POST['start']))
+			$start= $_POST['start'];
+		if(isset($_POST['search']))
+			$search=strtolower(trim($_POST['search']));
+		$page = ($start/$limit)+1;
+		if($search!='' && $search!="*"){
+			$whereis=array( 'conditions'=>array('AND'=>
+			array('OR'=>array(
+					array('lower(jm_no)  LIKE' => "%$search%"),
+					array('lower(un_kode) LIKE' =>"%$search%"),
+					array('lower(un_nama) LIKE' =>"%$search%") 
+				 )),
+			array('AND'=>array('jm_type'=>1)) 
+			),
+			'order'=> 'JeMasterList.jm_tgl asc' ,'limit'=>$limit,'page'=>$page);
+			$wherecount=array('conditions'=>array('AND'=>
+				array('OR'=>array(
+					array('lower(jm_no)  LIKE' => "%$search%"),
+					array('lower(un_kode) LIKE' =>"%$search%"),
+					array('lower(un_nama) LIKE' =>"%$search%") )),
+				array('AND'=>array('jm_type'=>1)) 
+			));
+		}
+		else {
+	  		$whereis=array( 'conditions'=>array('AND'=>array('jm_type'=>1)), 'order'=>'JeMasterList.jm_date asc','limit'=>$limit,'page'=>$page);
+			$wherecount=array('conditions'=>array('AND'=>array('jm_type'=>1)));
+		}
+		$dataAll=$jemasterlist->find('all',$whereis);
+		$count=$jemasterlist->find('count',$wherecount);
+			
+ 		 $this->set('dataAll','{"total":'.$count.',"jemasters":'.json_encode($dataAll).'}');
+
+	}
 	function getall(){
 		
 		Configure::write('debug',2);
@@ -237,19 +280,21 @@ class JeController extends AppController
 					array('lower(jm_no)  LIKE' => "%$search%"),
 					array('lower(un_kode) LIKE' =>"%$search%"),
 					array('lower(un_nama) LIKE' =>"%$search%") 
-				 )) 
+				 )),
+				 array('AND'=>array('jm_type'=>0))  
 			),
 			'order'=> 'JeMasterList.jm_tgl asc' ,'limit'=>$limit,'page'=>$page);
 			$wherecount=array('conditions'=>array('AND'=>
 				array('OR'=>array(
 						array('lower(jm_no)  LIKE' => "%$search%"),
 					array('lower(un_kode) LIKE' =>"%$search%"),
-					array('lower(un_nama) LIKE' =>"%$search%") )) 
+					array('lower(un_nama) LIKE' =>"%$search%") )),
+				array('AND'=>array('jm_type'=>0))  
 			));
 		}
 		else {
-	  		$whereis=array(  'order'=>'JeMasterList.jm_date asc','limit'=>$limit,'page'=>$page);
-			$wherecount=array();
+	  		$whereis=array( 'conditions'=>array('AND'=>array('jm_type'=>0)), 'order'=>'JeMasterList.jm_date asc','limit'=>$limit,'page'=>$page);
+			$wherecount=array('conditions'=>array('AND'=>array('jm_type'=>0)));
 		}
 		$dataAll=$jemasterlist->find('all',$whereis);
 		$count=$jemasterlist->find('count',$wherecount);

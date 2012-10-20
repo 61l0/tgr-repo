@@ -775,6 +775,7 @@ create table je_masters (
 	jm_date		date,
 	jm_note		varchar(250),
 	jm_type			integer default 0,
+	 
 	un_id			varchar(20),
 	astate			smallint default 0,
 	locked			smallint default 0,
@@ -838,12 +839,24 @@ create table gaji_detail2s(
 	gm_id	varchar(20),
 	gd_id	varchar(20),
 	gd_nama		varchar(100),
+	ptg_kode	varchar(20),
 	gd_nilai	numeric(24,2) default 0,
 	constraint gaji_detail2s_pk primary key(gd_id),
 	constraint gaji_detail2s_fk1 foreign key (gm_id) references gaji_masters(gm_id) on delete cascade 
 
 );
- 
+
+create table gaji_detail3s(
+	gm_id	varchar(20),
+	gd_id	varchar(20),
+	gd_nama		varchar(100),
+	pjk_kode	varchar(20),
+	gd_nilai	numeric(24,2) default 0,
+	constraint gaji_detail3s_pk primary key(gd_id),
+	constraint gaji_detail3s_fk1 foreign key (gm_id) references gaji_masters(gm_id) on delete cascade 
+
+);
+  
 -- berita acara
 -- ada program/kegiatan, makan selalu gunakan DPA saja
 create table  acara_masters(
@@ -899,7 +912,7 @@ create table belanja_masters(
 	keg_kode		varchar(30),
 	bm_panjar		integer default 0,
 	bm_nilaipanjar	numeric(24,2) default 0,
-	
+	bm_benda		varchar(30),
 	constraint belanja_masters_pk primary key(bm_id)
 );
 

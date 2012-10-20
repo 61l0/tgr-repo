@@ -28,7 +28,7 @@ create sequence spm_detail2s_spmd_id_seq increment 1;
 create sequence gaji_masters_gm_id_seq increment 1;
 create sequence gaji_detail1s_gd_id_seq increment 1;
 create sequence gaji_detail2s_gd_id_seq increment 1;
-
+create sequence gaji_detail3s_gd_id_seq increment 1;
 
 create sequence spp_masters_sppm_id_seq increment 1;
 create sequence spp_detail1s_sppd_id_seq increment 1;

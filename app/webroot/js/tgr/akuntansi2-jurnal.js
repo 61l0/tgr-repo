@@ -21,7 +21,8 @@ var JeMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[JeMaster][un_id]',mapping:'JeMasterList.un_id'},
 		{name:'data[JeMaster][un_kode]',mapping:'JeMasterList.un_kode'},
 		{name:'data[JeMaster][un_nama]',mapping:'JeMasterList.un_nama'},
-		{name:'data[JeMaster][jm_note]',mapping:'JeMasterList.jm_note'}
+		{name:'data[JeMaster][jm_note]',mapping:'JeMasterList.jm_note'},
+		{name:'data[JeMaster][jm_type]',mapping:'JeMasterList.jm_type'}
 	]
 	 
 	 
@@ -589,6 +590,13 @@ MyDesktop.EntryJeForm = Ext.extend(Ext.app.Module, {
 												 
 											},
 											{	 xtype:'hidden',
+												 name: 'data[JeMaster][jm_type]',
+												 
+												id:'jm_type1',
+												value:0
+												 
+											},
+												{	 xtype:'hidden',
 												 name: 'data[JeMaster][jm_totaldebit]',
 												 
 												id:'jm_totaldebit1',

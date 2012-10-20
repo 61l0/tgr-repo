@@ -2,6 +2,89 @@
 var  urlgajimaster=HOST_PATH+'/gaji/getall'; 
 var urladdgajimaster=HOST_PATH+'/gaji/add';
 var urlgetdpadetailbyun=HOST_PATH+'/dpa/readdetailbyun';
+var urlgetpotongan=HOST_PATH+'/lain/getpotongan'; 
+var urlgetpajak=HOST_PATH+'/lain/getpajak'; 
+
+var detailPotongan4Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpotongan
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'ptg_kode',
+    fields : [
+        	{name: 'ptg_kode'},
+	      	{name: 'ptg_nama'} 
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new GajiDetail2Store.recordType({
+					gd_id: 0,
+					gm_id: '',
+				  
+					ptg_kode:recordlist[i].get('ptg_kode'),
+					 
+					gd_nilai:0
+				 
+			
+			});
+		 	//alert("add to 2");
+			GajiDetail2Store.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
+
+var detailPajak4Store = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: urlgetpajak
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data',
+        totalProperty: 'total',
+        id: 'pjk_kode',
+    fields : [
+        	{name: 'pjk_kode'},
+	 
+	{name: 'pjk_nama'} 
+	 
+       
+        
+    ]
+    }),
+    listeners : {
+    	load : function (thistore,recordlist,object){
+    	 
+ 
+    		for (i=0;i<recordlist.length;i++){
+    		abc = new GajiDetail3Store.recordType({
+					gd_id: 0,
+					gm_id: '',
+				 	 
+					pjk_kode:recordlist[i].get('pjk_kode'),
+					 
+					gd_nilai:0
+				 
+			
+			});
+		 
+			GajiDetail3Store.add(abc);
+    		}
+    		Ext.MessageBox.hide();
+    		 
+    	}
+    }
+    
+});
 
 var detailDPABTL1Store = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
@@ -82,7 +165,7 @@ function hitungTotalGaji(){
 	 totkotor=totkotor+parseFloat(GajiDetail1Store.getAt(i).get('gd_nilai'));
 	}
 	 for (i=0;i<GajiDetail2Store.getCount();i++){
-	 if (GajiDetail1Store.getAt(i).get('gd_nilai')>0)
+	 if (GajiDetail2Store.getAt(i).get('gd_nilai')>0)
 	 totpotongan=totpotongan+parseFloat(GajiDetail2Store.getAt(i).get('gd_nilai'));
 	}
 	  
@@ -93,6 +176,9 @@ function hitungTotalGaji(){
 	 Ext.getCmp('gm_bersih1').setValue(totbersih);
 	 Ext.getCmp('gm_bulat1').setValue(totbulat);
 	
+}
+function proc_gaji3(o){
+	hitungTotalGaji();
 }
 function proc_gaji2(o){ 
 	hitungTotalGaji();
@@ -138,10 +224,10 @@ var gajiDetail1_proxy = new Ext.data.HttpProxy({
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
-			App.setAlert(App.STATUS_NOTICE,"Permohonan SPD : "+action+": Menyimpan data...");
+			App.setAlert(App.STATUS_NOTICE,"Daftar Gaji : "+action+": Menyimpan data...");
 			},
 		 write : function(proxy, action, result, res, rs) {
-			App.setAlert(true, "Permohonan SPD  :"+action+":"+res.message);
+			App.setAlert(true, "Daftar Gaji  :"+action+":"+res.message);
 			},
 		exception : function(proxy, type, action, options, res) {
 			if (type === 'remote') {
@@ -166,7 +252,7 @@ var gajiDetail1_reader = new Ext.data.JsonReader({
 	{name: 'akun_kode'},
 	{name: 'akun_nama'},
 	{name: 'gm_id'},
-	{name: 'gd_nilai',type:'float'} 
+	 {name: 'gd_nilai',type:'float'} 
 	 
 ]); 
 
@@ -292,17 +378,17 @@ var GajiDetail1Grid = Ext.extend( Ext.grid.EditorGridPanel, {
 
 var gajiDetail2_proxy = new Ext.data.HttpProxy({
     api: {
-        read : HOST_PATH+'/gaji/readdetail_bl',
-        create : HOST_PATH+'/gaji/createdetail_bl',
-        update:  HOST_PATH+'/gaji/updatedetail_bl',
-        destroy:  HOST_PATH+'/gaji/destroydetail_bl'
+        read : HOST_PATH+'/gaji/readdetail_2',
+        create : HOST_PATH+'/gaji/createdetail_2',
+        update:  HOST_PATH+'/gaji/updatedetail_2',
+        destroy:  HOST_PATH+'/gaji/destroydetail_2'
     },
 	listeners: {
 		beforewrite : function(proxy, action) {
-			App.setAlert(App.STATUS_NOTICE,"Permohonan SPD : "+action+": Menyimpan data...");
+			App.setAlert(App.STATUS_NOTICE,"Daftar Gaji : "+action+": Menyimpan data...");
 			},
 		 write : function(proxy, action, result, res, rs) {
-			App.setAlert(true, "Permohonan SPD  :"+action+":"+res.message);
+			App.setAlert(true, "Daftar Gaji  :"+action+":"+res.message);
 			},
 		exception : function(proxy, type, action, options, res) {
 			if (type === 'remote') {
@@ -324,8 +410,8 @@ var gajiDetail2_reader = new Ext.data.JsonReader({
     messageProperty: 'message'  // <-- New "messageProperty" meta-data
 }, [ 
 	{name: 'gd_id'},
-	{name: 'gd_nama'},
-	 
+	{name: 'ptg_kode'},
+	{name: 'gm_id'},
 	{name: 'gd_nilai',type:'float'} 
 	 
 ]); 
@@ -352,13 +438,13 @@ var GajiDetail2Grid = Ext.extend( Ext.grid.EditorGridPanel, {
     frame:false,
 	border:false,
 	loadMask: true,
-	 plugins:[ new Ext.ux.grid.GridSummary({position:'bottom',height:0})],
+	// plugins:[ new Ext.ux.grid.GridSummary({position:'bottom',height:0})],
 	sm: new Ext.grid.RowSelectionModel({	moveEditorOnEnter:false,
 								singleSelect: true }),
     initComponent : function() {
  
 	this.relayEvents(this.store, ['destroy', 'save', 'update']); 
-	this.tbar = this.buildTopToolbar();
+	//this.tbar = this.buildTopToolbar();
     GajiDetail2Grid.superclass.initComponent.call(this);
     },
  
@@ -408,7 +494,7 @@ var GajiDetail2Grid = Ext.extend( Ext.grid.EditorGridPanel, {
 			var u = new this.store.recordType({
 				gd_id: 0,
 				gm_id: '',
-				gd_nama:'',
+				ptg_kode:'',
 			 
 				gd_nilai:0
 			});
@@ -444,6 +530,163 @@ var GajiDetail2Grid = Ext.extend( Ext.grid.EditorGridPanel, {
 	}
 });
 
+
+var gajiDetail3_proxy = new Ext.data.HttpProxy({
+    api: {
+        read : HOST_PATH+'/gaji/readdetail_3',
+        create : HOST_PATH+'/gaji/createdetail_3',
+        update:  HOST_PATH+'/gaji/updatedetail_3',
+        destroy:  HOST_PATH+'/gaji/destroydetail_3'
+    },
+	listeners: {
+		beforewrite : function(proxy, action) {
+			App.setAlert(App.STATUS_NOTICE,"Daftar Gaji : "+action+": Menyimpan data...");
+			},
+		 write : function(proxy, action, result, res, rs) {
+			App.setAlert(true, "Daftar Gaji  :"+action+":"+res.message);
+			},
+		exception : function(proxy, type, action, options, res) {
+			if (type === 'remote') {
+			Ext.Msg.show({
+				title: 'REMOTE EXCEPTION',
+				msg: res.message,
+				icon: Ext.MessageBox.ERROR,
+				buttons: Ext.Msg.OK
+			});
+			}
+			}
+	}
+});
+var gajiDetail3_reader = new Ext.data.JsonReader({
+	totalProperty: 'total',
+    successProperty: 'success',
+    idProperty: 'gd_id',
+    root: 'data',
+    messageProperty: 'message'  // <-- New "messageProperty" meta-data
+}, [ 
+	{name: 'gd_id'},
+	{name: 'gm_id'},
+	{name: 'pjk_kode'},
+	 
+	{name: 'gd_nilai',type:'float'} 
+	 
+]); 
+
+// The new DataWriter component.
+var gajiDetail3_writer = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true,
+	listful:true
+});
+
+// Typical Store collecting the Proxy, Reader and Writer together.
+var GajiDetail3Store = new Ext.data.Store({
+    id: 'GajiDetail3Store',
+    proxy: gajiDetail3_proxy,
+    reader: gajiDetail3_reader,
+    writer: gajiDetail3_writer,  // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave: false, // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+	autoLoad: true  
+});
+ 
+var GajiDetail3Grid = Ext.extend( Ext.grid.EditorGridPanel, {
+    iconCls: 'icon-form',
+    frame:false,
+	border:false,
+	loadMask: true,
+	// plugins:[ new Ext.ux.grid.GridSummary({position:'bottom',height:0})],
+	sm: new Ext.grid.RowSelectionModel({	moveEditorOnEnter:false,
+								singleSelect: true }),
+    initComponent : function() {
+ 
+	this.relayEvents(this.store, ['destroy', 'save', 'update']); 
+	//this.tbar = this.buildTopToolbar();
+    GajiDetail3Grid.superclass.initComponent.call(this);
+    },
+ 
+    buildTopToolbar : function() {
+      return {
+			plugins: new Ext.ux.ToolbarKeyMap(),
+			items: [{
+				text: '<u>T</u>ambah',
+				iconCls: 'add',
+				 keyBinding: {
+                            key: 't',
+                            alt: true
+                        },
+				handler: this.onAdd,
+				scope: this
+			}, '-', {
+				text: '<u>H</u>apus',
+				iconCls: 'delete',
+				handler: this.onDelete,
+				scope: this,
+				 keyBinding: {
+                            key: 'h',
+                            alt: true
+                        }
+			}, '-']
+		}
+    },
+	onAdd: function(btn, ev) {
+		 
+		var rec = this.store.getAt(0);
+		var acontinue=false;
+		// alert(rec);
+		//check cust_code1 first
+		
+		if (rec){
+			adpam_no=rec.get("dpam_no");
+		 
+			if (adpam_no.length>0){
+				acontinue=true;
+			}
+		}else{
+			acontinue=true;
+		}
+	 
+		if (acontinue) {
+			//alert('continue');
+			var u = new this.store.recordType({
+				gd_id: 0,
+				gm_id: '',
+				pjk_kode:'',
+			 
+				gd_nilai:0
+			});
+			
+			this.store.insert(0, u);
+			
+			 this.getSelectionModel().selectRow(0,false,false);
+			 this.startEditing(0, 0);
+			 
+		}
+		else {
+			 this.getSelectionModel().selectRow(0,false,false);
+			 this.startEditing(0, 0);
+		}
+	},
+ 
+    onDelete : function(btn, ev) {
+         var index =this.getSelectionModel().getSelected();
+        if (!index) {
+            return false;
+        }
+        
+		 
+        this.store.remove(index);
+		 
+    },
+	listeners : {
+		afteredit: function (o){
+			//alert(o.field+":"+o.value+":"+o.originalValue+":"+o.row+":"+o.column );			
+			proc_gaji3(o);
+		}
+		 
+	}
+});
+
+ 
  
 MyDesktop.GajiGridWindow = Ext.extend(Ext.app.Module, {
     id:'gajigrid-win',
@@ -617,6 +860,11 @@ MyDesktop.GajiGridWindow = Ext.extend(Ext.app.Module, {
 									 					gm_id: 0
 									 				}
 									 			});
+									 			GajiDetail3Store.load({
+									 				params: {
+									 					gm_id: 0
+									 				}
+									 			});
 									 			Ext.getCmp('gm_tgl1').setValue(new Date());
 												Ext.getCmp('gm_tgl1').setReadOnly(false);
 												Ext.getCmp('gm_id1').setValue(0);
@@ -631,9 +879,9 @@ MyDesktop.GajiGridWindow = Ext.extend(Ext.app.Module, {
 										disabled: true,
 										handler: function(){
 										 	 mid=gridgaji.getSelectionModel().getSelected().get("GajiMasterList.gm_id");
-										 	 GajiDetail0Store.load({params:{gm_id:mid}});				 
+										 	 GajiDetail1Store.load({params:{gm_id:mid}});				 
 											 GajiDetail2Store.load({params:{gm_id:mid}});
-											 GajiDetail1Store.load({params:{gm_id:mid}});
+											 GajiDetail3Store.load({params:{gm_id:mid}});
 											 MyDesktop.getSingleModule('entrygaji-win').createWindow();
 											 Ext.getCmp("entrygajiform").getForm().loadRecord(gridgaji.getSelectionModel().getSelected());
 										}
@@ -746,6 +994,7 @@ MyDesktop.GajiGridWindow = Ext.extend(Ext.app.Module, {
 		   
 			 GajiDetail2Store.load({params:{gm_id:mid}});
 			 GajiDetail1Store.load({params:{gm_id:mid}});
+			 GajiDetail3Store.load({params:{gm_id:mid}});
 			 MyDesktop.getSingleModule('entrygaji-win').createWindow();
 			 Ext.getCmp("entrygajiform").getForm().loadRecord(gridgaji.getSelectionModel().getSelected());
 			 
@@ -902,9 +1151,16 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																	 					un_id: record.get('un_id')
 																	 				}
 																	 			});
-																	     dpaBTLByUNSearchStore.baseParams={un_id:record.get('un_id')};
+																	    dpaBTLByUNSearchStore.baseParams={un_id:record.get('un_id')};
 									    	  							 dpaBTLByUNSearchStore.removeAll();
 											 							 dpaBTLByUNSearchStore.lastQuery=null;
+											 							 
+											 							 GajiDetail2Store.removeAll();
+																		
+																		 GajiDetail3Store.removeAll();
+																		 detailPotongan4Store.load();
+																		 detailPajak4Store.load();
+							  											
 																	}	
 																}
 															 
@@ -1033,13 +1289,13 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																				
 																				columns: [ 
 																				{
-																					header: "Nama Potongan",
-																					width: 250,
+																					header: "Potongan",
+																					width: 150,
 																					sortable: true,
 																					isCellEditable: true,
 																					allowBlank: false,
-																					editor:new Ext.form.TextField({enableKeyEvents :true }),
-																					dataIndex: 'gd_nama'
+																					 
+																					dataIndex: 'ptg_kode'
 																				},  
 																				{
 																					header: "Nilai",
@@ -1056,7 +1312,53 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 																				},
 																				 {
 																					header: "ID",
-																					hidden:true,
+																					hidden:false,
+																					width: 40,
+																					sortable: true,
+																					dataIndex: 'gd_id',
+																					summaryType: 'count'
+																				} ]
+																			
+																			}) //end of grid  
+									                        } ,
+									                        {id:'tabgaji4',
+									                        layout:'fit',
+									                        title: 'Pajak',
+									                        items:gajiDetail3Grid = new GajiDetail3Grid({
+																				id: 'gajiDetail3Grid',
+																				autoWidth:true,
+																				height: 300,
+																				border: true,
+																				frame:false,
+																				stripeRows: true,
+																				store: GajiDetail3Store,
+																				
+																				columns: [ 
+																				{
+																					header: "Pajak",
+																					width: 150,
+																					sortable: true,
+																					isCellEditable: true,
+																					allowBlank: false,
+																					 
+																					dataIndex: 'pjk_kode'
+																				},  
+																				{
+																					header: "Nilai",
+																					width: 100,
+																					sortable: true,
+																					align:'right',
+																					summaryType: 'sum',
+																					dataIndex: 'gd_nilai',
+																					isCellEditable: true,
+																					allowBlank: false,
+																					editor:new Ext.form.NumberField({enableKeyEvents :true }),
+																					renderer: Ext.util.Format.numberRenderer('0,000.00')
+																				
+																				},
+																				 {
+																					header: "ID",
+																					hidden:false,
 																					width: 40,
 																					sortable: true,
 																					dataIndex: 'gd_id',
@@ -1184,12 +1486,18 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 						 		handler: function(){
 						 			entrygajiform.getForm().reset();
 						 		 
+						 			
+									GajiDetail1Store.load({
+						 				params: {
+						 					gm_id: 0
+						 				}
+						 			});
 						 			GajiDetail2Store.load({
 						 				params: {
 						 					gm_id: 0
 						 				}
 						 			});
-									GajiDetail1Store.load({
+						 			GajiDetail3Store.load({
 						 				params: {
 						 					gm_id: 0
 						 				}
@@ -1238,9 +1546,11 @@ MyDesktop.EntryGajiForm = Ext.extend(Ext.app.Module, {
 														Ext.getCmp('gm_no1').setReadOnly(true);
 														GajiDetail2Store.setBaseParam('master', newid);
 														GajiDetail1Store.setBaseParam('master', newid);
+														GajiDetail3Store.setBaseParam('master', newid);
 														
-														GajiDetail2Store.save();
 														GajiDetail1Store.save();
+														GajiDetail2Store.save();
+														GajiDetail3Store.save();
 														Ext.getCmp('gm_id1').setValue(newid);
 														 
 														
