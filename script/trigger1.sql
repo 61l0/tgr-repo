@@ -583,6 +583,13 @@ CREATE TRIGGER kembali_details_bef_ins1  BEFORE INSERT ON kembali_details FOR EA
 		if (new.jm_id is null or new.jm_id='0') then
 			new.jm_id :=   trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
 		end if;
+		if (new.jm_no is null or new.jm_no=' ' or new.jm_no=' ') then
+			if (new.jm_type=0) then
+				new.jm_no := 'JU'||trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
+			else
+				new.jm_no := 'JT'||trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
+			end if;
+		end if;
 		RETURN NEW;
 	END;
 $$ LANGUAGE 'plpgsql';
@@ -675,3 +682,17 @@ CREATE OR REPLACE FUNCTION bank_balances_bef_ins0() RETURNS TRIGGER AS $$
 $$ LANGUAGE 'plpgsql';
 DROP TRIGGER IF EXISTS bank_balances_bef_ins0 on bank_balances;
 CREATE TRIGGER bank_balances_bef_ins0  BEFORE INSERT ON bank_balances FOR EACH ROW  EXECUTE PROCEDURE bank_balances_bef_ins0();
+
+
+CREATE OR REPLACE FUNCTION rek_korans_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.rk_id is null or new.rk_id='0') then
+			new.rk_id :=   trim(to_char(nextval('rek_korans_rk_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS rek_korans_bef_ins0 on rek_korans;
+CREATE TRIGGER rek_korans_bef_ins0  BEFORE INSERT ON rek_korans FOR EACH ROW  EXECUTE PROCEDURE rek_korans_bef_ins0();

@@ -1,0 +1,16 @@
+--trigger for posting journal
+CREATE OR REPLACE FUNCTION belanja_details_aft_ins3() RETURNS TRIGGER AS $$
+DECLARE
+	master record;
+	check_kas integer;
+BEGIN
+	select * into master from belanja_masters where bm_id=new.bm_id;
+	
+	
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS belanja_details_aft_ins3 ON belanja_details;
+CREATE TRIGGER belanja_details_aft_ins3  AFTER INSERT ON belanja_details FOR EACH ROW  EXECUTE PROCEDURE belanja_details_aft_ins3;
+ /*------------------------------ */

@@ -140,7 +140,8 @@ create table subkas (
 	kas_kode	varchar(30),
 	un_id		varchar(20),
 	kas_nama	varchar(50),
-	bpp_no		integer default 1,
+	 
+	kas_benda	varchar(30),
 	akun_kode	varchar(20),
 	constraint subkas_pk primary key(kas_kode)
 );
@@ -784,7 +785,8 @@ create table je_masters (
 	voided			smallint default 0,
 	jm_totaldebit		numeric(22,4) default 0,
 	jm_totalcredit		numeric(22,4) default 0,
-	 
+	jm_refno			varchar(30),
+	jm_refname			varchar(50),
 	constraint je_master_pk primary key(jm_id)
 );
 
@@ -913,6 +915,9 @@ create table belanja_masters(
 	bm_panjar		integer default 0,
 	bm_nilaipanjar	numeric(24,2) default 0,
 	bm_benda		varchar(30),
+	bm_tot			numeric(24,2) default 0,
+	bm_totpot		numeric(24,2) default 0,
+	bm_totpajak		numeric(24,2) default 0,
 	constraint belanja_masters_pk primary key(bm_id)
 );
 
@@ -1153,3 +1158,21 @@ create table limpah_ups(
 	constraint limpah_ups_pk primary key(lu_id)
 );
 create index limpah_ups_idx0 on limpah_ups(un_id);
+
+create table rek_korans
+(
+	rk_id		varchar(50),
+	bank_norek	varchar(30),
+	 
+	rk_nomasuk		varchar(50),
+	rk_nilaimasuk	numeric(24,2) default 0,
+	rk_tglmasuk	date,
+	rk_ketmasuk		varchar(250),
+	rk_nokeluar		varchar(50),
+	rk_nilaikeluar	numeric(24,2) default 0,
+	rk_tglkeluar	date,
+	rk_ketkeluar	varchar(250),
+	constraint	rek_korans_pk primary key (rk_id)
+	
+);
+create index rek_korans_idx0 on rek_korans(bank_norek);

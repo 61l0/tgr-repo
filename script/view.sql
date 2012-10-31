@@ -306,11 +306,14 @@ left join anggarans a on (d.akun_kode=a.angg_kodeper);
 
 
 --drop view if exists belanja_master_lists cascade;
+c
+--drop view if exists belanja_master_lists cascade;
 create or replace view belanja_master_lists
 as
-select m.*,p.prog_nama,k.keg_nama,u.un_nama
+select m.*,p.prog_nama,k.keg_nama,u.un_nama,b.pn_nama as bm_bendanama
 from belanja_masters m
 left join units u on (m.un_id=u.un_id)
+left join pns  b on (m.bm_benda=b.pn_nip)
 left join programs  p on (m.prog_kode=p.prog_kode)
 left join kegiatans k on (m.keg_kode=k.keg_kode);
 
@@ -406,3 +409,14 @@ as
 select c.*,a.akun_nama,b.bank_nama,b.un_id from bank_balances c
 join banks b on (c.bank_norek=b.bank_norek)
 left join akun a on(c.akun_kode=a.akun_kode);
+
+create or replace view subkas_balance_lists
+as
+select c.*,a.akun_nama,k.kas_nama,k.un_id,k.kas_benda from subkas_balances c
+join subkas k on (c.kas_kode=k.kas_kode)
+left join akun a on(c.akun_kode=a.akun_kode);
+
+create or replace view rek_koran_lists
+as
+select r.*,b.bank_nama,b.un_id from rek_korans r
+left join banks b on (r.bank_norek=b.bank_norek);

@@ -146,6 +146,12 @@ var BelanjaMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[BelanjaMaster][prog_nama]',mapping:'BelanjaMasterList.prog_nama'},
 		 {name:'data[BelanjaMaster][keg_kode]',mapping:'BelanjaMasterList.keg_kode'},
 		{name:'data[BelanjaMaster][keg_nama]',mapping:'BelanjaMasterList.keg_nama'},
+		{name:'data[BelanjaMaster][bm_benda]',mapping:'BelanjaMasterList.bm_benda'},
+		{name:'data[BelanjaMaster][bm_bendanama]',mapping:'BelanjaMasterList.bm_bendanama'},
+		 {name:'data[BelanjaMaster][bm_tot]',mapping:'BelanjaMasterList.bm_tot'},
+		  {name:'data[BelanjaMaster][bm_totpot]',mapping:'BelanjaMasterList.bm_totpot'},
+		   {name:'data[BelanjaMaster][bm_totpajak]',mapping:'BelanjaMasterList.bm_totpajak'},
+		   {name:'data[BelanjaMaster][bm_panjar]',mapping:'BelanjaMasterList.bm_panjar'},
 		 {name:'data[BelanjaMaster][bm_panjar]',mapping:'BelanjaMasterList.bm_panjar'},
 		 {name:'data[BelanjaMaster][bm_nilaipanjar]',mapping:'BelanjaMasterList.bm_nilaipanjar'} 
 	]
@@ -153,17 +159,36 @@ var BelanjaMasterJsonReader =  new Ext.data.JsonReader({
 	 
 });
 function hitungTotalBelanja(){
-	 
+	  tot=0;totpot=0;
+	  totpajak=0;
+		for (i=0;i<BelanjaDetail1Store.getCount();i++){
+		  if (BelanjaDetail1Store.getAt(i).get('bd_nilai')>0)
+		 	 tot=tot+parseFloat(BelanjaDetail1Store.getAt(i).get('bd_nilai'));
+		  
+		}
+		for (i=0;i<belanjaPajakStore.getCount();i++){
+		  if (belanjaPajakStore.getAt(i).get('bd_nilai')>0)
+		 	 totpajak=totpajak+parseFloat(belanjaPajakStore.getAt(i).get('bd_nilai'));
+		  
+		}
+	 	for (i=0;i<belanjaPotStore.getCount();i++){
+		  if (belanjaPotStore.getAt(i).get('bd_nilai')>0)
+		 	 totpot=totpot+parseFloat(belanjaPotStore.getAt(i).get('bd_nilai'));
+		  
+		}
+	 Ext.getCmp('bm_tot1').setValue(tot);
+	 Ext.getCmp('bm_totpot1').setValue(totpot);
+	 Ext.getCmp('bm_totpajak1').setValue(totpajak);
 	
 }
 function proc_belanja2(o){ 
 	hitungTotalBelanja();
 }
 function proc_belanjapajak(o){
-	
+	hitungTotalBelanja()
 }
 function proc_belanjapot(o){
-	
+	hitungTotalBelanja()
 }
 function proc_belanja1(o){ 
 	if (o.field=="akun_kode"){
@@ -601,6 +626,29 @@ MyDesktop.BelanjaGridWindow = Ext.extend(Ext.app.Module, {
 								width: 200,
 								sortable: true 
 								 
+						 	},
+						 	 {
+								header: "Total",
+								dataIndex: 'data[BelanjaMaster][bm_tot]',
+								width: 100,
+								sortable: true  ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+								 
+						 	},
+						 	{
+								header: "Potongan",
+								dataIndex: 'data[BelanjaMaster][bm_totpot]',
+								width: 100,
+								sortable: true  ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+								 
+						 	},{
+								header: "Pajak",
+								dataIndex: 'data[BelanjaMaster][bm_totpajak]',
+								width: 100,
+								sortable: true  ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+								 
 						 	} 
 							  
 							],
@@ -887,8 +935,23 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 												 
 												id:'blm_id1' 
 												 
-											},
-											 
+											},{	 xtype:'hidden',
+												 name: 'data[BelanjaMaster][bm_tot]',
+												 
+												id:'bm_tot1' 
+												 
+											}, 
+											 {	 xtype:'hidden',
+												 name: 'data[BelanjaMaster][bm_totpot]',
+												 
+												id:'bm_totpot1' 
+												 
+											}, {	 xtype:'hidden',
+												 name: 'data[BelanjaMaster][bm_totpajak]',
+												 
+												id:'bm_totpajak1' 
+												 
+											}, 
 											{	 xtype:'textfield',
 												fieldLabel: 'No Surat',
 												name: 'data[BelanjaMaster][bm_no]',
@@ -1096,7 +1159,55 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 													}
 													]
 											} //end of composite
-											
+											,
+											{
+											                        xtype : 'compositefield',
+											                        anchor:'95%',
+											                        msgTarget: 'side',
+											                        fieldLabel: 'Bendahara Pengeluaran',
+											                        items : [ 
+													              		  new Ext.form.ComboBox({
+																 						 id:'bm_benda1',
+																						 store: bendaSearchStore,
+																						 hiddenName:'data[BelanjaMaster][bm_benda]',
+																						 fieldLabel:'Bendahara Pengeluaran',
+																						 displayField:'pn_nip',
+																						 typeAhead: false,
+																						 enableKeyEvents :true, 
+																						 valueField:'pn_nip',
+																						  triggerAction: 'all',
+																						 loadingText: 'Searching...',
+																						 minChars:0,
+																						 pageSize:20,
+																						 boxMinWidth: 80,
+																						 boxMinHeight: 100,
+																						 width:120,
+																						 hideTrigger:false,
+																						 forceSelection: true,
+																						 tpl:bendaComboTpl,
+																						 allowBlank:false,
+																						 itemSelector: 'div.search-benda',
+																						 listeners: {
+														 
+																								 
+																								select: function(thiscombo,record, index){
+																									  
+																									 Ext.getCmp('bm_bendanama1').setValue(record.get('pn_nama'));
+																									 
+																								}	
+																							}
+																						 
+																	
+																						 }),
+																				{	xtype:'textfield',
+																					id:'bm_bendanama1',
+																					fieldLabel: '',
+																					name: 'data[BelanjaMaster][bm_bendanama]',
+																					flex : 1,
+																					readOnly:true 
+																				}
+																		]
+													                }
 										]
 									} 
 									]

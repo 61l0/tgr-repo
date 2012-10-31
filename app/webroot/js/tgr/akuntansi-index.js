@@ -22,9 +22,14 @@ var MyDesktop = new Ext.app.App({
 		        new MyDesktop.KembaliGridWindow(),
 		        new MyDesktop.EntryJeForm(),
 		        new MyDesktop.JeGridWindow(),
+		        new MyDesktop.JeGridWindow2(),
+		        new MyDesktop.EntryJeForm2(),
 		        new MyDesktop.AccBalGridWindow(),
 		        new MyDesktop.BankBalGridWindow(),
-		        new MyDesktop.KasBalGridWindow()
+		        new MyDesktop.KasBalGridWindow(),
+		        new MyDesktop.SubKasBalGridWindow(),
+		        new MyDesktop.RekKoranGridWindow(),
+		        new MyDesktop.EntryRekKoranForm()
 		        
 		];
 		

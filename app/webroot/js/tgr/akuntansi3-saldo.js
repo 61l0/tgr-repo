@@ -1,7 +1,21 @@
 var urlaccbal=HOST_PATH+'/je/getbalance'; 
 var urlbankbal=HOST_PATH+'/bank/getbalance'; 
 var urlkasbal=HOST_PATH+'/kas/getbalance'; 
+var urlsubkasbal=HOST_PATH+'/kas/getsubbalance'; 
+Ext.namespace('Ext.bpptype');
+//itm_type -> 0 =service, 1=stock,2=non_stock
+Ext.bpptype.data = [
+        ['1', 'BPP 1'],
+        ['2', 'BPP 2'],
+		['3', 'BPP 3'],
+		['4', 'BPP 4'],
+		['5', 'BPP 5']
+    ];
 
+var bpptypeStore = new Ext.data.ArrayStore({
+    fields: ['id', 'name'],
+    data : Ext.bpptype.data
+});
 var AccBalStoreJsonReader =  new Ext.data.JsonReader({
  
 	remoteSort: false,
@@ -705,3 +719,277 @@ MyDesktop.BankBalGridWindow = Ext.extend(Ext.app.Module, {
 		 
 	}
 }); 
+
+
+//subkas
+
+
+var SubKasBalStoreJsonReader =  new Ext.data.JsonReader({
+ 
+	remoteSort: false,
+	root: 'data',
+	totalProperty: 'total',
+    idProperty: 'cb_id',
+	fields: [
+		{name:'cb_id'},
+		{name:'cb_seq'},
+		{name:'kas_kode'},
+		{name:'kas_nama'},
+		{name:'cb_action'},
+		{name:'cb_debit'},
+		{name:'cb_credit'},
+		{name:'cb_balance'},
+		{name:'cb_realdate', type: 'date', dateFormat: 'Y-m-d'},
+		{name:'cb_refno'},
+		{name:'cb_refname'},
+		{name:'cb_desc'} 
+	]
+	 
+	 
+});
+var SubKasBalStore = new Ext.data.Store({
+  	reader:SubKasBalStoreJsonReader,
+	 
+	proxy: new Ext.data.HttpProxy({
+        url: urlsubkasbal
+    })
+});
+MyDesktop.SubKasBalGridWindow = Ext.extend(Ext.app.Module, {
+    id:'subkasbalgrid-win',
+   init : function(){
+      this.launcher = {
+            text: 'Saldo Sub Kas',
+            iconCls:'icon-grid',
+            handler : this.createWindow,
+            scope: this
+        };
+     },
+    createWindow : function(){
+        var desktop = this.app.getDesktop();
+        var win2 = desktop.getWindow(this.id);
+		
+        if(!win2){
+            win2 = desktop.createWindow({
+                id: this.id,
+                title:'Saldo Sub Kas',
+                width:700,
+                height:400,
+                iconCls: 'icon-grid',
+                 shim:false,
+                animCollapse:false,
+                constrainHeader:true,
+				stripeRows: true,
+                layout: 'fit', 
+				border:false,
+                items: 
+					gridsubsubkasbal = new Ext.grid.GridPanel({
+							id: 'gridsubsubkasbal',
+						 
+							 store: SubKasBalStore,
+							trackMouseOver: true,
+							disableSelection: false,
+							loadMask: true,
+							// grid columns
+							columns: [ 
+							  {
+								header: "No",
+								dataIndex: 'cb_seq',
+								width: 80,
+								sortable: true
+							},
+							{
+								header: "Tanggal",
+								dataIndex: 'cb_realdate',
+								width: 100,
+								sortable: true,
+								 renderer: function(date) { return date.format("d/m/Y"); }
+						
+							},
+							 {
+								header: "Description",
+								dataIndex: 'cb_desc',
+								width: 200,
+								sortable: true
+							},
+							 
+							{
+								header: "Debet",
+								dataIndex: 'cb_debit',
+								width: 100,
+								sortable: true ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+							},
+							
+							 {
+								header: "Kredit",
+								dataIndex: 'cb_credit',
+								width: 100,
+								sortable: true  ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+								 
+						 	},
+						 	
+							 {
+								header: "Saldo",
+								dataIndex: 'cb_balance',
+								width: 200,
+								sortable: true,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+							},
+							 {
+								header: "No Ref.",
+								dataIndex: 'cb_refno',
+								width: 150,
+								sortable: true 
+							},
+							 {
+								header: "Nama Ref.",
+								dataIndex: 'cb_refname',
+								width: 150,
+								sortable: true 
+							}   
+							  
+							],
+							 
+							sm: new Ext.grid.RowSelectionModel({
+								singleSelect: true,
+								listeners: {
+									 
+								}
+							}),
+							bbar: new Ext.PagingToolbar({
+								pageSize: 20,
+								 store: SubKasBalStore,
+								displayInfo: true,
+								displayMsg: 'Displaying contents {0} - {1} of {2}',
+								emptyMsg: "No Content to display",
+								plugins: new Ext.ux.SlidingPager(),
+								listeners :{
+										'change' : function(){
+											SubKasBalStore.baseParams={start:'start',limit:'limit',un_id:Ext.getCmp("subkas_un_id1").getValue()};
+			    
+										}
+									}
+									 
+							}),
+							tbar: [
+							       '->',
+							        'SKPD : ',
+							new Ext.form.ComboBox({
+								 id:'subkas_un_id1',
+								 store: skpdSearchStore,
+								 
+								 fieldLabel:'SKPD',
+								 displayField:'un_kode',
+								 typeAhead: false,
+								 enableKeyEvents :true, 
+								 valueField:'un_id',
+								  triggerAction: 'all',
+								 loadingText: 'Searching...',
+								 minChars:0,
+								 pageSize:20,
+								 boxMinWidth: 80,
+								 boxMinHeight: 100,
+								 width:120,
+								 hideTrigger:false,
+								 forceSelection: true,
+								 tpl:skpdComboTpl,
+								 allowBlank:false,
+								 itemSelector: 'div.search-skpd',
+								 value:'*',
+								 listeners: {
+											select: function(thiscombo,record, index){
+											   Ext.getCmp('subkas_un_nama1').setValue(record.get('un_nama'));
+											   SubKasBalStore.load({params: {
+													start: 0,
+													limit: 20,
+													 un_id:Ext.getCmp("subkas_un_id1").getValue(),
+													 bpp:Ext.getCmp("subkas_bpp1").getValue() 
+												}})
+										}	
+									}
+								 
+							
+								 }),
+							{	xtype:'textfield',
+							id:'subkas_un_nama1',
+							fieldLabel: '',
+							 
+							flex : 1,
+							readOnly:true 
+							},'BPP : ',
+							new Ext.form.ComboBox({
+					 						 id:'subkas_bpp1',
+											 store: bendaSearchStore,
+											 fieldLabel:'Bendahara Pengeluaran',
+											 displayField:'pn_nip',
+											 typeAhead: false,
+											 enableKeyEvents :true, 
+											 valueField:'pn_nip',
+											  triggerAction: 'all',
+											 loadingText: 'Searching...',
+											 minChars:0,
+											 pageSize:20,
+											 boxMinWidth: 80,
+											 boxMinHeight: 100,
+											 width:120,
+											 hideTrigger:false,
+											 forceSelection: true,
+											 tpl:bendaComboTpl,
+											 allowBlank:false,
+											 itemSelector: 'div.search-benda',
+											 listeners: {
+			 
+													 
+													select: function(thiscombo,record, index){
+														  
+														 Ext.getCmp('subkas_bppnama1').setValue(record.get('pn_nama'));
+														 SubKasBalStore.load({params: {
+																		start: 0,
+																		limit: 20,
+																		 un_id:Ext.getCmp("subkas_un_id1").getValue(),
+																		 bpp:Ext.getCmp("subkas_bpp1").getValue() 
+																	}})
+													}	
+												}
+											 
+						
+											 }),
+									{	xtype:'textfield',
+										id:'subkas_bppnama1',
+										fieldLabel: '',
+										
+										readOnly:true 
+									},
+								   
+							{
+							 text:'Search',
+				            tooltip:'Search Contents',
+				            iconCls:'search',
+							handler: function(){
+								SubKasBalStore.load({params: {
+									start: 0,
+									limit: 20,
+									 un_id:Ext.getCmp("subkas_un_id1").getValue(),
+									  bpp:Ext.getCmp("subkas_bpp1").getValue() 
+									 }})
+						       
+					        }
+							}]
+						
+						})//end of grid
+					
+				
+					
+            });
+        }
+		 
+          win2.show();
+          SubKasBalStore.load({params:{start:0, limit:20, un_id:'*',bpp:'*'}});
+	 
+	  
+		 
+		 
+	}
+}); 
+ 

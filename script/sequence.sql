@@ -65,3 +65,5 @@ create sequence akun_bal2s_ab_id_seq increment 1;
 create sequence kas_balances_cb_id_seq increment 1;
 create sequence subkas_balances_cb_id_seq increment 1;
 create sequence bank_balances_bb_id_seq increment 1;
+
+create sequence rek_korans_rk_id_seq	increment 1;

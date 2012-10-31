@@ -51,6 +51,11 @@ Ext.onReady(function(){
         		handler: onJurnalClick
         	},
         	{
+        		text:'Jurnal Transaksi',
+        		id:'mnJurnalTrans',
+        		handler: onJurnalTransClick
+        	},
+        	{
         		text:'Rekening Koran',
         		id:'mnRekKoran',
         		handler: onRekKoranClick
@@ -65,6 +70,11 @@ Ext.onReady(function(){
         		text:'Saldo Kas',
         		id:'mnSaldoKas',
         		handler: onSaldoKasClick
+        	},
+        	{
+        		text:'Saldo Sub Kas',
+        		id:'mnSaldoSubKas',
+        		handler: onSaldoSubKasClick
         	},
         	{
         		text:'Saldo Bank',
@@ -139,14 +149,22 @@ Ext.onReady(function(){
 	 function onSaldoKasClick(){
 			 MyDesktop.getSingleModule('kasbalgrid-win').createWindow();
 			 //MyDesktop.getSingleModule('entryje-win').createWindow();
+		} 
+	 function onSaldoSubKasClick(){
+			 MyDesktop.getSingleModule('subkasbalgrid-win').createWindow();
+			 //MyDesktop.getSingleModule('entryje-win').createWindow();
 		}
 	 function onSaldoBankClick(){
 			  MyDesktop.getSingleModule('bankbalgrid-win').createWindow();
 			 //MyDesktop.getSingleModule('entryje-win').createWindow();
 		}
- 
+	 function onJurnalTransClick(){
+		 MyDesktop.getSingleModule('jegrid-win2').createWindow();
+	 }
 	 function onRekKoranClick(){
 	//	MyDesktop.getSingleModule('addspdmaster-win').createWindow();
+		 MyDesktop.getSingleModule('entryrekkoran-win').createWindow();
+		 MyDesktop.getSingleModule('rekkorangrid-win').createWindow();
 	}
 	 
 	function onTextReportClick(item){
