@@ -1478,7 +1478,7 @@ MyDesktop.EntryBelanjaForm = Ext.extend(Ext.app.Module, {
 						 			Ext.getCmp('blm_tgl1').setValue(new Date());
 									Ext.getCmp('blm_tgl1').setReadOnly(false);
 									Ext.getCmp('blm_id1').setValue(0);
-								 
+								 	Ext.getCmp('blm_no1').setReadOnly(false);
 								 
 									 
 						 		}

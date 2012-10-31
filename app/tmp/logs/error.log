@@ -2036,3 +2036,69 @@ LINE 1: ...l2List"   WHERE "bm_id" = '0000000002'   ORDER BY "akun_kode...
 2012-10-31 23:34:24 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
 LINE 1: ...l2List"   WHERE "bm_id" = '0000000002'   ORDER BY "akun_kode...
                                                              ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 01:14:30 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 01:14:30 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 01:19:05 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...l2List"   WHERE "bm_id" = '0000000001'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 01:19:05 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...l2List"   WHERE "bm_id" = '0000000001'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 01:19:36 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...l2List"   WHERE "bm_id" = '0000000002'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 01:19:36 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...l2List"   WHERE "bm_id" = '0000000002'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 01:27:15 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...l2List"   WHERE "bm_id" = '0000000002'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 01:27:15 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...l2List"   WHERE "bm_id" = '0000000002'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 01:51:23 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  record "master" has no field "bm_date"
+CONTEXT:  SQL statement "insert into kas_balances(kas_kode, cb_debit,cb_credit, cb_realdate,cb_refno,cb_refname,cb_refmode,cb_desc)
+				values(kas.kas_kode, 0,new.bd_nilai,master.bm_date,trim(master.bm_no||'-'||new.bd_id),'Belanja',0,'')"
+PL/pgSQL function "belanja_details_aft_upd3" line 24 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 01:51:23 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  record "master" has no field "bm_date"
+CONTEXT:  SQL statement "insert into kas_balances(kas_kode, cb_debit,cb_credit, cb_realdate,cb_refno,cb_refname,cb_refmode,cb_desc)
+				values(kas.kas_kode, 0,new.bd_nilai,master.bm_date,trim(master.bm_no||'-'||new.bd_id),'Belanja',0,'')"
+PL/pgSQL function "belanja_details_aft_upd3" line 24 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 01:51:41 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  record "master" has no field "bm_date"
+CONTEXT:  SQL statement "insert into kas_balances(kas_kode, cb_debit,cb_credit, cb_realdate,cb_refno,cb_refname,cb_refmode,cb_desc)
+				values(kas.kas_kode, 0,new.bd_nilai,master.bm_date,trim(master.bm_no||'-'||new.bd_id),'Belanja',0,'')"
+PL/pgSQL function "belanja_details_aft_upd3" line 24 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 01:51:41 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  record "master" has no field "bm_date"
+CONTEXT:  SQL statement "insert into kas_balances(kas_kode, cb_debit,cb_credit, cb_realdate,cb_refno,cb_refname,cb_refmode,cb_desc)
+				values(kas.kas_kode, 0,new.bd_nilai,master.bm_date,trim(master.bm_no||'-'||new.bd_id),'Belanja',0,'')"
+PL/pgSQL function "belanja_details_aft_upd3" line 24 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 02:09:48 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 02:09:48 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 02:13:02 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 02:13:02 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 02:14:13 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  record "new" has no field "kas_kode"
+CONTEXT:  SQL statement "insert into kas_balances(kas_kode, akun_kode, cb_debit,cb_credit, cb_realdate,cb_refno,cb_refname,cb_refmode,cb_desc)
+					values(new.kas_kode,new.akun_kode, 0,new.bd_nilai,master.bm_tgl,trim(master.bm_no||'-'||new.bd_id),'Belanja',0,akun.akun_nama)"
+PL/pgSQL function "belanja_details_aft_ins3" line 17 at SQL statement in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 02:14:13 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  record "new" has no field "kas_kode"
+CONTEXT:  SQL statement "insert into kas_balances(kas_kode, akun_kode, cb_debit,cb_credit, cb_realdate,cb_refno,cb_refname,cb_refmode,cb_desc)
+					values(new.kas_kode,new.akun_kode, 0,new.bd_nilai,master.bm_tgl,trim(master.bm_no||'-'||new.bd_id),'Belanja',0,akun.akun_nama)"
+PL/pgSQL function "belanja_details_aft_ins3" line 17 at SQL statement</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]
+2012-11-01 02:22:02 Warning: Warning (2): pg_query() [http://php.net/function.pg-query]: Query failed: ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^ in [/var/www/tgr/cake/libs/model/datasources/dbo/dbo_postgres.php, line 167]
+2012-11-01 02:22:02 Warning: Warning (512): <span style="color:Red;text-align:left"><b>SQL Error:</b> ERROR:  column "akun_kode" does not exist
+LINE 1: ...anjaDetail2List"   WHERE "bm_id" = '0'   ORDER BY "akun_kode...
+                                                             ^</span> in [/var/www/tgr/cake/libs/model/datasources/dbo_source.php, line 684]

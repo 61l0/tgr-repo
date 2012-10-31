@@ -282,6 +282,8 @@ var KasBalStoreJsonReader =  new Ext.data.JsonReader({
 		{name:'cb_seq'},
 		{name:'kas_kode'},
 		{name:'kas_nama'},
+		{name:'akun_kode'},
+		{name:'akun_nama'},
 		{name:'cb_action'},
 		{name:'cb_debit'},
 		{name:'cb_credit'},
@@ -351,6 +353,12 @@ MyDesktop.KasBalGridWindow = Ext.extend(Ext.app.Module, {
 								sortable: true,
 								 renderer: function(date) { return date.format("d/m/Y"); }
 						
+							},
+							  {
+								header: "Akun",
+								dataIndex: 'akun_kode',
+								width: 120,
+								sortable: true
 							},
 							 {
 								header: "Description",

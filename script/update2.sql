@@ -75,3 +75,25 @@ as
 select m.*,u.un_nama
 from je_masters m
 left join units u on (m.un_id=u.un_id);
+
+
+ CREATE OR REPLACE FUNCTION je_masters_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.jm_id is null or new.jm_id='0') then
+			new.jm_id :=   trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
+		end if;
+		if (new.jm_no is null or new.jm_no=' ' or new.jm_no=' ') then
+			if (new.jm_type=0) then
+				new.jm_no := 'JU'||trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
+			else
+				new.jm_no := 'JT'||trim(to_char(nextval('je_masters_jm_id_seq'),'0000000000')); 
+			end if;
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS je_masters_bef_ins0 on je_masters;
+CREATE TRIGGER je_masters_bef_ins0  BEFORE INSERT ON je_masters FOR EACH ROW  EXECUTE PROCEDURE je_masters_bef_ins0();
+ 
