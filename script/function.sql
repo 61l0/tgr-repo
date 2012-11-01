@@ -266,7 +266,7 @@ begin
 		-- mengakses record2 dibawahnya 
 		open bb_cursor for select * from bank_balances 
 				where   bank_norek=last_bb.bank_norek and bb_realdate>=last_bb.bb_realdate and bb_id > last_bb.bb_id
-				order by bb_realdate asc,_bbid asc;
+				order by bb_realdate asc,bb_id asc;
 	
 		loop
 		fetch bb_cursor into bb;
@@ -305,7 +305,7 @@ begin
 	-- mengakses record2 dibawahnya 
 	open ab_cursor for select * from bank_balances 
 			where   bank_norek=abank_norek and bb_seq>aab_seq  
- 			order by bb_realdate asc,_bbid asc;
+ 			order by bb_realdate asc,bb_id asc;
 	
 	loop
 	fetch ab_cursor into ab;

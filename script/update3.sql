@@ -1,3 +1,94 @@
+
+
+CREATE OR REPLACE FUNCTION bank_balances_bef_ins0() RETURNS TRIGGER AS $$
+	 
+	BEGIN
+		 
+		if (new.bb_id is null or new.bb_id='0') then
+			new.bb_id :=   trim(to_char(nextval('bank_balances_bb_id_seq'),'0000000000')); 
+		end if;
+		RETURN NEW;
+	END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS bank_balances_bef_ins0 on bank_balances;
+CREATE TRIGGER bank_balances_bef_ins0  BEFORE INSERT ON bank_balances FOR EACH ROW  EXECUTE PROCEDURE bank_balances_bef_ins0();
+
+create or replace function fixBankSeq(abb_id varchar(50)) returns varchar as $$
+declare
+	bb_cursor refcursor;
+	bb record;
+	i integer;
+	last_balance numeric(22,4);
+	  
+	last_bb record;
+begin
+	 
+	last_balance:=0;
+ 
+	select * into last_bb from bank_balances where bb_id=abb_id;
+	if (last_bb.afix=1) then
+		update bank_balances set afix=0 where bb_id=abb_id;
+		i:=last_bb.bb_seq;
+		last_balance:=last_bb.bb_balance;
+		-- mengakses record2 dibawahnya 
+		open bb_cursor for select * from bank_balances 
+				where   bank_norek=last_bb.bank_norek and bb_realdate>=last_bb.bb_realdate and bb_id > last_bb.bb_id
+				order by bb_realdate asc,bb_id asc;
+	
+		loop
+		fetch bb_cursor into bb;
+		exit when not found; 
+			i:=i+1;
+			 
+			last_balance:=last_balance+(coalesce(bb.bb_debit,0)-coalesce(bb.bb_credit,0));
+		 
+			update bank_balances set bb_seq=i,_bbbalance=last_balance,afix=0 where bb_id=bb.bb_id;
+		
+		end loop;
+		close bb_cursor;
+	end if;
+	return 'OK';
+end;
+$$ language 'plpgsql';
+/*--------------------------------------*/
+create or replace function fixBankDel(abank_norek varchar(30),aab_seq integer) returns varchar as $$
+declare
+	 
+	last_balance numeric(22,4);
+	ab_cursor refcursor;
+	ab record;
+	i integer;
+	 
+begin
+	if (aab_seq=1) then
+		last_balance:=0;
+		i:=0;
+	else 
+		select bb_balance into last_balance from bank_balances where bank_norek=abank_norek and bb_seq=aab_seq-1;
+		i:=aab_seq-1;
+		 
+	end if;
+	 
+	-- mengakses record2 dibawahnya 
+	open ab_cursor for select * from bank_balances 
+			where   bank_norek=abank_norek and bb_seq>aab_seq  
+ 			order by bb_realdate asc,bb_id asc;
+	
+	loop
+	fetch ab_cursor into ab;
+	exit when not found; 
+		i:=i+1;
+	 	last_balance:=last_balance+(coalesce(ab.bb_debit,0)-coalesce(ab.bb_credit,0));
+		 
+		update bank_balances set bb_seq=i,_bbbalance=last_balance where bb_id=ab.bb_id;
+		
+	end loop;
+	close ab_cursor;
+	return 'OK';
+	
+end;
+$$ language 'plpgsql';
+/* -------------------------- */
 --trigger for posting journal, kas,
 CREATE OR REPLACE FUNCTION belanja_masters_aft_ins3() RETURNS TRIGGER AS $$
 DECLARE
