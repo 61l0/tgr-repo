@@ -1,2 +1,2 @@
-1351710837
+1351778672
 a:6:{s:6:"pn_nip";a:5:{s:4:"type";s:6:"string";s:4:"null";b:0;s:7:"default";s:0:"";s:6:"length";i:30;s:3:"key";s:7:"primary";}s:7:"pn_nama";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:125;}s:8:"pn_kdgol";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:10;}s:5:"un_id";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:20;}s:10:"pn_jabatan";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:200;}s:7:"pn_pddk";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:20;}}
