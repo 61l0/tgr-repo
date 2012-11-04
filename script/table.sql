@@ -722,6 +722,8 @@ create table sp2d_masters(
 	npwp_no		varchar(30),
 	sp2dm_ket	varchar(500),
  	sp2dm_total	numeric(24,2) default 0,
+ 	sp2dm_pajak	numeric(24,2) default 0,
+ 	sp2dm_pot	numeric(24,2) default 0,
 	sp2dm_norek2	varchar(30),
 	sp2dm_bank2		varchar(50),
 	sp2dm_npwp2	varchar(30),
@@ -763,7 +765,7 @@ create table sp2d_detail3s (
 	
 	akun_kode		varchar(30),
 	sp2dd_nilai		numeric(22,4) default 0,
-	ss2dd_ket		varchar(150),
+	sp2dd_ket		varchar(150),
 	constraint sp2d_detail3s_pk primary key (sp2dd_id),
 	constraint sp2d_detail3s_fk1 foreign key (sp2dm_id) references sp2d_masters(sp2dm_id) on delete cascade 
 );
@@ -865,6 +867,7 @@ create table  acara_masters(
 	am_id	varchar(30),
 	am_no	varchar(50),
 	am_tgl	date,
+	am_tot	numeric(24,2) default 0,
 	un_id	varchar(20),
 	prog_kode	varchar(30),
 	keg_kode	varchar(30),
@@ -888,6 +891,7 @@ create table bansos_masters(
 	bm_id	varchar(30),
 	bm_no	varchar(50),
 	bm_tgl	date,
+	bm_tot		numeric(24,2) default 0,
 	bm_tentang varchar(250),
 	un_id	varchar(20),
 	prog_kode	varchar(30),

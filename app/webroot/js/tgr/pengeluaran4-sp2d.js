@@ -99,7 +99,7 @@ var detailBeban2Store = new Ext.data.Store({
 	 
 	{name: 'akun_kode'},
 	{name: 'akun_nama'},
-	{name: 'sppd_nilai'} 
+	{name: 'spmd_nilai'} 
 	 
        
         
@@ -110,6 +110,7 @@ var detailBeban2Store = new Ext.data.Store({
     	 
  
     		for (i=0;i<recordlist.length;i++){
+    		 
     		abc = new sp2ddBebanStore.recordType({
 					sp2dd_id: 0,
 					sppm_id: '',
@@ -131,13 +132,40 @@ var detailBeban2Store = new Ext.data.Store({
     
 });
 function proc_sp2dpot(){
-	
+	tot=0; 
+	 
+		for (i=0;i<sp2ddPotStore.getCount();i++){
+		  if (sp2ddPotStore.getAt(i).get('sp2dd_nilai')>0)
+		 	 tot=tot+parseFloat(sp2ddPotStore.getAt(i).get('sp2dd_nilai'));
+		  
+		}
+		 
+		 
+	 Ext.getCmp('sp2dm_pot1').setValue(tot); 
 }
 function proc_sp2dpajak(){
-	
+	tot=0; 
+	 
+		for (i=0;i<sp2ddPajakStore.getCount();i++){
+		  if (sp2ddPajakStore.getAt(i).get('sp2dd_nilai')>0)
+		 	 tot=tot+parseFloat(sp2ddPajakStore.getAt(i).get('sp2dd_nilai'));
+		  
+		}
+		 
+		 
+	 Ext.getCmp('sp2dm_pajak1').setValue(tot); 
 }
 function proc_sp2dbeban(){
-	
+	tot=0; 
+	 
+		for (i=0;i<sp2ddBebanStore.getCount();i++){
+		  if (sp2ddBebanStore.getAt(i).get('sp2dd_nilai')>0)
+		 	 tot=tot+parseFloat(sp2ddBebanStore.getAt(i).get('sp2dd_nilai'));
+		  
+		}
+		 
+	Ext.getCmp('sp2dm_sp2dm_total1').setValue(tot); 
+	 
 }
 var sp2ddPot_proxy = new Ext.data.HttpProxy({
     api: {
@@ -407,6 +435,8 @@ var Sp2dMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[Sp2dMaster][sp2dm_id]',mapping:'Sp2dMasterList.sp2dm_id'},
 		{name:'data[Sp2dMaster][sp2dm_no]',mapping:'Sp2dMasterList.sp2dm_no'},
 		{name:'data[Sp2dMaster][sppm_no]',mapping:'Sp2dMasterList.sppm_no'},
+		{name:'data[Sp2dMaster][spmm_no]',mapping:'Sp2dMasterList.spmm_no'},
+		
 		{name:'data[Sp2dMaster][sppm_tgl]',mapping:'Sp2dMasterList.sppm_tgl', type: 'date', dateFormat: 'Y-m-d'},
 		{name:'data[Sp2dMaster][spdm_no]',mapping:'Sp2dMasterList.sppm_no'},
 		{name:'data[Sp2dMaster][spdm_tgl]',mapping:'Sp2dMasterList.spdm_tgl', type: 'date', dateFormat: 'Y-m-d'},
@@ -420,6 +450,8 @@ var Sp2dMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[Sp2dMaster][sp2dm_bendanama]',mapping:'Sp2dMasterList.sp2dm_bendanama'},
 		{name:'data[Sp2dMaster][sp2dm_catatan]',mapping:'Sp2dMasterList.sp2dm_catatan'},
 		{name:'data[Sp2dMaster][sp2dm_total]',mapping:'Sp2dMasterList.sp2dm_total'}, 
+			{name:'data[Sp2dMaster][sp2dm_pajak]',mapping:'Sp2dMasterList.sp2dm_pajak'}, 
+			{name:'data[Sp2dMaster][sp2dm_pot]',mapping:'Sp2dMasterList.sp2dm_pot'}, 
 		{name:'data[Sp2dMaster][sp2dm_norek2]',mapping:'Sp2dMasterList.sp2dm_norek2'}, 
 		{name:'data[Sp2dMaster][sp2dm_bank2]',mapping:'Sp2dMasterList.sp2dm_bank2'},
 		{name:'data[Sp2dMaster][sp2dm_npwp2]',mapping:'Sp2dMasterList.sp2dm_npwp2'},
@@ -511,6 +543,19 @@ MyDesktop.EntrySP2DForm = Ext.extend(Ext.app.Module, {
 												 name: 'data[Sp2dMaster][sp2dm_id]',
 												 
 												id:'sp2dm_id1' 
+												 
+											},
+											 
+											{	 xtype:'hidden',
+												 name: 'data[Sp2dMaster][sp2dm_pot]',
+												 
+												id:'sp2dm_pot1' 
+												 
+											},
+											{	 xtype:'hidden',
+												 name: 'data[Sp2dMaster][sp2dm_pajak]',
+												 
+												id:'sp2dm_pajak1' 
 												 
 											},
 											{	 xtype:'hidden',
@@ -1226,20 +1271,41 @@ MyDesktop.SP2DGridWindow = Ext.extend(Ext.app.Module, {
 								sortable: true
 							},
 							 {
+								header: "No SPM",
+								dataIndex: 'data[Sp2dMaster][spmm_no]',
+								width: 150,
+								sortable: true
+							},
+							 {
 								header: "SKPD",
 								dataIndex: 'data[Sp2dMaster][un_nama]',
 								width: 150,
 								sortable: true
 							},
-							{
-								header: "Nilai",
+							
+							 {
+								header: "Potongan",
+								dataIndex: 'data[Sp2dMaster][sp2dm_pot]',
+								width: 150,
+								sortable: true,
+								align: 'right', 
+								renderer: Ext.util.Format.numberRenderer('0,000.00')
+							} ,
+							 {
+								header: "Pajak",
+								dataIndex: 'data[Sp2dMaster][sp2dm_pajak]',
+								width: 150,
+								sortable: true,
+								align: 'right', 
+								renderer: Ext.util.Format.numberRenderer('0,000.00')
+							}, {
+								header: "Total",
 								dataIndex: 'data[Sp2dMaster][sp2dm_total]',
 								width: 150,
 								sortable: true,
 								align: 'right', 
 								renderer: Ext.util.Format.numberRenderer('0,000.00')
-							} 
-							 
+							}  
 							],
 							
 							  view: new Ext.grid.GroupingView({

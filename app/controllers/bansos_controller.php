@@ -134,7 +134,8 @@ class BansosController extends AppController
 		if (!empty($this->data)) {
 			    $admin=$this->Session->read('PB_USER_SESSION');
 			
-			   
+			   	$this->data['BansosMaster']['bm_tot']=r(',','',$this->data['BansosMaster']['bm_tot']);
+			 
 				$checkdata=$bansosmaster->findByBm_id($this->data['BansosMaster']['bm_id']);
 				 if (empty($checkdata)) {
 				 

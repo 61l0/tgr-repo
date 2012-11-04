@@ -70,7 +70,16 @@ var AcaraMasterJsonReader =  new Ext.data.JsonReader({
 	 
 });
 function hitungTotalAcara(){
+	  tot=0; 
 	 
+		for (i=0;i<AcaraDetail1Store.getCount();i++){
+		  if (AcaraDetail1Store.getAt(i).get('ad_nilai')>0)
+		 	 tot=tot+parseFloat(AcaraDetail1Store.getAt(i).get('ad_nilai'));
+		  
+		}
+		 
+		 
+	 Ext.getCmp('am_tot1').setValue(tot); 
 	
 }
 function proc_acara2(o){ 
@@ -351,8 +360,15 @@ MyDesktop.AcaraGridWindow = Ext.extend(Ext.app.Module, {
 								width: 200,
 								sortable: true 
 								 
+						 	},
+							   {
+								header: "Total",
+								dataIndex: 'data[AcaraMaster][am_tot]',
+								width: 100,
+								sortable: true  ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+								 
 						 	} 
-							  
 							],
 							
 							  view: new Ext.grid.GroupingView({
@@ -626,7 +642,12 @@ MyDesktop.EntryAcaraForm = Ext.extend(Ext.app.Module, {
 												id:'am_id1' 
 												 
 											},
-											 
+											 {	 xtype:'hidden',
+												 name: 'data[AcaraMaster][am_tot]',
+												 
+												id:'am_tot1' 
+												 
+											},
 											{	 xtype:'textfield',
 												fieldLabel: 'No Surat',
 												name: 'data[AcaraMaster][am_no]',

@@ -1,2 +1,2 @@
-1351788635
+1352034242
 a:6:{s:5:"kd_id";a:5:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:20;s:3:"key";s:7:"primary";}s:5:"km_id";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:20;}s:9:"akun_kode";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:30;}s:11:"kd_nilaiblj";a:4:{s:4:"type";s:5:"float";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";N;}s:12:"kd_nilaikmbl";a:4:{s:4:"type";s:5:"float";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";N;}s:9:"akun_nama";a:4:{s:4:"type";s:6:"string";s:4:"null";b:1;s:7:"default";s:0:"";s:6:"length";i:200;}}

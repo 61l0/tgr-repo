@@ -1,6 +1,5 @@
-Revision Log :
+1. update4.sql
 
-Patch I : 20 Oktober 2012
-1. Patch DB (20Oktober) dump ulang pakai file spektra 20oktober
-	a. atau jalankan view.sql dan update1.sql
-2. Update Gaji dan Belanja
+2. Trigger3.sql
+3. update controllers
+ 

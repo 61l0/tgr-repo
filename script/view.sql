@@ -280,6 +280,7 @@ left join spm_masters m on (d.spmm_id=m.spmm_id);
 
 
 --drop view if exists sp2d_master_lists cascade;
+
 create or replace view sp2d_master_lists
 as
 select m.*,b.bank_nama,s.un_id,s.un_nama, s.spmm_tgl,s.sppm_tipe,s.sppm_no,s.sppm_tgl,s.sppm_benda,s.sppm_bendanama,s.spdm_no,s.spdm_tgl,s.spdm_uraian from sp2d_masters m

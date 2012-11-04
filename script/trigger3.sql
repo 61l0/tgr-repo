@@ -482,3 +482,250 @@ DROP TRIGGER IF EXISTS gaji_detail1s_aft_upd3 ON gaji_detail1s;
 CREATE TRIGGER gaji_detail1s_aft_upd3  AFTER UPDATE ON gaji_detail1s FOR EACH ROW  EXECUTE PROCEDURE gaji_detail1s_aft_upd3();
  /*------------------------------ */
 
+--trigger for posting journal, kas,
+CREATE OR REPLACE FUNCTION bansos_masters_aft_ins3() RETURNS TRIGGER AS $$
+DECLARE
+	check_master integer;
+	check_kas	integer;
+	check_akun 	integer;
+	kas record;
+BEGIN
+	select  count(*) into check_master from je_masters where jm_refno=new.bm_no and jm_refname='bansos_masters';
+	if (check_master<=0) then
+	 	if (new.bm_tot>0) then
+			insert into je_masters(jm_type,un_id,jm_date, jm_totaldebit,jm_totalcredit,jm_refno,jm_refname,jm_note)
+			values(1,new.un_id,current_date,new.bm_tot,0,new.bm_no,'bansos_masters','Bansos');
+			 
+		end if;		
+	end if;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS bansos_masters_aft_ins3 ON bansos_masters;
+CREATE TRIGGER bansos_masters_aft_ins3  AFTER INSERT ON bansos_masters FOR EACH ROW  EXECUTE PROCEDURE bansos_masters_aft_ins3();
+ /*------------------------------ */
+
+
+CREATE OR REPLACE FUNCTION bansos_masters_aft_upd3() RETURNS TRIGGER AS $$
+DECLARE
+	check_master integer;
+	kas record;
+	check_kas integer;
+	check_akun integer;
+	current_jmid varchar(50);
+	current_jdid	varchar(50);
+	check_jd	integer;
+BEGIN
+	select  count(*) into check_master from je_masters where jm_refno=new.bm_no and jm_refname='bansos_masters';
+	if (check_master<=0) then
+		if (new.bm_tot>0) then 
+			insert into je_masters(jm_type,jm_date,un_id, jm_totaldebit,jm_totalcredit,jm_refno,jm_refname,jm_note)
+			values(1,current_date,new.un_id,new.bm_tot,0,new.bm_no,'bansos_masters','Bansos');
+			current_jmid:='JT'||trim(to_char(currval('je_masters_jm_id_seq'),'0000000000')); 
+			
+			 
+		end if;
+	else
+		if (new.bm_tot>0) then
+			update je_masters set jm_totaldebit=new.bm_tot  where jm_refno=new.bm_no and jm_refname='bansos_masters';
+			 
+		end if;
+	end if;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS bansos_masters_aft_upd3 ON bansos_masters;
+CREATE TRIGGER bansos_masters_aft_upd3  AFTER UPDATE ON bansos_masters FOR EACH ROW  EXECUTE PROCEDURE bansos_masters_aft_upd3();
+ /*------------------------------ */
+
+
+CREATE OR REPLACE FUNCTION bansos_details_aft_ins3() RETURNS TRIGGER AS $$
+DECLARE
+	master record;
+	check_kas integer;
+	kas record;
+	akun record;
+	ajm_id	varchar(50);
+BEGIN
+	if (new.bd_nilai > 0) then
+		select * into master from bansos_masters where bm_id=new.bm_id;
+		 
+		 	---masukkan ke jurnal detail
+		 	--ambil jm_id
+			select jm_id into ajm_id from je_masters where jm_refno=master.bm_no and jm_refname='bansos_masters';
+			if (ajm_id is not null) then
+	  			insert into je_details(jm_id,akun_kode,jd_desc,jd_debit,jd_credit)
+				values(ajm_id,new.akun_kode,'Bansos',new.bd_nilai,0);
+			end if;
+		
+	end if;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS bansos_details_aft_ins3 ON bansos_details;
+CREATE TRIGGER bansos_details_aft_ins3  AFTER INSERT ON bansos_details FOR EACH ROW  EXECUTE PROCEDURE bansos_details_aft_ins3();
+ /*------------------------------ */
+
+CREATE OR REPLACE FUNCTION bansos_details_aft_upd3() RETURNS TRIGGER AS $$
+DECLARE
+	master record;
+	check_kas integer;
+	check_bal	integer;
+	check_jd	integer;
+	kas record;
+	ajm_id	varchar(50);
+	akun record;
+BEGIN
+	if (new.bd_nilai > 0) then
+	select * into master from bansos_masters where bm_id=new.bm_id;
+	
+	 
+	 	---masukkan ke jurnal detail
+	 	--ambil jm_id
+		select jm_id into ajm_id from je_masters where jm_refno=master.bm_no and jm_refname='bansos_masters';
+		if (ajm_id is not null) then
+  		
+			--cek apakah sudah ada di jurnal detail
+			select count(*) into check_jd from je_details where akun_kode=new.akun_kode and jm_id=ajm_id;
+			if (check_jd<=0 )then
+				insert into je_details(jm_id,akun_kode,jd_desc,jd_debit,jd_credit)
+				values(ajm_id,new.akun_kode,'Bansos',new.bd_nilai,0);
+			else
+				update je_details set jd_debit=new.bd_nilai where akun_kode=new.akun_kode and jm_id=ajm_id;
+			end if;
+		end if;
+	
+	end if;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS bansos_details_aft_upd3 ON bansos_details;
+CREATE TRIGGER bansos_details_aft_upd3  AFTER UPDATE ON bansos_details FOR EACH ROW  EXECUTE PROCEDURE bansos_details_aft_upd3();
+ /*------------------------------ */
+ 
+ 
+CREATE OR REPLACE FUNCTION sp2d_masters_aft_ins3() RETURNS TRIGGER AS $$
+DECLARE
+	check_master integer;
+	check_kas	integer;
+	check_akun 	integer;
+	aun_id	varchar(30);
+BEGIN
+	select  count(*) into check_master from je_masters where jm_refno=new.sp2dm_no and jm_refname='sp2d_masters';
+	select un_id into aun_id from spp_masters  where sppm_no = (select sppm_no from spm_masters where spmm_no=new.spmm_no limit 1) limit 1;
+	if (check_master<=0) then
+	 	if (new.sp2dm_total>0) then
+			insert into je_masters(jm_type,un_id,jm_date, jm_totaldebit,jm_totalcredit,jm_refno,jm_refname,jm_note)
+			values(1,aun_id,current_date,new.sp2dm_total,0,new.sp2dm_no,'sp2d_masters','SP2D');
+			 
+		end if;		
+	end if;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_masters_aft_ins3 ON sp2d_masters;
+CREATE TRIGGER sp2d_masters_aft_ins3  AFTER INSERT ON sp2d_masters FOR EACH ROW  EXECUTE PROCEDURE sp2d_masters_aft_ins3();
+ /*------------------------------ */
+
+
+CREATE OR REPLACE FUNCTION sp2d_masters_aft_upd3() RETURNS TRIGGER AS $$
+DECLARE
+	check_master integer;
+	kas record;
+	check_kas integer;
+	check_akun integer;
+	current_jmid varchar(50);
+	current_jdid	varchar(50);
+	check_jd	integer;
+	aun_id	varchar(30);
+BEGIN
+	select  count(*) into check_master from je_masters where jm_refno=new.sp2dm_no and jm_refname='sp2d_masters';
+	select un_id into aun_id from spp_masters where   sppm_no = (select sppm_no from spm_masters where spmm_no=new.spmm_no limit 1) limit 1;
+	if (check_master<=0) then
+		if (new.sp2dm_total>0) then 
+			insert into je_masters(jm_type,jm_date,un_id, jm_totaldebit,jm_totalcredit,jm_refno,jm_refname,jm_note)
+			values(1,current_date,aun_id,new.sp2dm_total,0,new.sp2dm_no,'sp2d_masters','SP2D');
+			current_jmid:='JT'||trim(to_char(currval('je_masters_jm_id_seq'),'0000000000')); 
+			
+			 
+		end if;
+	else
+		if (new.sp2dm_total>0) then
+			update je_masters set jm_totaldebit=new.sp2dm_total  where jm_refno=new.sp2dm_no and jm_refname='sp2d_masters';
+			 
+		end if;
+	end if;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_masters_aft_upd3 ON sp2d_masters;
+CREATE TRIGGER sp2d_masters_aft_upd3  AFTER UPDATE ON sp2d_masters FOR EACH ROW  EXECUTE PROCEDURE sp2d_masters_aft_upd3();
+ /*------------------------------ */
+
+
+CREATE OR REPLACE FUNCTION sp2d_detail3s_aft_ins3() RETURNS TRIGGER AS $$
+DECLARE
+	master record;
+	check_kas integer;
+	kas record;
+	akun record;
+	ajm_id	varchar(50);
+BEGIN
+	if (new.sp2dd_nilai > 0) then
+		select * into master from sp2d_masters where sp2dm_id=new.sp2dm_id;
+		 
+		 	---masukkan ke jurnal detail
+		 	--ambil jm_id
+			select jm_id into ajm_id from je_masters where jm_refno=master.sp2dm_no and jm_refname='sp2d_masters';
+			if (ajm_id is not null) then
+	  			insert into je_details(jm_id,akun_kode,jd_desc,jd_debit,jd_credit)
+				values(ajm_id,new.akun_kode,'SP2D',new.sp2dd_nilai,0);
+			end if;
+		
+	end if;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_detail3s_aft_ins3 ON sp2d_detail3s;
+CREATE TRIGGER sp2d_detail3s_aft_ins3  AFTER INSERT ON sp2d_detail3s FOR EACH ROW  EXECUTE PROCEDURE sp2d_detail3s_aft_ins3();
+ /*------------------------------ */
+
+CREATE OR REPLACE FUNCTION sp2d_detail3s_aft_upd3() RETURNS TRIGGER AS $$
+DECLARE
+	master record;
+	check_kas integer;
+	check_bal	integer;
+	check_jd	integer;
+	kas record;
+	ajm_id	varchar(50);
+	akun record;
+BEGIN
+	if (new.sp2dd_nilai > 0) then
+	select * into master from sp2d_masters where sp2dm_id=new.sp2dm_id;
+	
+	 
+	 	---masukkan ke jurnal detail
+	 	--ambil jm_id
+		select jm_id into ajm_id from je_masters where jm_refno=master.sp2dm_no and jm_refname='sp2d_masters';
+		if (ajm_id is not null) then
+  		
+			--cek apakah sudah ada di jurnal detail
+			select count(*) into check_jd from je_details where akun_kode=new.akun_kode and jm_id=ajm_id;
+			if (check_jd<=0 )then
+				insert into je_details(jm_id,akun_kode,jd_desc,jd_debit,jd_credit)
+				values(ajm_id,new.akun_kode,'SP2D',new.sp2dd_nilai,0);
+			else
+				update je_details set jd_debit=new.sp2dd_nilai where akun_kode=new.akun_kode and jm_id=ajm_id;
+			end if;
+		end if;
+	
+	end if;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS sp2d_detail3s_aft_upd3 ON sp2d_detail3s;
+CREATE TRIGGER sp2d_detail3s_aft_upd3  AFTER UPDATE ON sp2d_detail3s FOR EACH ROW  EXECUTE PROCEDURE sp2d_detail3s_aft_upd3();
+ /*------------------------------ */
+

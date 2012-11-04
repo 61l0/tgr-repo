@@ -59,6 +59,7 @@ var BansosMasterJsonReader =  new Ext.data.JsonReader({
 		{name:'data[BansosMaster][un_id]',mapping:'BansosMasterList.un_id'},
 		{name:'data[BansosMaster][un_kode]',mapping:'BansosMasterList.un_kode'},
 		{name:'data[BansosMaster][un_nama]',mapping:'BansosMasterList.un_nama'},
+		{name:'data[BansosMaster][bm_tot]',mapping:'BansosMasterList.bm_tot'},
 		 {name:'data[BansosMaster][prog_kode]',mapping:'BansosMasterList.prog_kode'},
 		{name:'data[BansosMaster][prog_nama]',mapping:'BansosMasterList.prog_nama'},
 		 {name:'data[BansosMaster][keg_kode]',mapping:'BansosMasterList.keg_kode'},
@@ -69,7 +70,16 @@ var BansosMasterJsonReader =  new Ext.data.JsonReader({
 	 
 });
 function hitungTotalBansos(){
+	   tot=0; 
 	 
+		for (i=0;i<BansosDetail1Store.getCount();i++){
+		  if (BansosDetail1Store.getAt(i).get('bd_nilai')>0)
+		 	 tot=tot+parseFloat(BansosDetail1Store.getAt(i).get('bd_nilai'));
+		  
+		}
+		 
+		 
+	 Ext.getCmp('bm_tot2').setValue(tot);
 	
 }
 function proc_bansos2(o){ 
@@ -339,8 +349,15 @@ MyDesktop.BansosGridWindow = Ext.extend(Ext.app.Module, {
 								width: 200,
 								sortable: true 
 								 
+						 	} ,
+							  {
+								header: "Total",
+								dataIndex: 'data[BansosMaster][bm_tot]',
+								width: 100,
+								sortable: true  ,
+								 renderer: Ext.util.Format.numberRenderer('0,000.00')
+								 
 						 	} 
-							  
 							],
 							
 							  view: new Ext.grid.GroupingView({
@@ -404,9 +421,9 @@ MyDesktop.BansosGridWindow = Ext.extend(Ext.app.Module, {
 									 					bm_id: 0
 									 				}
 									 			});
-									 			Ext.getCmp('bm_tgl1').setValue(new Date());
-												Ext.getCmp('bm_tgl1').setReadOnly(false);
-												Ext.getCmp('bm_id1').setValue(0);
+									 			Ext.getCmp('bm_tgl2').setValue(new Date());
+												Ext.getCmp('bm_tgl2').setReadOnly(false);
+												Ext.getCmp('bm_id2').setValue(0);
 											  
 										}
 									   } , {
@@ -610,7 +627,13 @@ MyDesktop.EntryBansosForm = Ext.extend(Ext.app.Module, {
 											{	 xtype:'hidden',
 												 name: 'data[BansosMaster][bm_id]',
 												 
-												id:'bm_id1' 
+												id:'bm_id2' 
+												 
+											}, 
+											{	 xtype:'hidden',
+												 name: 'data[BansosMaster][bm_tot]',
+												 
+												id:'bm_tot2' 
 												 
 											},
 											 
@@ -618,14 +641,14 @@ MyDesktop.EntryBansosForm = Ext.extend(Ext.app.Module, {
 												fieldLabel: 'No Surat',
 												name: 'data[BansosMaster][bm_no]',
 												maxLength:20,
-												id:'bm_no1',
+												id:'bm_no2',
 												 
 												allowBlank:false 
 												 
 											},
 											{	 xtype:'datefield',
 												fieldLabel: 'Tanggal',
-												id:'bm_tgl1',
+												id:'bm_tgl2',
 												name: 'data[BansosMaster][bm_tgl]',
 												maxLength:50, 
 												format:'Y-m-d',
@@ -891,9 +914,9 @@ MyDesktop.EntryBansosForm = Ext.extend(Ext.app.Module, {
 						 					bm_id: 0
 						 				}
 						 			});
-						 			Ext.getCmp('bm_tgl1').setValue(new Date());
-									Ext.getCmp('bm_tgl1').setReadOnly(false);
-									Ext.getCmp('bm_id1').setValue(0);
+						 			Ext.getCmp('bm_tgl2').setValue(new Date());
+									Ext.getCmp('bm_tgl2').setReadOnly(false);
+									Ext.getCmp('bm_id2').setValue(0);
 								 
 								 
 									 
@@ -904,7 +927,7 @@ MyDesktop.EntryBansosForm = Ext.extend(Ext.app.Module, {
 										tooltip:'Print ',
 										iconCls:'printer',
 										handler:function(){
-											aid=Ext.getCmp('bm_id1').getValue();
+											aid=Ext.getCmp('bm_id2').getValue();
 											aurl=HOST_PATH+'/rptbansos/bansos/'+aid;
 											window.open(aurl,'_blank');
 	
@@ -930,15 +953,15 @@ MyDesktop.EntryBansosForm = Ext.extend(Ext.app.Module, {
 						 							//alert(newid);
 														// Ext.getCmp('form_no').setValue(newid);
 														// alert(newid);
-														Ext.getCmp('bm_no1').setValue(newno);
-														Ext.getCmp('bm_id1').setValue(newid)
-														Ext.getCmp('bm_no1').setReadOnly(true);
+														Ext.getCmp('bm_no2').setValue(newno);
+														Ext.getCmp('bm_id2').setValue(newid)
+														Ext.getCmp('bm_no2').setReadOnly(true);
 														 
 														BansosDetail1Store.setBaseParam('master', newid);
 														
 													 
 														BansosDetail1Store.save();
-														Ext.getCmp('bm_id1').setValue(newid);
+														Ext.getCmp('bm_id2').setValue(newid);
 														 
 														
 													}

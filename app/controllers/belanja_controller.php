@@ -134,7 +134,9 @@ class BelanjaController extends AppController
 		if (!empty($this->data)) {
 			    $admin=$this->Session->read('PB_USER_SESSION');
 			
-			   
+			   	$this->data['BelanjaMaster']['bm_tot']=r(',','',$this->data['BelanjaMaster']['bm_tot']);
+				$this->data['BelanjaMaster']['bm_totpot']=r(',','',$this->data['BelanjaMaster']['bm_totpot']);
+				$this->data['BelanjaMaster']['bm_totpajak']=r(',','',$this->data['BelanjaMaster']['bm_totpajak']);
 				$checkdata=$belanjamaster->findByBm_id($this->data['BelanjaMaster']['bm_id']);
 				 if (empty($checkdata)) {
 				 
